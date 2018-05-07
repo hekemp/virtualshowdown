@@ -3417,7 +3417,7 @@ Prefab:
     - target: {fileID: 114387994867908110, guid: 7dc4f79d02d4a844492db2506eec061d,
         type: 2}
       propertyPath: keyboardControl
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7dc4f79d02d4a844492db2506eec061d, type: 2}
@@ -12570,7 +12570,7 @@ MonoBehaviour:
   clockText: {fileID: 1230601100}
   globalSpeechGameObject: {fileID: 2047228899}
   menuGameObject: {fileID: 489142306}
-  IsTactileDouse: 0
+  IsTactileDouse: 1
   IsCorrectionHints: 1
   IsMidPointAnnounce: 1
 --- !u!4 &2125212025

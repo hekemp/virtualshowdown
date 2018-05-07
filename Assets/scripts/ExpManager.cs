@@ -136,7 +136,7 @@ public class ExpManager : MonoBehaviour
         gamePoints = 0;
         canPressStartButton = true;
         expState = ExpState.menus;
-        playerLevel = 0;
+        playerLevel = 2;
         prevHits = new int[6] { 0, 0, 0, 0, 0, 0 };
         SetupChildAudio();
     }
@@ -206,7 +206,7 @@ public class ExpManager : MonoBehaviour
 
     private void SetGameHints()
     {
-        if (playerLevel <= 3)
+        if (playerLevel < 3)
         {
             if (IsTactileDouse)
             {
