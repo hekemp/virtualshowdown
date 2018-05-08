@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MenuScript : MonoBehaviour {
-    public Button expButton;
+    public Button AudioOnlyButton;
     public Button freeButton;
     public Text expMenuText;
     public InputField partInputField;
@@ -16,15 +16,16 @@ public class MenuScript : MonoBehaviour {
     public GameObject mainMenuGO;
     public GameObject startMenuGO;
     public GameObject menuGameObject;
+    public Button tactileAndAudioButton;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         calibrationGO.SetActive(false);
         mainMenuGO.SetActive(false);
 
-        expButton.onClick.AddListener(() => {
+        AudioOnlyButton.onClick.AddListener(() => {
             ExperimentLog.Log("Pressed Exp Mode", "Menu");
-            //ExpManager.NaiveMode = false;
+            ExpManager.TactileAndAudio = false;
             menuGameObject.SetActive(false);
             mainMenuGO.SetActive(true); //TODO Debatable
             expMenuText.text = "Our Ball Exp";
@@ -35,18 +36,19 @@ public class MenuScript : MonoBehaviour {
             }
         });
 
-        //naiveButton.onClick.AddListener(() => {
-        //    ExperimentLog.Log("Pressed Naive Mode", "Menu");
-        //    //ExpManager.NaiveMode = true;
-        //    menuGameObject.SetActive(false);
-        //    mainMenuGO.SetActive(true); //TODO Debatable
-        //    Time.timeScale = 1;
-        //    expMenuText.text = "Naive Ball Exp";
-        //    if (!SceneManager.GetActiveScene().name.Equals("Master"))
-        //    {
-        //        SceneManager.LoadSceneAsync("Master", LoadSceneMode.Single);
-        //    }
-        //});
+        tactileAndAudioButton.onClick.AddListener(() =>
+        {
+            ExperimentLog.Log("Pressed Naive Mode", "Menu");
+            ExpManager.TactileAndAudio = true;
+            menuGameObject.SetActive(false);
+            mainMenuGO.SetActive(true); //TODO Debatable
+            Time.timeScale = 1;
+            expMenuText.text = "Naive Ball Exp";
+            if (!SceneManager.GetActiveScene().name.Equals("Master"))
+            {
+                SceneManager.LoadSceneAsync("Master", LoadSceneMode.Single);
+            }
+        });
 
         freeButton.onClick.AddListener(() => {
             Time.timeScale = 1;

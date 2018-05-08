@@ -28,7 +28,7 @@ public class ExpManager : MonoBehaviour
 
     public static float TableEdge { get; private set; }
     public static float CenterX { get; private set; }
-    //public static bool NaiveMode { private get; set; }
+    public static bool TactileAndAudio { private get; set; }
     public static List<ExperimentLogFile> LogFileList = new List<ExperimentLogFile>();
     public static string globalClockString;
     public static string ParticipantId { private get; set; }
@@ -100,6 +100,7 @@ public class ExpManager : MonoBehaviour
     private HintLength oldHintLen;
     private AudioSource moveRightAudio;
     private bool firstPass;
+    private bool past6Min;
 
     private void Start()
     {
@@ -136,7 +137,8 @@ public class ExpManager : MonoBehaviour
         gamePoints = 0;
         canPressStartButton = true;
         expState = ExpState.menus;
-        playerLevel = 2;
+        playerLevel = 0;
+        past6Min = false;
         prevHits = new int[6] { 0, 0, 0, 0, 0, 0 };
         SetupChildAudio();
     }
@@ -172,6 +174,17 @@ public class ExpManager : MonoBehaviour
     private void Update()
     {
         GameUtils.playState = GameUtils.GamePlayState.ExpMode;
+
+        if (TactileAndAudio)
+        {
+            IsTactileDouse = true;
+            IsMidPointAnnounce = true;
+        }
+        else
+        {
+            IsTactileDouse = false;
+            IsMidPointAnnounce = true;
+        }
 
         clockText.text = clockString;
 
@@ -381,6 +394,10 @@ public class ExpManager : MonoBehaviour
     {
         TimeSpan diff = e.SignalTime - startTime;
         clockString = diff.Minutes + ":" + diff.Seconds + "." + diff.Milliseconds;
+        if(diff.Minutes > 5)
+        {
+            past6Min = true;
+        }
     }
 
     /// <summary>
@@ -435,6 +452,10 @@ public class ExpManager : MonoBehaviour
     {
         if (!canPressStartButton && playerReady) //Double check to present sending two balls in transition
         {
+            if (past6Min)
+            {
+                FinishExp();
+            }
             _currBallType = _expList.Current;
             _currBallNumber++;
             ballAndPosText.text = "Ball: " + _currBallNumber + "   Position: " + _currBallType;
@@ -1151,6 +1172,7 @@ public class ExpManager : MonoBehaviour
         newBallOk = true;
         prevHits = new int[6] { 0, 0, 0, 0, 0, 0 };
         expResults.Clear();
+        past6Min = false;
     }
 
     private IEnumerator ReadGamePoints()
