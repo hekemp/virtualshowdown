@@ -94,7 +94,7 @@ public class PaddleScript : MonoBehaviour
         Vector3 newPosition = new Vector3(-xPos, yPos, (zPos - unityTableEdge - estAvgError));
         //Smooting factor of fixedDeltaTime*20 is to keep the paddle from moving so quickly that is
         //phases through the ball on collision.
-        rb.MovePosition(Vector3.Lerp(rb.position, newPosition, Time.fixedDeltaTime * 15));
+        rb.MovePosition(Vector3.Lerp(rb.position, newPosition, Time.fixedDeltaTime * 13));
 
         if (keyboardControl)
         {

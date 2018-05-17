@@ -260,18 +260,20 @@ public class ExpManager : MonoBehaviour
             {
                 StartNextBall(HitRes.miss);
             }
+            return;
         }
 
         if (GoalScript.ExpBallWin)
         {
             GoalScript.ExpBallWin = false;
             StartNextBall(HitRes.goal);
+            return;
         }
 
         //Wait for result of hit
         if (timerStarted)
         {
-            if (BallScript.BallHitOnce || NaiveBallScript.BallHitOnce)
+            if (BallScript.BallHitOnce)
             {
                 if (_currentBall != null)
                 {
@@ -423,7 +425,6 @@ public class ExpManager : MonoBehaviour
     {
         yield return new WaitForSeconds(1.5f); //Time allowed once ball goes past halfway point
         BallScript.BallHitOnce = false;
-        NaiveBallScript.BallHitOnce = false;
         StartNextBall(HitRes.pastHalfHit);
     }
 
@@ -458,7 +459,7 @@ public class ExpManager : MonoBehaviour
             }
             _currBallType = _expList.Current;
             _currBallNumber++;
-            ballAndPosText.text = "Ball: " + _currBallNumber + "   Position: " + _currBallType;
+            ballAndPosText.text = "Ball: " + _currBallNumber + "   Pos: " + _currBallType + "   Level: " + playerLevel;
 
             bool isNewBallAvail = _expList.MoveNext();
             if (!isNewBallAvail)
@@ -690,7 +691,12 @@ public class ExpManager : MonoBehaviour
                 ExperimentLog.Log("Sending Ball");
                 if (_currBallNumber != -1)
                 {
-                    gamePoints += (int)hitres; //The points correlate to the hitres
+                    if (GoalScript.ExpBallWin)
+                    {
+                        GoalScript.ExpBallWin = false;
+                        hitres = HitRes.goal;
+                    }
+                    gamePoints += hitres == HitRes.miss ? 0 : (int)hitres - 1;//The points correlate to the hitres
                     CollectExpData(hitres);
                 }
                 Destroy(_currentBall);
@@ -706,8 +712,8 @@ public class ExpManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Player Not Ready: Need to press trigger");
-            ExperimentLog.Log("Player Not Ready", tag: "warn");
+            Debug.LogWarning("Exp Not Started");
+            ExperimentLog.Log("Exp Not Started", tag: "warn");
         }
 
     }
@@ -727,7 +733,8 @@ public class ExpManager : MonoBehaviour
             BallResult = (int) hit,
             EventTime = globalClockString,
             TimerTime = clockString,
-            GamePoints = gamePoints
+            GamePoints = gamePoints,
+            Level = playerLevel
         });
     }
 
@@ -802,8 +809,8 @@ public class ExpManager : MonoBehaviour
         var sb = new StringBuilder();
         //Append Exp result headers
         sb.AppendLine("Event_Time" + "," + "Timer_Time" + "," + "Participant_Id" + ","
-            + "Ball_Number" + "," + "Ball_Type" + ", " + "Ball_Speed" + "," + 
-            "Ball_Result [Miss->0|1 : MaybeHit->2 : HitPastHalf->3 : Goal->4]" + "," + "Game_Points");
+            + "Ball_Number" + "," + "Ball_Type" + "," + "Ball_Speed" + "," + 
+            "Ball_Result [Miss->0|1 : MaybeHit->2 : HitPastHalf->3 : Goal->4]" + "," + "Game_Points" + "," + "Level");
         //Append Exp results
         foreach (var data in expResults)
         {
@@ -817,12 +824,12 @@ public class ExpManager : MonoBehaviour
         {
             sb.AppendLine(data.ToString());
         }
-        //string naiveModeStr = NaiveMode ? "_navie_" : "_our_";
-        
+        string modeStr = TactileAndAudio ? "_tac_aud_" : "_aud_";
+
         var path = EditorUtility.SaveFilePanel(
               "Save Experiment as CSV",
               "",
-              nameField.text + "_exp.csv",
+              nameField.text + modeStr + "_exp.csv",
               "csv");
 
         if (path.Length != 0)
@@ -867,7 +874,7 @@ public class ExpManager : MonoBehaviour
         if(hits > 3) // 4 out of 6 hits, level up!
         {
             prevHits = new int[6] { 0, 0, 0, 0, 0, 0 };
-            Debug.Log("Level Up: " + (playerLevel + 1));
+            ExperimentLog.Log("Level Up: " + (playerLevel + 1), tag: "Exp");
             return true;
         }
         return false;
@@ -1196,11 +1203,12 @@ public class ExpData
     public string EventTime { get; internal set; }
     public string TimerTime { get; internal set; }
     public int GamePoints { get; internal set; }
+    public int Level { get; internal set; }
 
     public override string ToString()
     {
         return EventTime + "," + TimerTime + "," + ParticipantId + "," + BallNumber + "," + BallType + "," + 
-            BallSpeed + "," + BallResult + "," + GamePoints;
+            BallSpeed + "," + BallResult + "," + GamePoints + "," + Level;
     }
 }
 

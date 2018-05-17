@@ -43,7 +43,7 @@ public class GoalScript : MonoBehaviour {
 
     private void Update()
     {
-        if(GameUtils.playState != GameUtils.GamePlayState.ExpMode)
+        if (GameUtils.playState != GameUtils.GamePlayState.ExpMode)
             scoreText.text = "Player " + PlayerScore + " - " + OpponentScore + " Opponent";
     }
 

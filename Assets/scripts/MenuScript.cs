@@ -28,7 +28,7 @@ public class MenuScript : MonoBehaviour {
             ExpManager.TactileAndAudio = false;
             menuGameObject.SetActive(false);
             mainMenuGO.SetActive(true); //TODO Debatable
-            expMenuText.text = "Our Ball Exp";
+            expMenuText.text = "Audio Only Exp";
             Time.timeScale = 1;
             if (!SceneManager.GetActiveScene().name.Equals("Master"))
             {
@@ -43,7 +43,7 @@ public class MenuScript : MonoBehaviour {
             menuGameObject.SetActive(false);
             mainMenuGO.SetActive(true); //TODO Debatable
             Time.timeScale = 1;
-            expMenuText.text = "Naive Ball Exp";
+            expMenuText.text = "Tactile & Audio Exp";
             if (!SceneManager.GetActiveScene().name.Equals("Master"))
             {
                 SceneManager.LoadSceneAsync("Master", LoadSceneMode.Single);
