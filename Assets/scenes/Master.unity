@@ -533,6 +533,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 303aa306d767ca34e9a43f54d9579083, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  singlePlayerMenuGO: {fileID: 0}
   stick: []
   gyro: {x: 0, y: 0, z: 0}
   accel: {x: 0, y: 0, z: 0}
@@ -606,8 +607,8 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_NormalColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+    m_HighlightedColor: {r: 0.64705884, g: 1, b: 0.7372549, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -941,7 +942,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f39950323398f9345b73eb750fa9af77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreText: {fileID: 0}
+  scoreTextGO: {fileID: 0}
 --- !u!23 &218181202
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1152,8 +1153,8 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_NormalColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+    m_HighlightedColor: {r: 0.64705884, g: 1, b: 0.7371196, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -2135,8 +2136,8 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_NormalColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+    m_HighlightedColor: {r: 0.64705884, g: 1, b: 0.7372549, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -4129,7 +4130,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f39950323398f9345b73eb750fa9af77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreText: {fileID: 0}
+  scoreTextGO: {fileID: 0}
 --- !u!23 &883451723
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -4917,7 +4918,7 @@ GameObject:
   - component: {fileID: 1097918648}
   - component: {fileID: 1097918647}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: BackGround
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6831,7 +6832,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f39950323398f9345b73eb750fa9af77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreText: {fileID: 0}
+  scoreTextGO: {fileID: 0}
 --- !u!23 &1186059399
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -8515,7 +8516,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f39950323398f9345b73eb750fa9af77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreText: {fileID: 0}
+  scoreTextGO: {fileID: 0}
 --- !u!23 &1471773903
 MeshRenderer:
   m_ObjectHideFlags: 0

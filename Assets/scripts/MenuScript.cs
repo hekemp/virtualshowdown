@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -17,6 +18,9 @@ public class MenuScript : MonoBehaviour {
     public GameObject startMenuGO;
     public GameObject menuGameObject;
     public Button tactileAndAudioButton;
+
+    private List<Button> buttonList;
+    private int buttonIndex;
 
     // Use this for initialization
     void Start () {
@@ -93,6 +97,29 @@ public class MenuScript : MonoBehaviour {
             calibrationGO.SetActive(false);
             mainMenuGO.SetActive(true);
         });
+
+        buttonList = new List<Button>() { tactileAndAudioButton, AudioOnlyButton, freeButton };
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Comma))
+        {
+            var tempButton = buttonList[buttonIndex];
+            ColorBlock cb = tempButton.colors;
+            cb.normalColor = Color.grey;
+            tempButton.colors = cb;
+
+            buttonIndex++;
+            if(buttonIndex >= buttonList.Count)
+            {
+                buttonIndex = 0;
+            }
+            tempButton = buttonList[buttonIndex];
+            cb = tempButton.colors;
+            cb.normalColor = Color.red;
+            tempButton.colors = cb;
+        }
     }
 
     /// <summary>

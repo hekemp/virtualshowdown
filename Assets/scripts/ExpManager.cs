@@ -26,8 +26,6 @@ public class ExpManager : MonoBehaviour
     public bool IsCorrectionHints;
     public bool IsMidPointAnnounce;
 
-    public static float TableEdge { get; private set; }
-    public static float CenterX { get; private set; }
     public static bool TactileAndAudio { private get; set; }
     public static List<ExperimentLogFile> LogFileList = new List<ExperimentLogFile>();
     public static string globalClockString;
@@ -125,8 +123,6 @@ public class ExpManager : MonoBehaviour
         batSound.mute = true;
         StartCoroutine(GameUtils.PlayIntroMusic());
         newBallOk = true;
-        TableEdge = 0;
-        CenterX = 0;
         canPressButton = true;
         clockTimer = new Timer(100);
         clockTimer.Elapsed += ClockTimer_Elapsed;
@@ -199,8 +195,8 @@ public class ExpManager : MonoBehaviour
             if (JoyconController.ButtonPressed)
             {
                 playerReady = true;
-                TableEdge = BodySourceView.baseKinectPosition.Z;
-                CenterX = BodySourceView.baseKinectPosition.X;
+                PaddleScript.TableEdge = BodySourceView.baseKinectPosition.Z;
+                PaddleScript.CenterX = BodySourceView.baseKinectPosition.X;
             }
         }
         else
@@ -241,7 +237,7 @@ public class ExpManager : MonoBehaviour
     private void CheckHitResult()
     {
         //Perfect hit, start new ball
-        if ((BallScript.BallHitOnce || NaiveBallScript.BallHitOnce) && maxDistance > 10)
+        if ((BallScript.BallHitOnce) && maxDistance > 10)
         {
             timerStarted = false;
             StartCoroutine(HitPastHalfStartNextBall());
@@ -252,7 +248,7 @@ public class ExpManager : MonoBehaviour
         if (GoalScript.ExpBallLose)
         {
             GoalScript.ExpBallLose = false;
-            if (BallScript.BallHitOnce || NaiveBallScript.BallHitOnce)
+            if (BallScript.BallHitOnce)
             {
                 StartNextBall(HitRes.tipped);
             }
@@ -435,11 +431,11 @@ public class ExpManager : MonoBehaviour
     /// <returns>HitRes.miss or HitRes.hit</returns>
     private HitRes DetermineHitRes(GameObject ball)
     {
-        if((BallScript.BallHitOnce || NaiveBallScript.BallHitOnce) && maxDistance > -50)
+        if((BallScript.BallHitOnce) && maxDistance > -50)
         {
             return HitRes.hitNotPastHalf;
         }
-        else if ((BallScript.BallHitOnce || NaiveBallScript.BallHitOnce))
+        else if ((BallScript.BallHitOnce))
         {
             return HitRes.tipped;
         }
