@@ -122,14 +122,14 @@ public class NumberSpeech : MonoBehaviour
         yield return new WaitForSeconds(aud.clip.length);
 
         int inchNum = (int)(num / 2.54);
-        if (inchNum > 10 && inchNum < 15)
+        if (inchNum >= 11 && inchNum <= 13)
         {
             Debug.Log("Foot");
             var aud1 = PlayAudio("foot");
             yield return new WaitForSeconds(aud1.clip.length);
             yield break;
         }
-        else if(inchNum >= 16)
+        else if(inchNum >= 18)
         {
             var aud1 = PlayAudio("arm");
             yield return new WaitForSeconds(aud1.clip.length);

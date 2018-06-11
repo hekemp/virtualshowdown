@@ -410,6 +410,7 @@ public class ExpManager : MonoBehaviour
             clockTimer.Start();
             startTime = DateTime.Now;
             StartNextBall(HitRes.hitNotPastHalf); //Starting game, params don't matter here.
+            ResetGamePoints();
         }
     }
 
@@ -1172,6 +1173,17 @@ public class ExpManager : MonoBehaviour
         batSound = batObj.GetComponents<AudioSource>()[0];
         batSound.mute = true;
         StartCoroutine(GameUtils.PlayIntroMusic());
+        newBallOk = true;
+        prevHits = new int[6] { 0, 0, 0, 0, 0, 0 };
+        expResults.Clear();
+        past6Min = false;
+        ResetGamePoints();
+    }
+
+    private void ResetGamePoints()
+    {
+        gamePoints = 0;
+        playerLevel = 0;
         newBallOk = true;
         prevHits = new int[6] { 0, 0, 0, 0, 0, 0 };
         expResults.Clear();
