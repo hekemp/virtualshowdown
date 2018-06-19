@@ -6,6 +6,10 @@ public class NumberSpeech : MonoBehaviour
 {
     private static Dictionary<string,AudioSource> scoreAudioMap;
 
+    /// <summary>
+    /// Fills the AudioSource map with audiosources in GlobalSpeech gameobject
+    /// </summary>
+    /// <param name="a"></param>
     private void FillAudioMap(AudioSource[] a)
     {
         scoreAudioMap = new Dictionary<string, AudioSource>
@@ -70,6 +74,11 @@ public class NumberSpeech : MonoBehaviour
         FillAudioMap(audioSources);
     }
 
+    /// <summary>
+    /// Plays audio that is registered in the AudioSource map
+    /// </summary>
+    /// <param name="arg"></param>
+    /// <returns></returns>
     public static AudioSource PlayAudio(string arg)
     {
         AudioSource selectedAudio;
@@ -116,6 +125,12 @@ public class NumberSpeech : MonoBehaviour
         PlayAudio("points");
     }
 
+    /// <summary>
+    /// Reads numbers, for Exp mode correction hints in an equal distrobution between an analogy
+    /// and an exact measurement.
+    /// </summary>
+    /// <param name="num"></param>
+    /// <returns></returns>
     public IEnumerator PlayFancyNumberAudio(int num)
     {
         var aud = PlayAudio("by");
