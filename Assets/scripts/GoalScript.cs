@@ -56,7 +56,7 @@ public class GoalScript : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Ball" && GameUtils.playState == GameUtils.GamePlayState.InPlay) {
+        if(other.gameObject.CompareTag("Ball") && GameUtils.playState == GameUtils.GamePlayState.InPlay) {
             if (gameObject.tag == "SouthGoal")
             {
                 OpponentScore += 2;
@@ -74,16 +74,16 @@ public class GoalScript : MonoBehaviour {
             scoreText.text = "Player " + PlayerScore + " - " + OpponentScore + " Opponent";
             StartCoroutine(ReadScore());
         }
-        else if(other.tag == "Ball" && GameUtils.playState == GameUtils.GamePlayState.ExpMode)
+        else if(other.gameObject.CompareTag("Ball") && GameUtils.playState == GameUtils.GamePlayState.ExpMode)
         {
-            if(gameObject.tag == "SouthGoal")
+            if(gameObject.CompareTag("SouthGoal"))
             {
                 PlayLoseSound();
                 ExpBallLose = true;
                 ExpManager.expState = ExpManager.ExpState.noBall;
                 Destroy(other.gameObject);
             }
-            if (gameObject.tag == "NorthGoal")
+            if (gameObject.CompareTag("NorthGoal"))
             {
                 if (BallScript.BallHitOnce)
                 {
