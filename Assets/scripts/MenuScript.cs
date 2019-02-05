@@ -318,7 +318,7 @@ public class MenuScript : MonoBehaviour {
     /// </summary>
     private void CheckAndPlayAudio()
     {
-        if (playingAudioQueue.Count != 0)
+        if (playingAudioQueue != null && playingAudioQueue.Count != 0)
         {
             if (playingAudio != null && playingAudio.isPlaying) {
                 playingAudio.Stop();

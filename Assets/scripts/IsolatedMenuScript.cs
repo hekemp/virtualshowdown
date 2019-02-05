@@ -7,7 +7,7 @@ public class IsolatedMenuScript : MonoBehaviour {
     public Button AudioOnlyButton;
     public Button freeButton;
     public Text expMenuText;
-    public InputField partInputField;
+    //public InputField partInputField;
     public Button startRightHand;
     public Button startLeftHand;
     public InputField expInputField;
@@ -49,7 +49,9 @@ public class IsolatedMenuScript : MonoBehaviour {
 
         SetupButtonClickListeners();
 
-        startSelectableList = new List<Selectable>() { partInputField, startLeftHand, startRightHand };
+        startSelectableList = new List<Selectable>() {
+            //partInputField,
+            startLeftHand, startRightHand };
         calibSelectableList = new List<Selectable>() { calibrateButton };
         mainSelectableList = new List<Selectable>() { tactileAndAudioButton, AudioOnlyButton, freeButton };
         expSelectableList = new List<Selectable>() { startExpButton, finishExpButton };
@@ -66,7 +68,7 @@ public class IsolatedMenuScript : MonoBehaviour {
     {
         startAudioSourceList = new List<AudioSource>()
         {
-            partInputField.GetComponent<AudioSource>(),
+            //partInputField.GetComponent<AudioSource>(),
             startLeftHand.GetComponent<AudioSource>(),
             startRightHand.GetComponent<AudioSource>()
         };
@@ -135,17 +137,17 @@ public class IsolatedMenuScript : MonoBehaviour {
 
         startRightHand.onClick.AddListener(() =>
         {
-            if (!partInputField.text.Equals(""))
-            {
+            ///if (!partInputField.text.Equals(""))
+            //{
                 ExperimentLog.Log("Clicked [Start Right Hand]", tag: "pre-menu");
                 StartCalbMenu(false);
-            }
-            else
-            {
-                ExperimentLog.Log("Missing Participant ID", tag: "pre-menu");
-                Debug.LogWarning("Missing Participant ID");
-                GetComponents<AudioSource>()[1].Play();
-            }
+           // }
+           // else
+           // {
+           //     ExperimentLog.Log("Missing Participant ID", tag: "pre-menu");
+           //     Debug.LogWarning("Missing Participant ID");
+           //     GetComponents<AudioSource>()[1].Play();
+           // }
             currSelectableList = calibSelectableList;
             currAudioList = calibAudioSourceList;
             ToggleTopButton();
@@ -153,17 +155,17 @@ public class IsolatedMenuScript : MonoBehaviour {
 
         startLeftHand.onClick.AddListener(() =>
         {
-            if (!partInputField.text.Equals(""))
-            {
+            //if (!partInputField.text.Equals(""))
+            //{
                 ExperimentLog.Log("Clicked [Start Right Hand]", tag: "pre-menu");
                 StartCalbMenu(true);
-            }
-            else
-            {
-                ExperimentLog.Log("Missing Participant ID", tag: "pre-menu");
-                Debug.LogWarning("Missing Participant ID");
-                GetComponents<AudioSource>()[1].Play();
-            }
+           // }
+           // else
+          //  {
+           //     ExperimentLog.Log("Missing Participant ID", tag: "pre-menu");
+           //     Debug.LogWarning("Missing Participant ID");
+           //     GetComponents<AudioSource>()[1].Play();
+           // }
             currSelectableList = calibSelectableList;
             currAudioList = calibAudioSourceList;
             ToggleTopButton();
@@ -318,7 +320,7 @@ public class IsolatedMenuScript : MonoBehaviour {
     /// </summary>
     private void CheckAndPlayAudio()
     {
-        if (playingAudioQueue.Count != 0)
+        if (playingAudioQueue != null && playingAudioQueue.Count != 0)
         {
             if (playingAudio != null && playingAudio.isPlaying) {
                 playingAudio.Stop();
@@ -334,7 +336,7 @@ public class IsolatedMenuScript : MonoBehaviour {
     /// <param name="isLefty"></param>
     private void StartCalbMenu(bool isLefty)
     {
-        expInputField.text = partInputField.text;
+        //expInputField.text = partInputField.text;
         startMenuGO.SetActive(false);
         mainMenuGO.SetActive(false);
         calibrationGO.SetActive(true);

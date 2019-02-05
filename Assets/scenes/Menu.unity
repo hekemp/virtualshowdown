@@ -5633,7 +5633,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1135612043}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0449c16a27ba3ec479fd1ba2d86a7e15, type: 3}
+  m_Script: {fileID: 11500000, guid: 45a203275d190094999015394a48a6c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ourBall: {fileID: 1988242986954202, guid: 00401e9af8e7daf41b18abe67b428a6a, type: 2}
@@ -7573,13 +7573,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1757528461}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c933eaf7a4b68f40840f52115763686, type: 3}
+  m_Script: {fileID: 11500000, guid: e41f1a18257662f40b25999a60e15408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   AudioOnlyButton: {fileID: 337807713}
   freeButton: {fileID: 1704080670}
   expMenuText: {fileID: 0}
-  partInputField: {fileID: 1996806694}
   startRightHand: {fileID: 982010532}
   startLeftHand: {fileID: 397968657}
   expInputField: {fileID: 0}

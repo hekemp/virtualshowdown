@@ -6,8 +6,6 @@ using System.Text;
 using System.Timers;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ExpManager : MonoBehaviour
