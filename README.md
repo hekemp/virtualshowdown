@@ -12,6 +12,16 @@ Requirements:
 Optional Requirements: 
 - Bluetooth Enabled Computer
 
+Setting up the Kinect:
+1. Place the Kinect at least 3 feet off of the ground by placing it on a table, mantel, or bookshelf. If there is no tall surface to place the Kinect, rotate the box that packaged the Kinect sensor so it is at it's tallest. Place this box on a stable surface, and place the Kinect at the top of the box. 
+2. The front of the Kinect will have 3 circular indents. The Kinect should face an open space so you have plenty of room to move safely. While we recommend at least 6 feet of open space for your safety, the device can be used in smaller spaces, so long as you can stand approximately 3 feet away from the device.
+3. Once the Kinect has been placed, plug the power cable for the Kinect sensor into the wall. Depending on how your Kinect came packaged, you may need to attatch a wire from your Kinect into the power pack of this cable to provide it power.
+4. Plug the USB cable for the Kinect sensor into your computer's USB port. Your computer should automatically download and install the required files. This may take several minutes.
+
+Running VR Showdown (From Unity):
+
+Running VR Showndown (From .exe):
+
 Pairing the Nintendo Switch Joy-Con to Your Computer:
 
 1. Open your PC's settings menu (Windows Key + i)
