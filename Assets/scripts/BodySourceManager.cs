@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 using Windows.Kinect;
 using Microsoft.Kinect.Face;
 using System.Collections.Generic;
@@ -22,6 +23,7 @@ public class BodySourceManager : MonoBehaviour
         return _FaceData;
     }
 
+
     void Start()
     {
         _Sensor = KinectSensor.GetDefault();
@@ -35,6 +37,7 @@ public class BodySourceManager : MonoBehaviour
                 _Sensor.Open();
             }
         }
+
 
         this.faceFrameSources = new FaceFrameSource[_Sensor.BodyFrameSource.BodyCount];
         this.faceFrameReaders = new FaceFrameReader[_Sensor.BodyFrameSource.BodyCount];
@@ -110,21 +113,6 @@ public class BodySourceManager : MonoBehaviour
                 frame = null;
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     private FaceFrameResult[] processFaceData(int bodyCount)
