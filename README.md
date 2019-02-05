@@ -4,7 +4,8 @@ Virtual Showdown (eyes-free Virtual Reality game)
 Requirements:
 - Windows OS 
 - Kinect 2.0 
-- Kinect 2.0 SDK https://www.microsoft.com/en-us/download/details.aspx?id=44561
+- [Kinect 2.0 SDK](https://www.microsoft.com/en-us/download/details.aspx?id=44561)
+- [Kinect for Windows SDK](http://www.microsoft.com/en-us/download/details.aspx?id=40278)
 - Nintendo Switch Joy-Con
 - Unity
 
@@ -29,7 +30,7 @@ My Joy-Con's syncing lights continue to flash even after following these steps!
 
 This is, unfortunately, just how the Joy-Con is programmed to work when synced with a computer. Provided that you ran into no errors during these steps, your device will be paired and connected correctly, though.
 
-During syncing, the computer asks for a pin!:
+During syncing, the computer asks for a pin!
 
 Thankfully, the Switch uses the default pins for Bluetooth devices. Try "0000", and if this doesn't work, try "1234". If neither of these work, please consult your Joy-Con manual or provider, as they may have changed the pin for the device.
 
@@ -39,11 +40,11 @@ Unity Services Error:
 
 Initially, this project was created in Unity teams. Consequently, there occasionally, when first loading the project for the first time, be some errors regarding the legacy bits of configs for Unity Services. The way the team has managed to get around this is by clicking the "New Link" option to invoke a new set-up menu session and then leaving the menu. This will prevent these errors in the project, at least until a suitable solution can be achieved to remove this bug.
 
-Nintendo Switch Joycon Password Requested:
+DllNotFoundException: Kinect Unity Addin:
 
-It's usually the default (0000)
+If you run into this error on the console of Unity, this means that there is something wrong with your instalation of the [Kinect for Windows SDK](http://www.microsoft.com/en-us/download/details.aspx?id=40278) or that it may be missing altogether. Be sure to go through the installation again and ensure there was no errors.
 
 
 Developer References:
 
-Sample Kinect Files: https://developer.microsoft.com/en-us/windows/kinect 
+Sample Kinect Files: https://developer.microsoft.com/en-us/windows/kinect (Scroll down to "NuGet and Unity Pro add-ons" and download "Unity Pro packages" for sample projects
