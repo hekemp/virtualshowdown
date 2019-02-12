@@ -2,7 +2,7 @@
 Virtual Showdown (eyes-free Virtual Reality game)
 
 Requirements:
-- Windows OS 
+- Windows OS (An Intel Motherboard is **required**)
 - Kinect 2.0 
 - [Kinect 2.0 SDK](https://www.microsoft.com/en-us/download/details.aspx?id=44561)
 - [Kinect for Windows SDK](http://www.microsoft.com/en-us/download/details.aspx?id=40278)
