@@ -2,7 +2,7 @@
 Virtual Showdown (eyes-free Virtual Reality game)
 
 Requirements:
-- Windows OS 
+- Windows OS (An Intel Motherboard is **required**)
 - Kinect 2.0 
 - [Kinect 2.0 SDK](https://www.microsoft.com/en-us/download/details.aspx?id=44561)
 - [Kinect for Windows SDK](http://www.microsoft.com/en-us/download/details.aspx?id=40278)
@@ -17,6 +17,7 @@ Setting up the Kinect:
 2. The front of the Kinect will have 3 circular indents. The Kinect should face an open space so you have plenty of room to move safely. While we recommend at least 6 feet of open space for your safety, the device can be used in smaller spaces, so long as you can stand approximately 3 feet away from the device.
 3. Once the Kinect has been placed, plug the power cable for the Kinect sensor into the wall. Depending on how your Kinect came packaged, you may need to attatch a wire from your Kinect into the power pack of this cable to provide it power.
 4. Plug the USB cable for the Kinect sensor into your computer's USB port. Your computer should automatically download and install the required files. This may take several minutes.
+5. (Optional/Troubleshooting) If your drivers aren't downloaded automatically (usually due to security settings), please download the drivers and runtime dependencies [here](https://www.microsoft.com/en-us/download/details.aspx?id=44559)
 
 Running VR Showdown (From Unity):
 
