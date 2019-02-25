@@ -27,68 +27,19 @@ public class MenuSetupSection : MonoBehaviour
 					var lefthandBtn = Buttons[0].GetComponent<Button>();
 					lefthandBtn.onClick.AddListener(OnLeftHandSelected);
 					var righthandBtn = Buttons[1].GetComponent<Button>();
-					righthandBtn.onClick.AddListener(() =>
-						{
-							PreferenceManager.Instance.PlayerHandedness = Handedness.Right;
-							Finish();
-						});
-					break;
+					righthandBtn.onClick.AddListener(OnRightHandSelected);
+                    break;
 				case MenuSetupSectionType.ControllerRumble:
 					var rumbleButton = Buttons[0].GetComponent<Button>();
-					rumbleButton.onClick.AddListener(() =>
-					{
-						PreferenceManager.Instance.ControllerRumble = true;
-						Finish();
-					});
+					rumbleButton.onClick.AddListener(OnVibrationOnSelected);
 					var noRumbleButton = Buttons[1].GetComponent<Button>();
-					noRumbleButton.onClick.AddListener(() =>
-					{
-						PreferenceManager.Instance.ControllerRumble = false;
-						Finish();
-					});
+					noRumbleButton.onClick.AddListener(OnVibrationOffSelected);
 					break;
 				case MenuSetupSectionType.NarratorVoice:
 					var maleButton = Buttons[0].GetComponent<Button>();
-					maleButton.onClick.AddListener(() =>
-					{
-						PreferenceManager.Instance.NarratorVoice = NarratorVoice.MaleVoice;
-						Finish();
-					});
+					maleButton.onClick.AddListener(OnMaleNarratorSelected);
 					var femaleButton = Buttons[1].GetComponent<Button>();
-					femaleButton.onClick.AddListener(() =>
-					{
-						// TODO: Female voice
-						PreferenceManager.Instance.NarratorVoice = NarratorVoice.MaleVoice;
-						Finish();
-					});
-					break;
-				case MenuSetupSectionType.NarratorTalkativeness:
-					var silentButton = Buttons[0].GetComponent<Button>();
-					silentButton.onClick.AddListener(() =>
-					{
-						PreferenceManager.Instance.NarratorTalkativeness = NarratorTalkativeness.Silent;
-						Finish();
-					});
-					var verboseButton = Buttons[1].GetComponent<Button>();
-					verboseButton.onClick.AddListener(() =>
-					{
-						PreferenceManager.Instance.NarratorTalkativeness = NarratorTalkativeness.Verbose;
-						Finish();
-					});
-					break;
-				case MenuSetupSectionType.TooltipNarration:
-					var tooltipOnButton = Buttons[0].GetComponent<Button>();
-					tooltipOnButton.onClick.AddListener(() =>
-					{
-						PreferenceManager.Instance.TooltipNarration = true;
-						Finish();
-					});
-					var tooltipOffButton = Buttons[1].GetComponent<Button>();
-					tooltipOffButton.onClick.AddListener(() =>
-					{
-						PreferenceManager.Instance.TooltipNarration = false;
-						Finish();
-					});
+					femaleButton.onClick.AddListener(OnFemaleNarratorSelected);
 					break;
 		}
 	}
@@ -101,7 +52,58 @@ public class MenuSetupSection : MonoBehaviour
         Finish();
     }
 
-	public void OnQuestionShown()
+    public void OnRightHandSelected()
+    {
+        if (!gameObject.activeInHierarchy)
+            return;
+        PreferenceManager.Instance.PlayerHandedness = Handedness.Right;
+        Finish();
+    }
+
+    public void OnVibrationOnSelected()
+    {
+        if (!gameObject.activeInHierarchy)
+            return;
+        PreferenceManager.Instance.ControllerRumble = true;
+        Finish();
+    }
+
+    public void OnVibrationOffSelected()
+    {
+        if (!gameObject.activeInHierarchy)
+            return;
+        PreferenceManager.Instance.ControllerRumble = false;
+        Finish();
+    }
+
+    public void OnMaleNarratorSelected()
+    {
+        if (!gameObject.activeInHierarchy)
+            return;
+        PreferenceManager.Instance.NarratorVoice = NarratorVoice.MaleVoice;
+        Finish();
+    }
+
+    public void OnFemaleNarratorSelected()
+    {
+        // TODO: Female voice
+        if (!gameObject.activeInHierarchy)
+            return;
+        PreferenceManager.Instance.NarratorVoice = NarratorVoice.MaleVoice;
+        Finish();
+    }
+
+    public void OnDefaultSelected()
+    {
+        Finish();
+    }
+
+    public void OnRepeatSelected()
+    {
+        OnQuestionShown();
+    }
+
+    public void OnQuestionShown()
 	{
 		// TODO: Narrate question
 	}

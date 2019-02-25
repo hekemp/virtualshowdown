@@ -32,7 +32,7 @@ public class MenuSetup : MonoBehaviour
 		Sections[_activeSection].OnQuestionShown();
 	}
 
-	void GoToNextSection()
+	public void GoToNextSection()
 	{
 		_activeSection += 1;
 		if (_activeSection == Sections.Count)
@@ -42,4 +42,9 @@ public class MenuSetup : MonoBehaviour
 		}
 		SetSections();
 	}
+
+    public void OnRepeatSelected()
+    {
+        Sections[_activeSection].OnQuestionShown();
+    }
 }
