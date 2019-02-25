@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class MenuSetup : MonoBehaviour
 {
-	public  List<MenuSetupSection> Sections;
+    public KinectAudioParser AudioParser;
+    public  List<MenuSetupSection> Sections;
 	private int _activeSection = 0;
 
 	// Use this for initialization

@@ -25,11 +25,7 @@ public class MenuSetupSection : MonoBehaviour
 		{
 				case MenuSetupSectionType.Handedness:
 					var lefthandBtn = Buttons[0].GetComponent<Button>();
-					lefthandBtn.onClick.AddListener(() =>
-						{
-							PreferenceManager.Instance.PlayerHandedness = Handedness.Left;
-							Finish();
-						});
+					lefthandBtn.onClick.AddListener(OnLeftHandSelected);
 					var righthandBtn = Buttons[1].GetComponent<Button>();
 					righthandBtn.onClick.AddListener(() =>
 						{
@@ -96,6 +92,14 @@ public class MenuSetupSection : MonoBehaviour
 					break;
 		}
 	}
+
+    public void OnLeftHandSelected()
+    {
+        if (!gameObject.activeInHierarchy)
+            return;
+        PreferenceManager.Instance.PlayerHandedness = Handedness.Left;
+        Finish();
+    }
 
 	public void OnQuestionShown()
 	{
