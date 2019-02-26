@@ -98,10 +98,7 @@ public class MenuSetupSection : MonoBehaviour
         Finish();
     }
 
-    public void OnRepeatSelected()
-    {
-        OnQuestionShown();
-    }
+
 
     public void OnQuestionShown()
 	{
