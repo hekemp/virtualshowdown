@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class MenuSetup : MonoBehaviour
 {
@@ -35,9 +37,15 @@ public class MenuSetup : MonoBehaviour
 	public void GoToNextSection()
 	{
 		_activeSection += 1;
+		// If the next section is for the controller rumble but we don't have a controller attatched, we can skip the rumble setting
+		if ((Sections[_activeSection].Section == MenuSetupSectionType.ControllerRumble) && (!JoyconController.CheckJoyconAvail()))
+		{
+			_activeSection += 1;
+			PreferenceManager.Instance.ControllerRumble = false;
+		}
 		if (_activeSection == Sections.Count)
 		{
-			// TODO: Exit setup
+			SceneManager.LoadScene("Main_Menu");
 			_activeSection = 0;
 		}
 		SetSections();

@@ -28,7 +28,7 @@ public class JoyconController : MonoBehaviour {
         }
     }
 
-    private static bool CheckJoyconAvail()
+    public static bool CheckJoyconAvail()
     {
         // make sure the Joycon only gets checked if at least 1 is attached
         return j != null && j.Exists(joycon => joycon.state == Joycon.state_.ATTACHED);
