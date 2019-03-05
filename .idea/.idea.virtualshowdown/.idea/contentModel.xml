@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\dev\virtualshowdown" t="IncludeRecursive">
+      <e p="Assembly-CSharp-Editor-firstpass.csproj" t="IncludeRecursive" />
+      <e p="Assembly-CSharp-firstpass.csproj" t="IncludeRecursive" />
+      <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
+      <e p="Assets\JoyconDemo.cs" t="Include" />
+      <e p="Assets\JoyconLib_scripts" t="Include">
+        <e p="HIDapi.cs" t="Include" />
+        <e p="Joycon.cs" t="Include" />
+        <e p="JoyconManager.cs" t="Include" />
+      </e>
+      <e p="Assets\KinectView" t="Include">
+        <e p="Scripts" t="Include">
+          <e p="ColorSourceManager.cs" t="Include" />
+          <e p="ColorSourceView.cs" t="Include" />
+          <e p="DepthSourceManager.cs" t="Include" />
+          <e p="DepthSourceView.cs" t="Include" />
+          <e p="DisableOnStart.cs" t="Include" />
+          <e p="InfraredSourceManager.cs" t="Include" />
+          <e p="InfraredSourceView.cs" t="Include" />
+          <e p="MultiSourceManager.cs" t="Include" />
+        </e>
+      </e>
+      <e p="Assets\Plugins" t="Include">
+        <e p="x86_64" t="Include">
+          <e p="NuiDatabase" t="Include">
+            <e p="Expression" t="Include">
+              <e p="NuiExpressionModelManifest.txt" t="Include" />
+            </e>
+            <e p="HDFaceTracker" t="Include">
+              <e p="AAMModel" t="Include">
+                <e p="Map2D3D_F.txt" t="Include" />
+                <e p="Map2D3D_HLP.txt" t="Include" />
+                <e p="Map2D3D_HRP.txt" t="Include" />
+              </e>
+              <e p="EvalModel" t="Include">
+                <e p="Front.p.txt" t="Include" />
+                <e p="left.p.txt" t="Include" />
+                <e p="right.p.txt" t="Include" />
+              </e>
+              <e p="MouthModel" t="Include">
+                <e p="close.p.txt" t="Include" />
+                <e p="lopen.p.txt" t="Include" />
+                <e p="MeanShapes.txt" t="Include" />
+              </e>
+              <e p="SkintoneModel" t="Include">
+                <e p="skintone_appearance_classifier.txt" t="Include" />
+                <e p="skintone_shape_classifier.txt" t="Include" />
+              </e>
+              <e p="ViewModel" t="Include">
+                <e p="Front.p.txt" t="Include" />
+                <e p="left.p.txt" t="Include" />
+                <e p="right.p.txt" t="Include" />
+              </e>
+              <e p="WholeHeadModel" t="Include">
+                <e p="FullHeadMaskVertexCorrespondence.txt" t="Include" />
+              </e>
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="Assets\Scripts" t="Include">
+        <e p="AudioManager.cs" t="Include" />
+        <e p="InputManager.cs" t="Include" />
+        <e p="JoyconController.cs" t="Include" />
+        <e p="Kinect API" t="Include">
+          <e p="BodySourceManager.cs" t="Include" />
+          <e p="BodySourceView.cs" t="Include" />
+        </e>
+        <e p="KinectInputManager.cs" t="Include" />
+        <e p="MenuSetup.cs" t="Include" />
+        <e p="MenuSetupSection.cs" t="Include" />
+        <e p="PreferenceManager.cs" t="Include" />
+        <e p="Test.cs" t="Include" />
+      </e>
+      <e p="Assets\Standard Assets" t="Include">
+        <e p="CameraIntrinsics.cs" t="Include" />
+        <e p="CollectionMap.cs" t="Include" />
+        <e p="Editor" t="Include">
+          <e p="KinectCopyPluginDataHelper.cs" t="Include" />
+          <e p="KinectFacePostBuildCopyPluginData.cs" t="Include" />
+        </e>
+        <e p="EventPump.cs" t="Include" />
+        <e p="ExceptionHelper.cs" t="Include" />
+        <e p="INativeWrapper.cs" t="Include" />
+        <e p="KinectBuffer.cs" t="Include" />
+        <e p="KinectFaceSpecialCases.cs" t="Include" />
+        <e p="KinectSpecialCases.cs" t="Include" />
+        <e p="Microsoft" t="Include">
+          <e p="Kinect" t="Include">
+            <e p="Face" t="Include">
+              <e p="CaptureStatusChangedEventArgs.cs" t="Include" />
+              <e p="CollectionStatusChangedEventArgs.cs" t="Include" />
+              <e p="FaceAlignment.cs" t="Include" />
+              <e p="FaceAlignmentQuality.cs" t="Include" />
+              <e p="FaceFrame.cs" t="Include" />
+              <e p="FaceFrameArrivedEventArgs.cs" t="Include" />
+              <e p="FaceFrameFeatures.cs" t="Include" />
+              <e p="FaceFrameReader.cs" t="Include" />
+              <e p="FaceFrameReference.cs" t="Include" />
+              <e p="FaceFrameResult.cs" t="Include" />
+              <e p="FaceFrameSource.cs" t="Include" />
+              <e p="FaceModel.cs" t="Include" />
+              <e p="FaceModelBuilder.cs" t="Include" />
+              <e p="FaceModelBuilderAttributes.cs" t="Include" />
+              <e p="FaceModelBuilderCaptureStatus.cs" t="Include" />
+              <e p="FaceModelBuilderCollectionStatus.cs" t="Include" />
+              <e p="FaceModelData.cs" t="Include" />
+              <e p="FacePointType.cs" t="Include" />
+              <e p="FaceProperty.cs" t="Include" />
+              <e p="FaceShapeAnimations.cs" t="Include" />
+              <e p="FaceShapeDeformations.cs" t="Include" />
+              <e p="HighDefinitionFaceFrame.cs" t="Include" />
+              <e p="HighDefinitionFaceFrameArrivedEventArgs.cs" t="Include" />
+              <e p="HighDefinitionFaceFrameReader.cs" t="Include" />
+              <e p="HighDefinitionFaceFrameReference.cs" t="Include" />
+              <e p="HighDefinitionFaceFrameSource.cs" t="Include" />
+              <e p="HighDetailFacePoints.cs" t="Include" />
+              <e p="KinectFaceUnityAddinUtils.cs" t="Include" />
+              <e p="RectI.cs" t="Include" />
+              <e p="TrackingIdLostEventArgs.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="NativeObjectCache.cs" t="Include" />
+        <e p="NativeWrapper.cs" t="Include" />
+        <e p="SmartGCHandle.cs" t="Include" />
+        <e p="ThreadSafeDictionary.cs" t="Include" />
+        <e p="Windows" t="Include">
+          <e p="Data" t="Include">
+            <e p="PropertyChangedEventArgs.cs" t="Include" />
+          </e>
+          <e p="Kinect" t="Include">
+            <e p="Activity.cs" t="Include" />
+            <e p="Appearance.cs" t="Include" />
+            <e p="AudioBeam.cs" t="Include" />
+            <e p="AudioBeamFrame.cs" t="Include" />
+            <e p="AudioBeamFrameArrivedEventArgs.cs" t="Include" />
+            <e p="AudioBeamFrameList.cs" t="Include" />
+            <e p="AudioBeamFrameReader.cs" t="Include" />
+            <e p="AudioBeamFrameReference.cs" t="Include" />
+            <e p="AudioBeamMode.cs" t="Include" />
+            <e p="AudioBeamSubFrame.cs" t="Include" />
+            <e p="AudioBodyCorrelation.cs" t="Include" />
+            <e p="AudioSource.cs" t="Include" />
+            <e p="Body.cs" t="Include" />
+            <e p="BodyFrame.cs" t="Include" />
+            <e p="BodyFrameArrivedEventArgs.cs" t="Include" />
+            <e p="BodyFrameReader.cs" t="Include" />
+            <e p="BodyFrameReference.cs" t="Include" />
+            <e p="BodyFrameSource.cs" t="Include" />
+            <e p="BodyIndexFrame.cs" t="Include" />
+            <e p="BodyIndexFrameArrivedEventArgs.cs" t="Include" />
+            <e p="BodyIndexFrameReader.cs" t="Include" />
+            <e p="BodyIndexFrameReference.cs" t="Include" />
+            <e p="BodyIndexFrameSource.cs" t="Include" />
+            <e p="CameraSpacePoint.cs" t="Include" />
+            <e p="ColorCameraSettings.cs" t="Include" />
+            <e p="ColorFrame.cs" t="Include" />
+            <e p="ColorFrameArrivedEventArgs.cs" t="Include" />
+            <e p="ColorFrameReader.cs" t="Include" />
+            <e p="ColorFrameReference.cs" t="Include" />
+            <e p="ColorFrameSource.cs" t="Include" />
+            <e p="ColorImageFormat.cs" t="Include" />
+            <e p="ColorSpacePoint.cs" t="Include" />
+            <e p="CoordinateMapper.cs" t="Include" />
+            <e p="CoordinateMappingChangedEventArgs.cs" t="Include" />
+            <e p="DepthFrame.cs" t="Include" />
+            <e p="DepthFrameArrivedEventArgs.cs" t="Include" />
+            <e p="DepthFrameReader.cs" t="Include" />
+            <e p="DepthFrameReference.cs" t="Include" />
+            <e p="DepthFrameSource.cs" t="Include" />
+            <e p="DepthSpacePoint.cs" t="Include" />
+            <e p="DetectionResult.cs" t="Include" />
+            <e p="Expression.cs" t="Include" />
+            <e p="FrameCapturedEventArgs.cs" t="Include" />
+            <e p="FrameCapturedStatus.cs" t="Include" />
+            <e p="FrameDescription.cs" t="Include" />
+            <e p="FrameEdges.cs" t="Include" />
+            <e p="FrameSourceTypes.cs" t="Include" />
+            <e p="HandState.cs" t="Include" />
+            <e p="InfraredFrame.cs" t="Include" />
+            <e p="InfraredFrameArrivedEventArgs.cs" t="Include" />
+            <e p="InfraredFrameReader.cs" t="Include" />
+            <e p="InfraredFrameReference.cs" t="Include" />
+            <e p="InfraredFrameSource.cs" t="Include" />
+            <e p="IsAvailableChangedEventArgs.cs" t="Include" />
+            <e p="Joint.cs" t="Include" />
+            <e p="JointOrientation.cs" t="Include" />
+            <e p="JointType.cs" t="Include" />
+            <e p="KinectAudioCalibrationState.cs" t="Include" />
+            <e p="KinectCapabilities.cs" t="Include" />
+            <e p="KinectSensor.cs" t="Include" />
+            <e p="KinectUnityAddinUtils.cs" t="Include" />
+            <e p="LongExposureInfraredFrame.cs" t="Include" />
+            <e p="LongExposureInfraredFrameArrivedEventArgs.cs" t="Include" />
+            <e p="LongExposureInfraredFrameReader.cs" t="Include" />
+            <e p="LongExposureInfraredFrameReference.cs" t="Include" />
+            <e p="LongExposureInfraredFrameSource.cs" t="Include" />
+            <e p="MultiSourceFrame.cs" t="Include" />
+            <e p="MultiSourceFrameArrivedEventArgs.cs" t="Include" />
+            <e p="MultiSourceFrameReader.cs" t="Include" />
+            <e p="MultiSourceFrameReference.cs" t="Include" />
+            <e p="TrackingConfidence.cs" t="Include" />
+            <e p="TrackingState.cs" t="Include" />
+            <e p="Vector4.cs" t="Include" />
+          </e>
+        </e>
+      </e>
+      <e p="Library" t="ExcludeRecursive" />
+      <e p="obj" t="ExcludeRecursive" />
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="Temp" t="ExcludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+      </e>
+      <e p="virtualshowdown.sln" t="IncludeFlat" />
+    </e>
+    <e p="C:\Users\Alic Szecsei\.Rider2018.2\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\Alic Szecsei\.Rider2018.2\system\resharper-host\Local\Transient\ReSharperHost\v182\SolutionCaches\_virtualshowdown.-1221050842.00" t="ExcludeRecursive" />
+  </component>
+</project>

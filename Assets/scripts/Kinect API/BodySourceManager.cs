@@ -12,6 +12,8 @@ public class BodySourceManager : MonoBehaviour
     private FaceFrameResult[] _FaceData;
     private FaceFrameSource[] faceFrameSources = null;
     private FaceFrameReader[] faceFrameReaders = null;
+    
+    public static BodySourceManager Instance;
 
     public Body[] GetData()
     {
@@ -26,6 +28,18 @@ public class BodySourceManager : MonoBehaviour
 
     void Start()
     {
+        // We only ever want 1 copy of this game object!
+        if (Instance != null)
+        {
+            Destroy(this);
+            return;
+        }
+		
+        // We want preferences to persist throughout the menus
+        DontDestroyOnLoad(this);
+		
+        Instance = this;
+        
         _Sensor = KinectSensor.GetDefault();
 
         if (_Sensor != null)

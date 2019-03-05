@@ -50,7 +50,6 @@ public class BodySourceView : MonoBehaviour
     private const double FaceRotationIncrementInDegrees = 0.01;
 
     public static bool leftyMode;
-    public Toggle leftyToggle;
 
     public static CameraSpacePoint handPosition;
     public static CameraSpacePoint wristPosition;
@@ -61,34 +60,32 @@ public class BodySourceView : MonoBehaviour
 
     public static Quaternion faceRotation;
     public static bool BodyFound;
+    
+    public static BodySourceView Instance;
 
     public void Start()
     {
-        //Code used for actual menu and should be used in futher deployment coding
-        if (PlayerPrefs.GetInt("hand") == 0)
+        // We only ever want 1 copy of this game object!
+        if (Instance != null)
         {
-            leftyMode = false;
+            Destroy(this);
+            return;
         }
-        else
-        {
-            leftyMode = true;
-        }
+		
+        // We want preferences to persist throughout the menus
+        DontDestroyOnLoad(this);
+		
+        Instance = this;
+        
+        leftyMode = PreferenceManager.Instance.PlayerHandedness == Handedness.Left;
 
-        //leftyToggle.isOn = leftyMode;
     }
 
     void Update()
     {
-        if (leftyToggle != null)
+        if (PreferenceManager.Instance.PlayerHandedness != null)
         {
-            if (leftyToggle.isOn) //Left handed
-            {
-                leftyMode = true;
-            }
-            else
-            {
-                leftyMode = false;
-            }
+            leftyMode = PreferenceManager.Instance.PlayerHandedness == Handedness.Left;
         }
 
 
@@ -141,6 +138,7 @@ public class BodySourceView : MonoBehaviour
             {
                 Destroy(_Bodies[trackingId]);
                 _Bodies.Remove(trackingId);
+                BodyFound = false;
             }
         }
 
@@ -148,6 +146,7 @@ public class BodySourceView : MonoBehaviour
         {
             if (body == null)
             {
+                BodyFound = false;
                 continue;
             }
 
@@ -164,25 +163,10 @@ public class BodySourceView : MonoBehaviour
         }
     }
 
-    public void SetLeftyToggle(bool isLefty)
-    {
-        if (isLefty)
-        {
-            if(leftyToggle != null)
-                leftyToggle.isOn = true;
-            leftyMode = true;
-        }
-        else
-        {
-            if (leftyToggle != null)
-                leftyToggle.isOn = false;
-            leftyMode = false;
-        }
-    }
-
     private GameObject CreateBodyObject(ulong id)
     {
         GameObject body = new GameObject("Body:" + id);
+        BodyFound = true;
 
         for (Kinect.JointType jt = Kinect.JointType.SpineBase; jt <= Kinect.JointType.ThumbRight; jt++)
         {
