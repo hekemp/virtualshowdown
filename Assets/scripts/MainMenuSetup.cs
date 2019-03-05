@@ -10,13 +10,14 @@ public class MainMenuSetup : MonoBehaviour
 	public KinectAudioParser AudioParser;
 	public Button DrillModeBtn;
 	public Button ShowdownPracticeBtn;
-	public Button Preferences;
+	public Button PreferencesBtn;
 
 	// Use this for initialization
 	void Start () {
 		
-		// TODO: Add BTN listeners
-		// Reference: section.OnSelectionMade.AddListener(GoToNextSection);
+		DrillModeBtn.onClick.AddListener(StartDrillMode);
+		ShowdownPracticeBtn.onClick.AddListener(StartShowdownPractice);
+		PreferencesBtn.onClick.AddListener(StartPreferencesMenu);
 	}
 	
 	// Update is called once per frame
@@ -26,17 +27,20 @@ public class MainMenuSetup : MonoBehaviour
 
 	public void StartDrillMode()
 	{
-		
+		Debug.Log("Going to drill mode");
+		SceneManager.LoadScene("DrillMode");
 	}
 
 	public void StartShowdownPractice()
 	{
-		
+		Debug.Log("Going to showdown mode");
+		SceneManager.LoadScene("ShowdownPractice");
 	}
 
 	public void StartPreferencesMenu()
 	{
-		
+		Debug.Log("Going to preference mode");
+		SceneManager.LoadScene("MenuSetup");
 	}
 
 }

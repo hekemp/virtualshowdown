@@ -20,3 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/scenes/Main_Menu.unity
     guid: 785c9fe4f43e8a94f87b4bc4c6f51931
+  - enabled: 1
+    path: Assets/scenes/DrillMode.unity
+    guid: a24e0420aacc61f4fab0b422e1715883
+  - enabled: 1
+    path: Assets/scenes/ShowdownPractice.unity
+    guid: b3f82e8a28f38d84bbc9fbfc2aab8f05
