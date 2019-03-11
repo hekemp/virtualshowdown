@@ -14,7 +14,10 @@ public class MenuSetup : MonoBehaviour
 	void Start () {
 		foreach (var section in Sections)
 		{
-			section.OnSelectionMade.AddListener(GoToNextSection);
+            if(section) {
+                section.OnSelectionMade.AddListener(GoToNextSection);
+            }
+			
 		}
 		SetSections();
 	}
@@ -37,16 +40,17 @@ public class MenuSetup : MonoBehaviour
 	public void GoToNextSection()
 	{
 		_activeSection += 1;
-		// If the next section is for the controller rumble but we don't have a controller attatched, we can skip the rumble setting
-		if ((Sections[_activeSection].Section == MenuSetupSectionType.ControllerRumble) && (!JoyconController.CheckJoyconAvail()))
+        if (_activeSection == Sections.Count)
+        {
+            SceneManager.LoadScene("Main_Menu");
+            _activeSection = 0;
+            return;
+        }
+        // If the next section is for the controller rumble but we don't have a controller attatched, we can skip the rumble setting
+        if ((Sections[_activeSection].Section == MenuSetupSectionType.ControllerRumble) && (!JoyconController.CheckJoyconAvail()))
 		{
 			_activeSection += 1;
 			PreferenceManager.Instance.ControllerRumble = false;
-		}
-		if (_activeSection == Sections.Count)
-		{
-			SceneManager.LoadScene("Main_Menu");
-			_activeSection = 0;
 		}
 		SetSections();
 	}

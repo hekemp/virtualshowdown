@@ -119,6 +119,7 @@ public class MenuSetupSection : MonoBehaviour
         {
             // TODO: Announce that we need to see just 1 player
             Debug.Log("Please clear the play area so there is just 1 player.");
+            return;
         }
 		Finish();
 	}
