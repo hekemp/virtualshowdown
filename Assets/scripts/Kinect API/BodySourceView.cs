@@ -60,6 +60,7 @@ public class BodySourceView : MonoBehaviour
 
     public static Quaternion faceRotation;
     public static bool BodyFound;
+    public static int numberOfBodiesFound = 0;
     
     public static BodySourceView Instance;
 
@@ -139,6 +140,7 @@ public class BodySourceView : MonoBehaviour
                 Destroy(_Bodies[trackingId]);
                 _Bodies.Remove(trackingId);
                 BodyFound = false;
+                numberOfBodiesFound--;
             }
         }
 
@@ -182,6 +184,7 @@ public class BodySourceView : MonoBehaviour
             jointObj.transform.parent = body.transform;
         }
 
+        numberOfBodiesFound++;
         return body;
     }
 

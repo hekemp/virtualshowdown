@@ -23,6 +23,7 @@ public class MenuSetupSection : MonoBehaviour
 	public MenuSetupSectionType Section;
 	public UnityEvent OnSelectionMade = new UnityEvent();
 	public bool bodyAnnounced = false;
+    public bool multipleBodiesAnnounced = false;
 
 	// Use this for initialization
 	void Start () {
@@ -114,6 +115,11 @@ public class MenuSetupSection : MonoBehaviour
 			Debug.Log("Please wait until we can see you.");
 			return;
 		}
+        if(BodySourceView.numberOfBodiesFound > 1)
+        {
+            // TODO: Announce that we need to see just 1 player
+            Debug.Log("Please clear the play area so there is just 1 player.");
+        }
 		Finish();
 	}
 
@@ -189,7 +195,33 @@ public class MenuSetupSection : MonoBehaviour
 				{
 					// Nothing yet? 
 				}
-				break;
+
+                // Multiple bodies was already announced and we still multiple bodies. AKA waiting for them to move.
+                if (multipleBodiesAnnounced && (BodySourceView.numberOfBodiesFound == 1))
+                {
+                    // Nothing yet?
+                }
+                // Multiple bodies was not announced and we see multiple bodies. Aka announce that there's an error here.
+                else if (!multipleBodiesAnnounced && (BodySourceView.numberOfBodiesFound == 1))
+                {
+                    // TODO: Announce status
+                    Debug.Log("We see two bodies! Please clear the play area if you're not the player");
+                    multipleBodiesAnnounced = true;
+                }
+                // Multiple bodies were seen but now we only see one. AKA we need to announce that we're good to go
+                else if (multipleBodiesAnnounced && !(BodySourceView.numberOfBodiesFound > 1))
+                {
+                    // TODO: Announce status
+                    Debug.Log("We can only see the player now! We're good to go!");
+                    multipleBodiesAnnounced = false;
+                }
+                // Multiple bodies weren't seen and we don't see multiple bodies. Aka there's nothing for us to do here
+                else
+                {
+                    // Nothing yet? 
+                }
+
+                break;
 		}
 	}
 }
