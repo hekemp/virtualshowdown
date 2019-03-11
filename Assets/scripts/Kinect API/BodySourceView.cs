@@ -84,10 +84,7 @@ public class BodySourceView : MonoBehaviour
 
     void Update()
     {
-        if (PreferenceManager.Instance.PlayerHandedness != null)
-        {
-            leftyMode = PreferenceManager.Instance.PlayerHandedness == Handedness.Left;
-        }
+        leftyMode = PreferenceManager.Instance.PlayerHandedness == Handedness.Left;
 
 
         if (BodySourceManager == null)

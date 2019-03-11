@@ -31,8 +31,13 @@ public class MenuSetup : MonoBehaviour
 	{
 		foreach (var section in Sections)
 		{
-			section.gameObject.SetActive(false);
+            // TODO: Add if null check
+            if (section != null)
+            {
+                section.gameObject.SetActive(false);
+            }
 		}
+        Debug.Log(_activeSection);
 		Sections[_activeSection].gameObject.SetActive(true);
 		Sections[_activeSection].OnQuestionShown();
 	}
@@ -40,7 +45,7 @@ public class MenuSetup : MonoBehaviour
 	public void GoToNextSection()
 	{
 		_activeSection += 1;
-        if (_activeSection == Sections.Count)
+        if (_activeSection >= Sections.Count)
         {
             SceneManager.LoadScene("Main_Menu");
             _activeSection = 0;

@@ -5,16 +5,18 @@ using Windows.Kinect;
 
 public class CameraControllerScript : MonoBehaviour {
 
-    public float smooth = 0.01F;
+    public float smooth = 0.07F;
     public static float CameraDeltaZ;
     private float yVelocity = 0.0F;
     private float xVelocity = 0.0F;
     private float zVelocity = 0.0F;
     private float startingZPosition;
 
+    private Transform _debugCube;
+
     private void Start()
     {
-        startingZPosition = -130;
+        startingZPosition = transform.position.z;
         CameraDeltaZ = 0;
     }
 
@@ -35,7 +37,7 @@ public class CameraControllerScript : MonoBehaviour {
         float xDiff = (headPos.X - centerXPoint) * 100;
 
         Vector3 newPosition = new Vector3(xDiff, transform.position.y, startingZPosition + CameraDeltaZ);
-        transform.position = Vector3.Lerp(transform.position, newPosition, Time.fixedDeltaTime * 3);
+        transform.position = Vector3.Lerp(transform.position, newPosition, 0.01f);
 
         Quaternion fr = BodySourceView.faceRotation;
         float yAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, -fr.eulerAngles.y, ref yVelocity, smooth);

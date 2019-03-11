@@ -1728,7 +1728,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _keywords:
-  - keyword: Showdown Practice
+  - keyword: Showdown
     action:
       m_PersistentCalls:
         m_Calls:
