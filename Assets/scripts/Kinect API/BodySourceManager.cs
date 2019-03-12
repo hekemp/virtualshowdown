@@ -127,12 +127,14 @@ public class BodySourceManager : MonoBehaviour
 
     void Update()
     {
+		Debug.Log ("start");
         if (_reader == null)
         {
             // Debug.LogError("Body frame reader is null!");
             return;
         }
 
+		Debug.Log ("After reader check");
         var frame = _reader.AcquireLatestFrame();
         if (frame == null)
         {
@@ -140,6 +142,7 @@ public class BodySourceManager : MonoBehaviour
             return;
         }
 
+		Debug.Log ("Before data  check intial");
         if (_data == null)
         {
             _data = new Body[BodyCount];
@@ -190,6 +193,7 @@ public class BodySourceManager : MonoBehaviour
         
         bodyFound = false;
 
+		Debug.Log ("before the data null check");
         // Check if we've seen anything
         if (_data == null)
         {
@@ -211,6 +215,7 @@ public class BodySourceManager : MonoBehaviour
                 continue;
             }
             trackedIds.Add(body.TrackingId);
+			Debug.Log (trackedIds.Count);
         }
         
         // Delete untracked bodies
