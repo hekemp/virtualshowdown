@@ -5,13 +5,14 @@ using Kinect = Windows.Kinect;
 using UnityEngine.UI;
 using Microsoft.Kinect.Face;
 using System;
+using System.Linq;
 using Windows.Kinect;
 
 public class BodySourceView : MonoBehaviour
 {
     public Material BoneMaterial;
 
-    private Dictionary<ulong, GameObject> _Bodies = new Dictionary<ulong, GameObject>();
+    private Dictionary<ulong, GameObject> _bodies = new Dictionary<ulong, GameObject>();
 
     private Dictionary<Kinect.JointType, Kinect.JointType> _BoneMap = new Dictionary<Kinect.JointType, Kinect.JointType>()
     {
@@ -52,59 +53,46 @@ public class BodySourceView : MonoBehaviour
 
     public void Start()
     {
-        // We only ever want 1 copy of this game object!
-        //if (Instance != null)
-        //{
-        //    Destroy(this);
-        //    return;
-        //}
-		
-        // We want body to persist throughout the menus
-        //DontDestroyOnLoad(this);
-		
-        //Instance = this;
-
+        
     }
 
     void Update()
     {
-
-        //_BodyManager = BodySourceManager.GetComponent<BodySourceManager>();
-        Kinect.Body[] data = BodySourceManager.Instance.GetData();
-        //FaceFrameResult[] faceData = _BodyManager.GetFaceData();
-
-        List<ulong> trackedIds = new List<ulong>();
-        foreach (var body in data)
+        BodySourceManager bm = BodySourceManager.Instance;
+        if (bm == null)
         {
-            if (body != null && body.IsTracked)
+            return;
+        }
+        
+        // Ensure we have deleted all game objects associated with untracked bodies
+        List<ulong> knownIds = new List<ulong>(_bodies.Keys);
+        foreach (var key in knownIds)
+        {
+            if (!bm.TrackedBodyIds.Contains(key))
             {
-                trackedIds.Add(body.TrackingId);
+                Destroy(_bodies[key]);
+                _bodies.Remove(key);
             }
         }
-
-        List<ulong> knownIds = new List<ulong>(_Bodies.Keys);
-
-        // First delete untracked bodies
-        foreach (ulong trackingId in knownIds)
+        
+        // Create new game objects for all new tracked bodies
+        foreach (var key in bm.TrackedBodyIds)
         {
-            if (!trackedIds.Contains(trackingId))
+            if (!_bodies.ContainsKey(key))
             {
-                Destroy(_Bodies[trackingId]);
-                _Bodies.Remove(trackingId);
+                _bodies[key] = CreateBodyObject(key);
             }
         }
-
-        foreach (var body in data)
+        
+        // Update all body objects
+        foreach (var body in bm.Bodies)
         {
-            if (body != null && body.IsTracked)
+            if (body == null || !body.IsTracked)
             {
-                if (!_Bodies.ContainsKey(body.TrackingId))
-                {
-                    _Bodies[body.TrackingId] = CreateBodyObject(body.TrackingId);
-                }
-
-                RefreshBodyObject(body, _Bodies[body.TrackingId]);
+                continue;
             }
+            
+            RefreshBodyObject(body, _bodies[body.TrackingId]);
         }
     }
 
@@ -130,8 +118,6 @@ public class BodySourceView : MonoBehaviour
 
     private void RefreshBodyObject(Body body, GameObject bodyObject)
     {
-
-
         for (Kinect.JointType jt = Kinect.JointType.SpineBase; jt <= Kinect.JointType.ThumbRight; jt++)
         {
             Kinect.Joint sourceJoint = body.Joints[jt];
@@ -178,5 +164,4 @@ public class BodySourceView : MonoBehaviour
     {
         return new Vector3(joint.Position.X * 10, joint.Position.Y * 10, joint.Position.Z * 10);
     }
-
 }

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="C:\dev\virtualshowdown" t="IncludeRecursive">
+    <e p="C:\Users\aszecsei\.Rider2018.3\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\aszecsei\.Rider2018.3\system\resharper-host\Local\Transient\ReSharperHost\v183\SolutionCaches\_virtualshowdown.-1096977595.00" t="ExcludeRecursive" />
+    <e p="D:\dev\virtualshowdown" t="IncludeRecursive">
       <e p="Assembly-CSharp-Editor-firstpass.csproj" t="IncludeRecursive" />
       <e p="Assembly-CSharp-firstpass.csproj" t="IncludeRecursive" />
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
@@ -63,15 +65,21 @@
       </e>
       <e p="Assets\Scripts" t="Include">
         <e p="AudioManager.cs" t="Include" />
+        <e p="BallScript.cs" t="Include" />
+        <e p="CameraControllerScript.cs" t="Include" />
+        <e p="InGameAudioParserManager.cs" t="Include" />
         <e p="InputManager.cs" t="Include" />
         <e p="JoyconController.cs" t="Include" />
         <e p="Kinect API" t="Include">
           <e p="BodySourceManager.cs" t="Include" />
           <e p="BodySourceView.cs" t="Include" />
         </e>
+        <e p="KinectAudioParser.cs" t="Include" />
         <e p="KinectInputManager.cs" t="Include" />
+        <e p="MainMenuSetup.cs" t="Include" />
         <e p="MenuSetup.cs" t="Include" />
         <e p="MenuSetupSection.cs" t="Include" />
+        <e p="PaddleScript.cs" t="Include" />
         <e p="PreferenceManager.cs" t="Include" />
         <e p="Test.cs" t="Include" />
       </e>
@@ -217,7 +225,5 @@
       </e>
       <e p="virtualshowdown.sln" t="IncludeFlat" />
     </e>
-    <e p="C:\Users\Alic Szecsei\.Rider2018.2\system\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\Alic Szecsei\.Rider2018.2\system\resharper-host\Local\Transient\ReSharperHost\v182\SolutionCaches\_virtualshowdown.-1221050842.00" t="ExcludeRecursive" />
   </component>
 </project>

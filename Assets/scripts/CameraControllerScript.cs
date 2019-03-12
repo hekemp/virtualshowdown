@@ -31,7 +31,7 @@ public class CameraControllerScript : MonoBehaviour {
         CameraSpacePoint headPos = BodySourceManager.Instance.headPosition;
 
         float centerXPoint = !(Mathf.Approximately(BodySourceManager.Instance.baseKinectPosition.X, 0)) ? BodySourceManager.Instance.baseKinectPosition.X : closestZPoint.X;
-        float maxZPoint = !(Mathf.Approximately(BodySourceManager.Instance.baseKinectPosition.Z, 0)) ? BodySourceManager.Instance.baseKinectPosition.Z : BodySourceManager.Instance.MaxZDistance;
+        float maxZPoint = !(Mathf.Approximately(BodySourceManager.Instance.baseKinectPosition.Z, 0)) ? BodySourceManager.Instance.baseKinectPosition.Z : BodySourceManager.Instance.maxZDistance;
 
         CameraDeltaZ = (maxZPoint - closestZPoint.Z) * 100;
         float xDiff = (headPos.X - centerXPoint) * 100;

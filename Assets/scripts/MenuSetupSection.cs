@@ -109,13 +109,13 @@ public class MenuSetupSection : MonoBehaviour
 	{
 		if (!gameObject.activeInHierarchy)
 			return;
-        if (!BodySourceManager.Instance.BodyFound())
+        if (!BodySourceManager.Instance.bodyFound)
 		{
 			// TODO: Announce that we haven't seen the player yet
 			Debug.Log("Please wait until we can see you.");
 			return;
 		}
-        if(BodySourceManager.Instance.MultipleBodiesDetected())
+        if(BodySourceManager.Instance.MultipleBodiesDetected)
         {
             // TODO: Announce that we need to see just 1 player
             Debug.Log("Please clear the play area so there is just 1 player.");
@@ -173,19 +173,19 @@ public class MenuSetupSection : MonoBehaviour
 				break;
 			case MenuSetupSectionType.KinectCalibration:
 				// Body was already announced and we still see the body. AKA waiting their OK.
-				if (bodyAnnounced && BodySourceManager.Instance.BodyFound())
+				if (bodyAnnounced && BodySourceManager.Instance.bodyFound)
 				{
 					// Nothing yet?
 				}
 				// Body was not announced but we now see the body. AKA need to announce we found them.
-				else if (!bodyAnnounced && BodySourceManager.Instance.BodyFound())
+				else if (!bodyAnnounced && BodySourceManager.Instance.bodyFound)
 				{
 					// TODO: Announce status
 					Debug.Log("We found you!");
 					bodyAnnounced = true;
 				}
 				// Body was announced but now we don't see the body. AKA we need to announce that we lost sight of them
-				else if (bodyAnnounced && !BodySourceManager.Instance.BodyFound())
+				else if (bodyAnnounced && !BodySourceManager.Instance.bodyFound)
 				{
 					// TODO: Announce status
 					Debug.Log("We lost you!");
@@ -198,19 +198,19 @@ public class MenuSetupSection : MonoBehaviour
 				}
 
                 // Multiple bodies was already announced and we still multiple bodies. AKA waiting for them to move.
-                if (multipleBodiesAnnounced && BodySourceManager.Instance.MultipleBodiesDetected())
+                if (multipleBodiesAnnounced && BodySourceManager.Instance.MultipleBodiesDetected)
                 {
                     // Nothing yet?
                 }
                 // Multiple bodies was not announced and we see multiple bodies. Aka announce that there's an error here.
-                else if (!multipleBodiesAnnounced && BodySourceManager.Instance.MultipleBodiesDetected())
+                else if (!multipleBodiesAnnounced && BodySourceManager.Instance.MultipleBodiesDetected)
                 {
                     // TODO: Announce status
                     Debug.Log("We see two bodies! Please clear the play area if you're not the player");
                     multipleBodiesAnnounced = true;
                 }
                 // Multiple bodies were seen but now we only see one. AKA we need to announce that we're good to go
-                else if (multipleBodiesAnnounced && !BodySourceManager.Instance.MultipleBodiesDetected())
+                else if (multipleBodiesAnnounced && !BodySourceManager.Instance.MultipleBodiesDetected)
                 {
                     // TODO: Announce status
                     Debug.Log("We can only see the player now! We're good to go!");

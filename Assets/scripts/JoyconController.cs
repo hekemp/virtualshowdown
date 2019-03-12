@@ -17,7 +17,7 @@ public class JoyconController : MonoBehaviour {
 
     public static void RumbleJoycon(float lowFreq, float higFreq, float amp, int time = 0)
     {
-        if (!CheckJoyconAvail() || !BodySourceManager.Instance.BodyFound()) return;
+        if (!CheckJoyconAvail() || !BodySourceManager.Instance.bodyFound) return;
         
         foreach (var joycon in j)
         {
