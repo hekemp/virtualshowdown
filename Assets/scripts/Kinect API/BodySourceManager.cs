@@ -89,7 +89,7 @@ public class BodySourceManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(this);
-        
+
         _sensor = KinectSensor.GetDefault();
         if (_sensor == null)
         {
@@ -97,14 +97,14 @@ public class BodySourceManager : MonoBehaviour
             Debug.LogError("Kinect not found!");
             return;
         }
-        
+
         _reader = _sensor.BodyFrameSource.OpenReader();
         // If the Kinect isn't active, make it so
         if (!_sensor.IsOpen)
         {
             _sensor.Open();
         }
-        
+
         this._faceFrameSources = new FaceFrameSource[_sensor.BodyFrameSource.BodyCount];
         this._faceFrameReaders = new FaceFrameReader[_sensor.BodyFrameSource.BodyCount];
 
@@ -117,13 +117,20 @@ public class BodySourceManager : MonoBehaviour
         {
             // create the face frame source with the required face frame features and an initial tracking Id of 0
             _faceFrameSources[i] = FaceFrameSource.Create(_sensor, 0, faceFrameFeatures);
-            
+
             // open the corresponding reader
             _faceFrameReaders[i] = _faceFrameSources[i].OpenReader();
         }
     }
 
     void Update()
+    {
+        UpdateData();
+        
+        UpdateBodies();
+    }
+
+    void UpdateData()
     {
         if (_reader == null)
         {
@@ -185,7 +192,10 @@ public class BodySourceManager : MonoBehaviour
         
         frame.Dispose();
         frame = null;
-        
+    }
+
+    void UpdateBodies()
+    {
         bodyFound = false;
 
         // Check if we've seen anything
@@ -282,7 +292,6 @@ public class BodySourceManager : MonoBehaviour
             };
         }
     }
-
     private void OnApplicationQuit()
     {
         if (_reader != null)
