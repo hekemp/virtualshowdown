@@ -58,14 +58,14 @@ public class BodySourceView : MonoBehaviour
 
     void Update()
     {
-        BodySourceManager bm = BodySourceManager.Instance;
+        var bm = BodySourceManager.Instance;
 		if (bm == null || bm.Bodies == null)
         {
             return;
         }
         
         // Ensure we have deleted all game objects associated with untracked bodies
-        List<ulong> knownIds = new List<ulong>(_bodies.Keys);
+        var knownIds = new List<ulong>(_bodies.Keys);
         foreach (var key in knownIds)
         {
             if (!bm.TrackedBodyIds.Contains(key))
@@ -76,11 +76,16 @@ public class BodySourceView : MonoBehaviour
         }
         
         // Create new game objects for all new tracked bodies
-        foreach (var key in bm.TrackedBodyIds)
+        foreach (var body in bm.Bodies)
         {
-            if (!_bodies.ContainsKey(key))
+            if (body == null || !body.IsTracked)
             {
-                _bodies[key] = CreateBodyObject(key);
+                continue;
+            }
+
+            if (!_bodies.ContainsKey(body.TrackingId))
+            {
+                _bodies[body.TrackingId] = CreateBodyObject(body.TrackingId);
             }
         }
         
