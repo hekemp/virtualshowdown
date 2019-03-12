@@ -5,15 +5,14 @@ using Kinect = Windows.Kinect;
 using UnityEngine.UI;
 using Microsoft.Kinect.Face;
 using System;
+using System.Linq;
 using Windows.Kinect;
 
 public class BodySourceView : MonoBehaviour
 {
     public Material BoneMaterial;
-    public GameObject BodySourceManager;
 
-    private Dictionary<ulong, GameObject> _Bodies = new Dictionary<ulong, GameObject>();
-    private BodySourceManager _BodyManager;
+    private Dictionary<ulong, GameObject> _bodies = new Dictionary<ulong, GameObject>();
 
     private Dictionary<Kinect.JointType, Kinect.JointType> _BoneMap = new Dictionary<Kinect.JointType, Kinect.JointType>()
     {
@@ -49,123 +48,62 @@ public class BodySourceView : MonoBehaviour
 
     private const double FaceRotationIncrementInDegrees = 0.01;
 
-    public static bool leftyMode;
-
-    public static CameraSpacePoint handPosition;
-    public static CameraSpacePoint wristPosition;
-    public static CameraSpacePoint baseKinectPosition;
-    public static CameraSpacePoint headPosition;
-    public static CameraSpacePoint closestZPoint;
-    public static float MaxZDistance;
-
-    public static Quaternion faceRotation;
-    public static bool BodyFound;
-    public static int numberOfBodiesFound = 0;
     
     public static BodySourceView Instance;
 
     public void Start()
     {
-        // We only ever want 1 copy of this game object!
-        if (Instance != null)
-        {
-            Destroy(this);
-            return;
-        }
-		
-        // We want preferences to persist throughout the menus
-        DontDestroyOnLoad(this);
-		
-        Instance = this;
         
-        leftyMode = PreferenceManager.Instance.PlayerHandedness == Handedness.Left;
-
     }
 
     void Update()
     {
-        leftyMode = PreferenceManager.Instance.PlayerHandedness == Handedness.Left;
-
-
-        if (BodySourceManager == null)
+        var bm = BodySourceManager.Instance;
+		if (bm == null || bm.Bodies == null)
         {
             return;
         }
-
-        _BodyManager = BodySourceManager.GetComponent<BodySourceManager>();
-        if (_BodyManager == null)
+        
+        // Ensure we have deleted all game objects associated with untracked bodies
+        var knownIds = new List<ulong>(_bodies.Keys);
+        foreach (var key in knownIds)
         {
-            return;
+            if (!bm.TrackedBodyIds.Contains(key))
+            {
+                Destroy(_bodies[key]);
+                _bodies.Remove(key);
+            }
         }
-
-        Kinect.Body[] data = _BodyManager.GetData();
-        if (data == null)
+        
+        // Create new game objects for all new tracked bodies
+        foreach (var body in bm.Bodies)
         {
-            BodyFound = false;
-            return;
-        }
-
-        FaceFrameResult[] faceData = _BodyManager.GetFaceData();
-
-        if (faceData[0] != null)
-        {
-            faceRotation = new Quaternion(faceData[0].FaceRotationQuaternion.X, faceData[0].FaceRotationQuaternion.Y, faceData[0].FaceRotationQuaternion.Z, faceData[0].FaceRotationQuaternion.W);
-        }
-
-
-        List<ulong> trackedIds = new List<ulong>();
-        foreach (var body in data)
-        {
-            if (body == null)
+            if (body == null || !body.IsTracked)
             {
                 continue;
             }
 
-            if (body.IsTracked)
+            if (!_bodies.ContainsKey(body.TrackingId))
             {
-                trackedIds.Add(body.TrackingId);
+                _bodies[body.TrackingId] = CreateBodyObject(body.TrackingId);
             }
         }
-
-        List<ulong> knownIds = new List<ulong>(_Bodies.Keys);
-
-        // First delete untracked bodies
-        foreach (ulong trackingId in knownIds)
+        
+        // Update all body objects
+        foreach (var body in bm.Bodies)
         {
-            if (!trackedIds.Contains(trackingId))
+            if (body == null || !body.IsTracked)
             {
-                Destroy(_Bodies[trackingId]);
-                _Bodies.Remove(trackingId);
-                BodyFound = false;
-                numberOfBodiesFound--;
-            }
-        }
-
-        foreach (var body in data)
-        {
-            if (body == null)
-            {
-                BodyFound = false;
                 continue;
             }
-
-            if (body.IsTracked)
-            {
-                BodyFound = true;
-                if (!_Bodies.ContainsKey(body.TrackingId))
-                {
-                    _Bodies[body.TrackingId] = CreateBodyObject(body.TrackingId);
-                }
-
-                RefreshBodyObject(body, _Bodies[body.TrackingId]);
-            }
+            
+            RefreshBodyObject(body, _bodies[body.TrackingId]);
         }
     }
 
     private GameObject CreateBodyObject(ulong id)
     {
         GameObject body = new GameObject("Body:" + id);
-        BodyFound = true;
 
         for (Kinect.JointType jt = Kinect.JointType.SpineBase; jt <= Kinect.JointType.ThumbRight; jt++)
         {
@@ -180,64 +118,11 @@ public class BodySourceView : MonoBehaviour
             jointObj.name = jt.ToString();
             jointObj.transform.parent = body.transform;
         }
-
-        numberOfBodiesFound++;
         return body;
     }
 
     private void RefreshBodyObject(Body body, GameObject bodyObject)
     {
-        if (leftyMode) //Left handed
-        {
-            handPosition = body.Joints[JointType.HandTipLeft].Position;
-            wristPosition = body.Joints[JointType.HandLeft].Position;
-        }
-        else
-        {
-            handPosition = body.Joints[JointType.HandTipRight].Position;
-            wristPosition = body.Joints[JointType.HandRight].Position;
-        }
-
-        headPosition = body.Joints[JointType.Head].Position;
-
-        MaxZDistance = 
-            Math.Max(body.Joints[JointType.Head].Position.Z, 
-            Math.Max(body.Joints[JointType.Head].Position.Z, 
-            Math.Max(body.Joints[JointType.Neck].Position.Z, 
-            Math.Max(body.Joints[JointType.SpineMid].Position.Z, 
-            Math.Max(body.Joints[JointType.SpineShoulder].Position.Z, 
-            Math.Max(body.Joints[JointType.HipLeft].Position.Z,
-                body.Joints[JointType.HipRight].Position.Z))))));
-
-        //float minZBodyDist =
-        //   Math.Min(body.Joints[JointType.Head].Position.Z,
-        //   Math.Min(body.Joints[JointType.Head].Position.Z,
-        //   Math.Min(body.Joints[JointType.Neck].Position.Z,
-        //   Math.Min(body.Joints[JointType.SpineMid].Position.Z,
-        //   Math.Min(body.Joints[JointType.SpineShoulder].Position.Z,
-        //   Math.Min(body.Joints[JointType.HipLeft].Position.Z,
-        //       body.Joints[JointType.HipRight].Position.Z))))));
-
-        float minZDistance =
-            Math.Min(body.Joints[JointType.Head].Position.Z,
-            Math.Min(body.Joints[JointType.Head].Position.Z,
-            Math.Min(body.Joints[JointType.Neck].Position.Z,
-                body.Joints[JointType.SpineShoulder].Position.Z)));
-
-        baseKinectPosition = new CameraSpacePoint()
-        {
-            X = body.Joints[JointType.SpineShoulder].Position.X,
-            Y = body.Joints[JointType.Head].Position.Y,
-            Z = MaxZDistance
-        };
-
-        closestZPoint = new CameraSpacePoint()
-        {
-            X = body.Joints[JointType.SpineMid].Position.X,
-            Y = body.Joints[JointType.SpineMid].Position.Y,
-            Z = minZDistance
-        };
-
         for (Kinect.JointType jt = Kinect.JointType.SpineBase; jt <= Kinect.JointType.ThumbRight; jt++)
         {
             Kinect.Joint sourceJoint = body.Joints[jt];
@@ -284,5 +169,4 @@ public class BodySourceView : MonoBehaviour
     {
         return new Vector3(joint.Position.X * 10, joint.Position.Y * 10, joint.Position.Z * 10);
     }
-
 }

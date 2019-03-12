@@ -27,11 +27,11 @@ public class CameraControllerScript : MonoBehaviour {
     /// </summary>
     private void FixedUpdate()
     {
-        CameraSpacePoint closestZPoint = BodySourceView.closestZPoint;
-        CameraSpacePoint headPos = BodySourceView.headPosition;
+        CameraSpacePoint closestZPoint = BodySourceManager.Instance.closestZPoint;
+        CameraSpacePoint headPos = BodySourceManager.Instance.headPosition;
 
-        float centerXPoint = BodySourceView.baseKinectPosition.X != 0 ? BodySourceView.baseKinectPosition.X : closestZPoint.X;
-        float maxZPoint = BodySourceView.baseKinectPosition.Z != 0 ? BodySourceView.baseKinectPosition.Z : BodySourceView.MaxZDistance;
+        float centerXPoint = !(Mathf.Approximately(BodySourceManager.Instance.baseKinectPosition.X, 0)) ? BodySourceManager.Instance.baseKinectPosition.X : closestZPoint.X;
+        float maxZPoint = !(Mathf.Approximately(BodySourceManager.Instance.baseKinectPosition.Z, 0)) ? BodySourceManager.Instance.baseKinectPosition.Z : BodySourceManager.Instance.maxZDistance;
 
         CameraDeltaZ = (maxZPoint - closestZPoint.Z) * 100;
         float xDiff = (headPos.X - centerXPoint) * 100;
@@ -39,7 +39,7 @@ public class CameraControllerScript : MonoBehaviour {
         Vector3 newPosition = new Vector3(xDiff, transform.position.y, startingZPosition + CameraDeltaZ);
         transform.position = Vector3.Lerp(transform.position, newPosition, 0.01f);
 
-        Quaternion fr = BodySourceView.faceRotation;
+        Quaternion fr = BodySourceManager.Instance.faceRotation;
         float yAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, -fr.eulerAngles.y, ref yVelocity, smooth);
         float xAngle = Mathf.SmoothDampAngle(transform.eulerAngles.x, -fr.eulerAngles.x, ref xVelocity, smooth);
         float zAngle = Mathf.SmoothDampAngle(transform.eulerAngles.z, fr.eulerAngles.z, ref zVelocity, smooth);
