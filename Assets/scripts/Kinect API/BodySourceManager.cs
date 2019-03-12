@@ -15,6 +15,19 @@ public class BodySourceManager : MonoBehaviour
     
     public static BodySourceManager Instance;
 
+    public static bool leftyMode;
+
+    public CameraSpacePoint handPosition;
+    public CameraSpacePoint wristPosition;
+    public CameraSpacePoint baseKinectPosition;
+    public CameraSpacePoint headPosition;
+    public CameraSpacePoint closestZPoint;
+    public float MaxZDistance;
+
+    public Quaternion faceRotation;
+    private const double FaceRotationIncrementInDegrees = 0.01;
+
+
     public Body[] GetData()
     {
         return _Data;
@@ -23,6 +36,14 @@ public class BodySourceManager : MonoBehaviour
     public FaceFrameResult[] GetFaceData()
     {
         return _FaceData;
+    }
+
+    public bool MultipleBodiesDetected() {
+        return _Sensor.BodyFrameSource.BodyCount > 1;
+    }
+
+    public bool BodyFound() {
+        return _Sensor.BodyFrameSource.BodyCount > 0;
     }
 
 
@@ -39,7 +60,9 @@ public class BodySourceManager : MonoBehaviour
         DontDestroyOnLoad(this);
 		
         Instance = this;
-        
+
+        leftyMode = PreferenceManager.Instance.PlayerHandedness == Handedness.Left;
+
         _Sensor = KinectSensor.GetDefault();
 
         if (_Sensor != null)
@@ -73,6 +96,8 @@ public class BodySourceManager : MonoBehaviour
 
     void Update()
     {
+        leftyMode = PreferenceManager.Instance.PlayerHandedness == Handedness.Left;
+
         if (_Reader != null)
         {
             var frame = _Reader.AcquireLatestFrame();
@@ -83,7 +108,12 @@ public class BodySourceManager : MonoBehaviour
                     _Data = new Body[_Sensor.BodyFrameSource.BodyCount];
                     _FaceData = new FaceFrameResult[_Sensor.BodyFrameSource.BodyCount];
                 }
+                if (_FaceData != null)
+                {
+                    faceRotation = new Quaternion(_FaceData[0].FaceRotationQuaternion.X, _FaceData[0].FaceRotationQuaternion.Y, _FaceData[0].FaceRotationQuaternion.Z, _FaceData[0].FaceRotationQuaternion.W);
+                }
 
+                RefreshBodyData();
                 frame.GetAndRefreshBodyData(_Data);
                 //_FaceData = processFaceData(_Sensor.BodyFrameSource.BodyCount);
                 List<FaceFrameResult> res = new List<FaceFrameResult>();
@@ -126,6 +156,62 @@ public class BodySourceManager : MonoBehaviour
                 frame.Dispose();
                 frame = null;
             }
+        }
+    }
+
+    private void RefreshBodyData() {
+        if (_Sensor.BodyFrameSource.BodyCount > 0 && _Data[0] != null) {
+            Body body = _Data[0];
+            if (leftyMode) //Left handed
+            {
+                handPosition = body.Joints[JointType.HandTipLeft].Position;
+                wristPosition = body.Joints[JointType.HandLeft].Position;
+            }
+            else
+            {
+                handPosition = body.Joints[JointType.HandTipRight].Position;
+                wristPosition = body.Joints[JointType.HandRight].Position;
+            }
+
+            headPosition = body.Joints[JointType.Head].Position;
+
+            MaxZDistance =
+                Mathf.Max(body.Joints[JointType.Head].Position.Z,
+                Mathf.Max(body.Joints[JointType.Head].Position.Z,
+                Mathf.Max(body.Joints[JointType.Neck].Position.Z,
+                Mathf.Max(body.Joints[JointType.SpineMid].Position.Z,
+                Mathf.Max(body.Joints[JointType.SpineShoulder].Position.Z,
+                Mathf.Max(body.Joints[JointType.HipLeft].Position.Z,
+                    body.Joints[JointType.HipRight].Position.Z))))));
+
+            //float minZBodyDist =
+            //   Math.Min(body.Joints[JointType.Head].Position.Z,
+            //   Math.Min(body.Joints[JointType.Head].Position.Z,
+            //   Math.Min(body.Joints[JointType.Neck].Position.Z,
+            //   Math.Min(body.Joints[JointType.SpineMid].Position.Z,
+            //   Math.Min(body.Joints[JointType.SpineShoulder].Position.Z,
+            //   Math.Min(body.Joints[JointType.HipLeft].Position.Z,
+            //       body.Joints[JointType.HipRight].Position.Z))))));
+
+            float minZDistance =
+                Mathf.Min(body.Joints[JointType.Head].Position.Z,
+                Mathf.Min(body.Joints[JointType.Head].Position.Z,
+                Mathf.Min(body.Joints[JointType.Neck].Position.Z,
+                    body.Joints[JointType.SpineShoulder].Position.Z)));
+
+            baseKinectPosition = new CameraSpacePoint()
+            {
+                X = body.Joints[JointType.SpineShoulder].Position.X,
+                Y = body.Joints[JointType.Head].Position.Y,
+                Z = MaxZDistance
+            };
+
+            closestZPoint = new CameraSpacePoint()
+            {
+                X = body.Joints[JointType.SpineMid].Position.X,
+                Y = body.Joints[JointType.SpineMid].Position.Y,
+                Z = minZDistance
+            };
         }
     }
 
