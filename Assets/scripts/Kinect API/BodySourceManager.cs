@@ -63,7 +63,7 @@ public class BodySourceManager : MonoBehaviour
     {
         get
         {
-            return _sensor.BodyFrameSource.BodyCount;
+            return _knownBodyIds.Count;
         }
     }
 
@@ -107,15 +107,15 @@ public class BodySourceManager : MonoBehaviour
             _sensor.Open();
         }
         
-        this._faceFrameSources = new FaceFrameSource[BodyCount];
-        this._faceFrameReaders = new FaceFrameReader[BodyCount];
+        this._faceFrameSources = new FaceFrameSource[_sensor.BodyFrameSource.BodyCount];
+        this._faceFrameReaders = new FaceFrameReader[_sensor.BodyFrameSource.BodyCount];
 
         FaceFrameFeatures faceFrameFeatures =
             FaceFrameFeatures.RotationOrientation
             | FaceFrameFeatures.FaceEngagement
             | FaceFrameFeatures.LookingAway;
 
-        for (int i = 0; i < BodyCount; i++)
+        for (int i = 0; i < _sensor.BodyFrameSource.BodyCount; i++)
         {
             // create the face frame source with the required face frame features and an initial tracking Id of 0
             _faceFrameSources[i] = FaceFrameSource.Create(_sensor, 0, faceFrameFeatures);
@@ -142,14 +142,14 @@ public class BodySourceManager : MonoBehaviour
 
         if (_data == null)
         {
-            _data = new Body[BodyCount];
-            _faceData = new FaceFrameResult[BodyCount];
+            _data = new Body[_sensor.BodyFrameSource.BodyCount];
+            _faceData = new FaceFrameResult[_sensor.BodyFrameSource.BodyCount];
         }
         
         frame.GetAndRefreshBodyData(_data);
         List<FaceFrameResult> res = new List<FaceFrameResult>();
         // iterate through each body and update face source
-        for (int i = 0; i < BodyCount; i++)
+        for (int i = 0; i < _sensor.BodyFrameSource.BodyCount; i++)
         {
             // check if a valid face is tracked in this face source
             if (_faceFrameSources[i].IsTrackingIdValid)
