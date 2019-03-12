@@ -59,7 +59,7 @@ public class BodySourceView : MonoBehaviour
     void Update()
     {
         BodySourceManager bm = BodySourceManager.Instance;
-        if (bm == null)
+		if (bm == null || bm.Bodies == null)
         {
             return;
         }

@@ -15,7 +15,7 @@ public class BodySourceManager : MonoBehaviour
     private FaceFrameResult[] _faceData;
     private FaceFrameSource[] _faceFrameSources;
     private FaceFrameReader[] _faceFrameReaders;
-    private List<ulong> _knownBodyIds;
+	private List<ulong> _knownBodyIds = new List<ulong>();
     private Dictionary<JointType, JointType> _BoneMap = new Dictionary<JointType, JointType>()
     {
         { JointType.FootLeft, JointType.AnkleLeft },
