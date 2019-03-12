@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections;
 using Windows.Kinect;
 using Microsoft.Kinect.Face;
 using System.Collections.Generic;
-using Joint = UnityEngine.Joint;
 
 public class BodySourceManager : MonoBehaviour
 {
