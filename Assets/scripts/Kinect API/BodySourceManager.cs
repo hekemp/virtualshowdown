@@ -219,7 +219,7 @@ public class BodySourceManager : MonoBehaviour
                 continue;
             }
             trackedIds.Add(body.TrackingId);
-			Debug.Log (trackedIds.Count);
+			//Debug.Log (trackedIds.Count);
         }
         
         // Delete untracked bodies

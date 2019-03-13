@@ -28,8 +28,8 @@ GameObject:
   - component: {fileID: 82133659473452600}
   - component: {fileID: 82995315369046654}
   - component: {fileID: 82500795322441200}
-  - component: {fileID: 114761162818055936}
   - component: {fileID: 114430344085919510}
+  - component: {fileID: 114473882751071574}
   m_Layer: 0
   m_Name: OurBall
   m_TagString: Ball
@@ -46,6 +46,7 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -61,6 +62,7 @@ MeshRenderer:
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -102,7 +104,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 24300001, guid: 1dd706bb85d8aef4e83a6229dbd62c36,
     type: 2}
   m_audioClip: {fileID: 8300000, guid: 96c0cbafd70a6e04bbddf2231e283fc9, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 0.25
   m_Pitch: 0.9
   Loop: 1
@@ -485,7 +487,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_RoomSize: 0
---- !u!114 &114761162818055936
+--- !u!114 &114473882751071574
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -493,14 +495,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 1988242986954202}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c6f89681e502fb48bfc98693cab761d, type: 3}
+  m_Script: {fileID: 11500000, guid: a8217de59cde5024d8a37b71f1370ad6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputSpeed: 75
+  wallHitSound: {fileID: 8300000, guid: 3c145c77d80e54f4b99430c9aed50c7b, type: 3}
+  outOfTableBoundsSound: {fileID: 8300000, guid: 7811b1c0ebac3af42b6eadd38d21829e,
+    type: 3}
+  ballRollingSound: {fileID: 8300000, guid: 96c0cbafd70a6e04bbddf2231e283fc9, type: 3}
+  hitPaddleSound: {fileID: 8300000, guid: 7fd0880b2ae3d504d92167ee75e88ad6, type: 3}
   farSideSnap: {fileID: 245765757212363544, guid: 1dd706bb85d8aef4e83a6229dbd62c36,
     type: 2}
   closeSideSnap: {fileID: 24500003, guid: 1dd706bb85d8aef4e83a6229dbd62c36, type: 2}
-  keyboardControl: 0
+  ballHitOnce: 0
 --- !u!135 &135435362158440468
 SphereCollider:
   m_ObjectHideFlags: 1

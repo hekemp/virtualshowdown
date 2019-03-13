@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KinectInputManager : InputManager {
+public class ShowdownManager : MonoBehaviour {
+
 	// Use this for initialization
 	void Start () {
 		
@@ -11,10 +12,5 @@ public class KinectInputManager : InputManager {
 	// Update is called once per frame
 	void Update () {
 		
-	}
-
-	public override Vector3 GetHandPosition()
-	{
-		return Vector3.zero;
 	}
 }

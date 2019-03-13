@@ -37,7 +37,7 @@ public class CameraControllerScript : MonoBehaviour {
         float xDiff = (headPos.X - centerXPoint) * 100;
 
         Vector3 newPosition = new Vector3(xDiff, transform.position.y, startingZPosition + CameraDeltaZ);
-        transform.position = Vector3.Lerp(transform.position, newPosition, 0.01f);
+        transform.position = Vector3.Lerp(transform.position, newPosition, 0.1f);
 
         Quaternion fr = BodySourceManager.Instance.faceRotation;
         float yAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, -fr.eulerAngles.y, ref yVelocity, smooth);
