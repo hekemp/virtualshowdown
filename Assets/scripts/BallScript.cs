@@ -8,24 +8,33 @@ public class BallScript : MonoBehaviour {
     private Rigidbody rb;
 
     public AudioClip wallHitSound;
-    public AudioClip outOfTableBoundsSound;
     public AudioClip ballRollingSound;
     public AudioClip hitPaddleSound;
 
     public AudioMixerSnapshot farSideSnap;
     public AudioMixerSnapshot closeSideSnap;
 
-    private AudioSource _ballSoundSource;
+    private AudioSource[] _ballSoundSources;
+    private enum BallSoundSource
+    {
+        Rolling = 0,
+        PaddleHit = 1,
+        HitWall = 2,
+    }
+
     private const float maxspeed = 250;
 
     public bool ballHitOnce = false;
 
-
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+        _ballSoundSources = GetComponents<AudioSource>();
+    }
 
     private void Start()
     {
-        rb = GetComponent<Rigidbody>();
-        _ballSoundSource = GetComponent<AudioSource>();
+        StartBallSound();
     }
 
     public float CurrentSpeed()
@@ -62,7 +71,7 @@ public class BallScript : MonoBehaviour {
     private void DynamicAudioChanges()
     {
         //Change and limit pitch change on ball
-        _ballSoundSource.pitch = GameUtils.Scale(0, maxspeed, 0.8f, 1.25f, Mathf.Abs(rb.velocity.magnitude));
+        _ballSoundSources[(int)BallSoundSource.Rolling].pitch = GameUtils.Scale(0, maxspeed, 0.8f, 1.25f, Mathf.Abs(rb.velocity.magnitude));
 
         //Change rolling sounds based on speed of ball
         //ballSoundSource.volume = GameUtils.Scale(0, maxspeed, 0, 1, Math.Abs(rb.velocity.magnitude));
@@ -80,23 +89,23 @@ public class BallScript : MonoBehaviour {
         //Change Stereo Pan in buckets
         if (rb.position.x < -30)
         {
-            _ballSoundSource.panStereo = -1;
+            _ballSoundSources[(int)BallSoundSource.Rolling].panStereo = -1;
         }
         else if (rb.position.x >= -30 && rb.position.x < -10)
         {
-            _ballSoundSource.panStereo = -0.5f;
+            _ballSoundSources[(int)BallSoundSource.Rolling].panStereo = -0.5f;
         }
         else if (rb.position.x >= -10 && rb.position.x < 10)
         {
-            _ballSoundSource.panStereo = 0;
+            _ballSoundSources[(int)BallSoundSource.Rolling].panStereo = 0;
         }
         else if (rb.position.x >= 10 && rb.position.x < 30)
         {
-            _ballSoundSource.panStereo = 0.5f;
+            _ballSoundSources[(int)BallSoundSource.Rolling].panStereo = 0.5f;
         }
         else if (rb.position.x >= 30)
         {
-            _ballSoundSource.panStereo = 1;
+            _ballSoundSources[(int)BallSoundSource.Rolling].panStereo = 1;
         }
     }
 
@@ -112,7 +121,7 @@ public class BallScript : MonoBehaviour {
                 float rumbleAmp = GameUtils.Scale(0, 243382, 0.3f, 0.9f, impulse);
                 JoyconController.RumbleJoycon(160, 320, rumbleAmp, 200);
             }
-            _ballSoundSource.volume = GameUtils.Scale(0, 243382, 0.07f, 0.3f, impulse);
+            _ballSoundSources[(int)BallSoundSource.PaddleHit].volume = GameUtils.Scale(0, 243382, 0.07f, 0.3f, impulse);
             StartPaddleCollideSound();
             
         }
@@ -124,52 +133,55 @@ public class BallScript : MonoBehaviour {
 
     private void StartBallSound()
     {
-        if (!_ballSoundSource.isPlaying)
+        // TODO: Optimize this to not set everything per call
+        if (!_ballSoundSources[(int)BallSoundSource.Rolling].isPlaying)
         {
-            _ballSoundSource.loop = true;
-            _ballSoundSource.bypassEffects = false;
-            _ballSoundSource.bypassReverbZones = true;
-            _ballSoundSource.priority = 64;
-            _ballSoundSource.volume = .25f;
-            _ballSoundSource.panStereo = 0.0f;
-            _ballSoundSource.spatialBlend = 1.0f;
-            _ballSoundSource.reverbZoneMix = 0.559f;
-            _ballSoundSource.clip = ballRollingSound;
-            _ballSoundSource.Play();
+            _ballSoundSources[(int)BallSoundSource.Rolling].loop = true;
+            _ballSoundSources[(int)BallSoundSource.Rolling].bypassEffects = false;
+            _ballSoundSources[(int)BallSoundSource.Rolling].bypassReverbZones = true;
+            _ballSoundSources[(int)BallSoundSource.Rolling].priority = 64;
+            _ballSoundSources[(int)BallSoundSource.Rolling].volume = .25f;
+            _ballSoundSources[(int)BallSoundSource.Rolling].panStereo = 0.0f;
+            _ballSoundSources[(int)BallSoundSource.Rolling].spatialBlend = 1.0f;
+            _ballSoundSources[(int)BallSoundSource.Rolling].reverbZoneMix = 0.559f;
+            _ballSoundSources[(int)BallSoundSource.Rolling].clip = ballRollingSound;
+            _ballSoundSources[(int)BallSoundSource.Rolling].Play();
         }
     }
 
     private void StartWallCollideSound()
     {
-        if (!_ballSoundSource.isPlaying)
+        // TODO: Optimize this to not set everything per call
+        if (!_ballSoundSources[(int)BallSoundSource.HitWall].isPlaying)
         {
-            _ballSoundSource.priority = 64;
-            _ballSoundSource.bypassReverbZones = true;
-            _ballSoundSource.bypassEffects = true;
-            _ballSoundSource.loop = false;
-            _ballSoundSource.pitch = 1.0f;
-            _ballSoundSource.spatialBlend = 1.0f;
-            _ballSoundSource.volume = 0.391f;
-            _ballSoundSource.panStereo = 0.0f;
-            _ballSoundSource.clip = wallHitSound;
-            _ballSoundSource.Play();
+            _ballSoundSources[(int)BallSoundSource.HitWall].priority = 64;
+            _ballSoundSources[(int)BallSoundSource.HitWall].bypassReverbZones = true;
+            _ballSoundSources[(int)BallSoundSource.HitWall].bypassEffects = true;
+            _ballSoundSources[(int)BallSoundSource.HitWall].loop = false;
+            _ballSoundSources[(int)BallSoundSource.HitWall].pitch = 1.0f;
+            _ballSoundSources[(int)BallSoundSource.HitWall].spatialBlend = 1.0f;
+            _ballSoundSources[(int)BallSoundSource.HitWall].volume = 0.391f;
+            _ballSoundSources[(int)BallSoundSource.HitWall].panStereo = 0.0f;
+            _ballSoundSources[(int)BallSoundSource.HitWall].clip = wallHitSound;
+            _ballSoundSources[(int)BallSoundSource.HitWall].Play();
         }
     }
 
     private void StartPaddleCollideSound()
     {
-        if (!_ballSoundSource.isPlaying)
+        // TODO: Optimize this to not set everything per call
+        if (!_ballSoundSources[(int)BallSoundSource.PaddleHit].isPlaying)
         {
-            _ballSoundSource.bypassReverbZones = true;
-            _ballSoundSource.bypassEffects = true;
-            _ballSoundSource.loop = false;
-            _ballSoundSource.priority = 64;
-            _ballSoundSource.spatialBlend = 1.0f;
-            _ballSoundSource.reverbZoneMix = 0.559f;
-            _ballSoundSource.pitch = 1.0f;
-            _ballSoundSource.panStereo = 0.0f;
-            _ballSoundSource.clip = hitPaddleSound;
-            _ballSoundSource.Play();
+            _ballSoundSources[(int)BallSoundSource.PaddleHit].bypassReverbZones = true;
+            _ballSoundSources[(int)BallSoundSource.PaddleHit].bypassEffects = true;
+            _ballSoundSources[(int)BallSoundSource.PaddleHit].loop = false;
+            _ballSoundSources[(int)BallSoundSource.PaddleHit].priority = 64;
+            _ballSoundSources[(int)BallSoundSource.PaddleHit].spatialBlend = 1.0f;
+            _ballSoundSources[(int)BallSoundSource.PaddleHit].reverbZoneMix = 0.559f;
+            _ballSoundSources[(int)BallSoundSource.PaddleHit].pitch = 1.0f;
+            _ballSoundSources[(int)BallSoundSource.PaddleHit].panStereo = 0.0f;
+            _ballSoundSources[(int)BallSoundSource.PaddleHit].clip = hitPaddleSound;
+            _ballSoundSources[(int)BallSoundSource.PaddleHit].Play();
         }
     }
 

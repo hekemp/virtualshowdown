@@ -16,7 +16,7 @@ public class MainMenuSetup : MonoBehaviour
 	void Start () {
 		
 		DrillModeBtn.onClick.AddListener(StartDrillMode);
-		ShowdownPracticeBtn.onClick.AddListener(StartShowdownPractice);
+		ShowdownPracticeBtn.onClick.AddListener(StartShowdown);
 		PreferencesBtn.onClick.AddListener(StartPreferencesMenu);
 	}
 	
@@ -28,13 +28,13 @@ public class MainMenuSetup : MonoBehaviour
 	public void StartDrillMode()
 	{
 		Debug.Log("Going to drill mode");
-		SceneManager.LoadScene("DrillMode");
+		SceneManager.LoadScene("ShowdownDrill");
 	}
 
-	public void StartShowdownPractice()
+	public void StartShowdown()
 	{
 		Debug.Log("Going to showdown mode");
-		SceneManager.LoadScene("ShowdownPractice");
+		SceneManager.LoadScene("Showdown");
 	}
 
 	public void StartPreferencesMenu()
