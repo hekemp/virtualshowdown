@@ -8,15 +8,15 @@ using UnityEngine.UI;
 public class MainMenuSetup : MonoBehaviour
 {
 	public KinectAudioParser AudioParser;
-	public Button DrillModeBtn;
-	public Button ShowdownPracticeBtn;
+	public Button ShowdownDrillBtn;
+	public Button ShowdownBtn;
 	public Button PreferencesBtn;
 
 	// Use this for initialization
 	void Start () {
 		
-		DrillModeBtn.onClick.AddListener(StartDrillMode);
-		ShowdownPracticeBtn.onClick.AddListener(StartShowdown);
+		ShowdownDrillBtn.onClick.AddListener(StartDrillMode);
+		ShowdownBtn.onClick.AddListener(StartShowdown);
 		PreferencesBtn.onClick.AddListener(StartPreferencesMenu);
 	}
 	

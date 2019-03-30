@@ -325,7 +325,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Drill Mode
+  m_Text: Showdown Drill
 --- !u!222 &260496817
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -468,7 +468,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: 52bd4b121e9df7b45a2863369a0a0d16, type: 3}
-    m_FontSize: 17
+    m_FontSize: 22
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -479,7 +479,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Showdown Practice
+  m_Text: Showdown
 --- !u!222 &526512932
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -890,7 +890,7 @@ GameObject:
   - component: {fileID: 1084049126}
   - component: {fileID: 1084049125}
   m_Layer: 5
-  m_Name: Showdown Practice Button
+  m_Name: Showdown Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1174,7 +1174,7 @@ GameObject:
   - component: {fileID: 1112154415}
   - component: {fileID: 1112154414}
   m_Layer: 5
-  m_Name: Drill Mode Button
+  m_Name: Showdown Drill Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1497,8 +1497,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AudioParser: {fileID: 1986608257}
-  DrillModeBtn: {fileID: 1112154414}
-  ShowdownPracticeBtn: {fileID: 1084049125}
+  ShowdownDrillBtn: {fileID: 1112154414}
+  ShowdownBtn: {fileID: 1084049125}
   PreferencesBtn: {fileID: 1088257582}
 --- !u!1 &1708147810
 GameObject:
@@ -1745,7 +1745,7 @@ MonoBehaviour:
           m_CallState: 2
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-  - keyword: Drill Mode
+  - keyword: Showdown Drill
     action:
       m_PersistentCalls:
         m_Calls:
