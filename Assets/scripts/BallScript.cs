@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Events;
 
 public class BallScript : MonoBehaviour {
 
@@ -10,9 +11,12 @@ public class BallScript : MonoBehaviour {
     public AudioClip wallHitSound;
     public AudioClip ballRollingSound;
     public AudioClip hitPaddleSound;
+    public AudioClip clickSound;
 
     public AudioMixerSnapshot farSideSnap;
     public AudioMixerSnapshot closeSideSnap;
+
+    public UnityEvent onBallCollisionEvent;
 
     private AudioSource[] _ballSoundSources;
     private enum BallSoundSource
@@ -20,6 +24,7 @@ public class BallScript : MonoBehaviour {
         Rolling = 0,
         PaddleHit = 1,
         HitWall = 2,
+        Click = 3,
     }
 
     private const float maxspeed = 250;
@@ -115,6 +120,12 @@ public class BallScript : MonoBehaviour {
         {
             ballHitOnce = true;
 
+            if (onBallCollisionEvent != null)
+            {
+                onBallCollisionEvent.Invoke();
+            }
+            
+
             float impulse = collision.impulse.sqrMagnitude;
             if (collision.gameObject.tag == "Player" && PreferenceManager.Instance.ControllerRumble)
             {
@@ -183,6 +194,25 @@ public class BallScript : MonoBehaviour {
             _ballSoundSources[(int)BallSoundSource.PaddleHit].clip = hitPaddleSound;
             _ballSoundSources[(int)BallSoundSource.PaddleHit].Play();
         }
+    }
+
+    public void StartClickSound()
+    {
+        // TODO: Add
+        /*
+         * 
+         * mute = false
+bypass effects = true
+bypass reverb zone = true
+play on awake = false
+loop = false
+priority = 64
+volume = 1
+pitch = 1
+stereo pan = 0
+spatial blend = 1
+reverb zone mix = .559
+*/
     }
 
 }

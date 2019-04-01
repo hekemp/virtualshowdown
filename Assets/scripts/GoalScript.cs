@@ -16,7 +16,7 @@ public class GoalScript : MonoBehaviour {
             {
                 onOpponentGoalScore.Invoke();
             }
-            if (gameObject.CompareTag("NorthGoal") && other.gameObject.GetComponent<BallScript>().ballHitOnce)
+            if (gameObject.CompareTag("NorthGoal") && other.gameObject.GetComponent<BallScript>() != null && other.gameObject.GetComponent<BallScript>().ballHitOnce)
             {
                 onPlayerGoalScore.Invoke();
             }

@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33090640790562978}
   - component: {fileID: 65287098151209648}
   - component: {fileID: 23599089173694430}
-  - component: {fileID: 114385823669761802}
+  - component: {fileID: 114643578919428308}
   m_Layer: 0
   m_Name: South Goal
   m_TagString: SouthGoal
@@ -59,7 +59,7 @@ GameObject:
   - component: {fileID: 33054499036422428}
   - component: {fileID: 65991374276885070}
   - component: {fileID: 23185054542815564}
-  - component: {fileID: 114442091585260856}
+  - component: {fileID: 114285149784817770}
   m_Layer: 0
   m_Name: North Goal
   m_TagString: NorthGoal
@@ -102,7 +102,6 @@ GameObject:
   - component: {fileID: 33520526115095182}
   - component: {fileID: 136534828899910218}
   - component: {fileID: 23895069101738574}
-  - component: {fileID: 114849337903544182}
   m_Layer: 0
   m_Name: South Goal Hole
   m_TagString: SouthGoal
@@ -121,7 +120,6 @@ GameObject:
   - component: {fileID: 33553524177658522}
   - component: {fileID: 136453773650134392}
   - component: {fileID: 23360852952063238}
-  - component: {fileID: 114835427988994064}
   m_Layer: 0
   m_Name: North Goal Hole
   m_TagString: NorthGoal
@@ -1173,19 +1171,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
---- !u!114 &114385823669761802
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1069736436313494}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f39950323398f9345b73eb750fa9af77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scoreTextGO: {fileID: 0}
---- !u!114 &114442091585260856
+--- !u!114 &114285149784817770
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -1193,34 +1179,40 @@ MonoBehaviour:
   m_GameObject: {fileID: 1262060560667852}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f39950323398f9345b73eb750fa9af77, type: 3}
+  m_Script: {fileID: 11500000, guid: b12e44da8a1ebda41a61263b086c0a0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreTextGO: {fileID: 0}
---- !u!114 &114835427988994064
+  onPlayerGoalScore:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  onOpponentGoalScore:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!114 &114643578919428308
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1910761104527630}
+  m_GameObject: {fileID: 1069736436313494}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f39950323398f9345b73eb750fa9af77, type: 3}
+  m_Script: {fileID: 11500000, guid: b12e44da8a1ebda41a61263b086c0a0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreTextGO: {fileID: 0}
---- !u!114 &114849337903544182
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1458138763670070}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f39950323398f9345b73eb750fa9af77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scoreTextGO: {fileID: 0}
+  onPlayerGoalScore:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  onOpponentGoalScore:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!136 &136453773650134392
 CapsuleCollider:
   m_ObjectHideFlags: 1
