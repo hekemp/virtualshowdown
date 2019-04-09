@@ -43,23 +43,26 @@ public class NumberSpeech : MonoBehaviour {
     }
 
 
-    public void PlayNumbersAudio(int number)
+    public IEnumerator PlayNumbersAudio(int number)
     {
         // We have audio clips for up to 19 because these are unique numbers
         if (number <= 19)
         {
             AudioManager.Instance.PlayNarration(numbers0Through19Clips[number], AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+            yield return new WaitForSeconds(numbers0Through19Clips[number].length);
         }
         // We have to do a bit of fancy manipulation now
         else
         {
             int firstDigit = Mathf.FloorToInt(number / 10);
             AudioManager.Instance.PlayNarration(multiplesOf10From20To90Clips[firstDigit - 2], AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+            yield return new WaitForSeconds(multiplesOf10From20To90Clips[firstDigit - 2].length);
             // We don't say something extra if it's not a multiple of ten, so let's see if it was before saying something
             int secondDigit = Mathf.FloorToInt(number % 10);
             if (secondDigit != 0)
             {
                 AudioManager.Instance.PlayNarration(numbers0Through19Clips[secondDigit], AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+                yield return new WaitForSeconds(numbers0Through19Clips[secondDigit].length);
             }
         }
     }
@@ -71,16 +74,18 @@ public class NumberSpeech : MonoBehaviour {
     /// <param name="points"></param>
     /// <returns></returns>
     /// 
-    public void PlayExpPointsAudio(int points)
+    public IEnumerator PlayExpPointsAudio(int points)
     {
-        if (points > 99)
+        if (points < 99)
         {
-            return;
+            AudioManager.Instance.PlayNarration(youHaveClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+            yield return new WaitForSeconds(youHaveClip.length);
+            PlayNumbersAudio(points);
+            AudioManager.Instance.PlayNarration(pointsClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+            yield return new WaitForSeconds(pointsClip.length);
         }
 
-        AudioManager.Instance.PlayNarration(youHaveClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-        PlayNumbersAudio(points);
-        AudioManager.Instance.PlayNarration(pointsClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+        
     }
 
     /// <summary>
@@ -89,31 +94,37 @@ public class NumberSpeech : MonoBehaviour {
     /// </summary>
     /// <param name="num"></param>
     /// <returns></returns>
-    public void PlayFancyNumberAudio(int num)
+    public IEnumerator PlayFancyNumberAudio(int num)
     {
         AudioManager.Instance.PlayNarration(byClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+        yield return new WaitForSeconds(byClip.length);
 
         int inchNum = (int)(num / 2.54);
         if (inchNum >= 11 && inchNum <= 13)
         {
             AudioManager.Instance.PlayNarration(footClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+            yield return new WaitForSeconds(footClip.length);
         }
         else if (inchNum >= 18)
         {
             AudioManager.Instance.PlayNarration(armClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+            yield return new WaitForSeconds(armClip.length);
         }
         else if (inchNum > 4 && inchNum < 8)
         {
             AudioManager.Instance.PlayNarration(penClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+            yield return new WaitForSeconds(penClip.length);
         }
         else if (inchNum < 2)
         {
             AudioManager.Instance.PlayNarration(pinchClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+            yield return new WaitForSeconds(pinchClip.length);
         }
 
         PlayNumbersAudio(inchNum);
 
         AudioManager.Instance.PlayNarration(inchesClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+        yield return new WaitForSeconds(inchesClip.length);
 
     }
 }

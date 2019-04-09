@@ -145,7 +145,7 @@ public class BallScript : MonoBehaviour {
     private void StartBallSound()
     {
         // TODO: Optimize this to not set everything per call
-        if (!_ballSoundSources[(int)BallSoundSource.Rolling].isPlaying)
+        if ((rb.velocity.x > 0 || rb.velocity.y > 0) && !_ballSoundSources[(int)BallSoundSource.Rolling].isPlaying)
         {
             _ballSoundSources[(int)BallSoundSource.Rolling].loop = true;
             _ballSoundSources[(int)BallSoundSource.Rolling].bypassEffects = false;

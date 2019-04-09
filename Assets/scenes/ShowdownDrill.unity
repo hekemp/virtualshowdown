@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657934, g: 0.4964134, b: 0.5748173, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657993, g: 0.49641424, b: 0.57481825, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -1547,7 +1547,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1082073988}
-        m_MethodName: playerScores
+        m_MethodName: PlayerScoreCoroutine
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1563,7 +1563,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1082073988}
-        m_MethodName: opponentScores
+        m_MethodName: OpponentScoresCoroutine
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3385,37 +3385,50 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ourBall: {fileID: 1988242986954202, guid: 00401e9af8e7daf41b18abe67b428a6a, type: 2}
   playerPaddle: {fileID: 1141653947}
-  positiveReinforcementSuccessClips: []
-  positiveReinforcementMissClips: []
-  clappingClip: {fileID: 0}
-  levelUpClip: {fileID: 0}
+  positiveReinforcementSuccessClips:
+  - {fileID: 8300000, guid: 6c7fe36561ba2e1488be33a194778848, type: 3}
+  - {fileID: 8300000, guid: 41a02c0132d0fed4aa63c57a0bffc6e6, type: 3}
+  - {fileID: 8300000, guid: aad7af91ab5d2924c882e4e70757b3cb, type: 3}
+  - {fileID: 8300000, guid: fa48c3a2d209fea4ab8a8300bf8bde10, type: 3}
+  - {fileID: 8300000, guid: 85851fba417368145b115281566469ea, type: 3}
+  - {fileID: 8300000, guid: 49daaf08ce1bde24aa45c4d6b3e32ccd, type: 3}
+  - {fileID: 8300000, guid: 442e9b0910d245a45a76ba48ba3b8038, type: 3}
+  positiveReinforcementMissClips:
+  - {fileID: 8300000, guid: b08798332663a254190a304444f77712, type: 3}
+  - {fileID: 8300000, guid: daae41cb1d66bee42a75b0f71e296a46, type: 3}
+  - {fileID: 8300000, guid: a2059bf8b43722c4988a028a464569c1, type: 3}
+  - {fileID: 8300000, guid: 3c6dd22fcdaa1df4bab7cd6abffc2627, type: 3}
+  - {fileID: 8300000, guid: b5b1113b00579d14b94a0774d5d1a609, type: 3}
+  clappingClip: {fileID: 8300000, guid: cd648d5413889164f94611d505be869a, type: 3}
+  levelUpClip: {fileID: 8300000, guid: 4e5adfa46d410ed4188014038c0cfb61, type: 3}
   winClip: {fileID: 8300000, guid: 36f4371d7d166c1469dab3c6754b3198, type: 3}
   loseClip: {fileID: 8300000, guid: 842d5fa66a2f05142b3583113e7c33c7, type: 3}
-  clickClip: {fileID: 0}
+  nextBallClip: {fileID: 8300000, guid: 7a5a1dbcb6af2bb42b99b495a5b3965d, type: 3}
+  clickClip: {fileID: 8300000, guid: 7fd0880b2ae3d504d92167ee75e88ad6, type: 3}
   announcerWithStereoPanAltering: {fileID: 0}
-  farLeftClip: {fileID: 0}
-  reachLeftClip: {fileID: 0}
-  endTooFarLeftClip: {fileID: 0}
-  leftClip: {fileID: 0}
-  centerLeftClip: {fileID: 0}
-  centerClip: {fileID: 0}
-  middleAudioClip: {fileID: 0}
-  tippedClip: {fileID: 0}
-  backwardsClip: {fileID: 0}
-  centerRightClip: {fileID: 0}
-  farRightClip: {fileID: 0}
-  reachRightClip: {fileID: 0}
-  tooFarRightClip: {fileID: 0}
-  rightClip: {fileID: 0}
-  startLeftClip: {fileID: 0}
-  startCenterClip: {fileID: 0}
-  startRightClip: {fileID: 0}
-  andIsClip: {fileID: 0}
-  tooForwardClip: {fileID: 0}
-  tooBackClip: {fileID: 0}
-  toClip: {fileID: 0}
-  moveLeftClip: {fileID: 0}
-  moveRightClip: {fileID: 0}
+  farLeftClip: {fileID: 8300000, guid: bbf956746ecd07e469d2f8fdd84a001f, type: 3}
+  reachLeftClip: {fileID: 8300000, guid: 8ae09026eec35df4fa7e54f2c84ae5f3, type: 3}
+  endTooFarLeftClip: {fileID: 8300000, guid: bb82102174364d64fa9501f9869ae91e, type: 3}
+  leftClip: {fileID: 8300000, guid: 5e8472af7bc3fa24ba134e9dd77babfa, type: 3}
+  centerLeftClip: {fileID: 8300000, guid: 96622d4636a111647b17d29cd8d56254, type: 3}
+  centerClip: {fileID: 8300000, guid: e3e66f410b124ac458b8d9a73f87c5de, type: 3}
+  middleAudioClip: {fileID: 8300000, guid: 4142e0d60ae4fe841931b74729044f2e, type: 3}
+  tippedClip: {fileID: 8300000, guid: 015098b55e46796468f9cdaa3c5b83bf, type: 3}
+  backwardsClip: {fileID: 8300000, guid: f27ab033bd7b8774f8eb605ca8980bb3, type: 3}
+  centerRightClip: {fileID: 8300000, guid: 40c04d0dd736b5542a983c1cc1018ffe, type: 3}
+  farRightClip: {fileID: 8300000, guid: 33f9600a2d19b8d4787e3abb1c6d57ad, type: 3}
+  reachRightClip: {fileID: 8300000, guid: 778e42ce09dd4f241bdf983602988f5d, type: 3}
+  tooFarRightClip: {fileID: 8300000, guid: 5052c0249bd6a124f94c24e62dd959c8, type: 3}
+  rightClip: {fileID: 8300000, guid: ea19d707d925e794fa58c7c8babb7c7a, type: 3}
+  startLeftClip: {fileID: 8300000, guid: 1c68e8c3100be944790b3179fedfddfa, type: 3}
+  startCenterClip: {fileID: 8300000, guid: 61b68f484324c2a46ae1eff46e8bf20f, type: 3}
+  startRightClip: {fileID: 8300000, guid: bd1bcb47f11b2484b8f4167f3a584616, type: 3}
+  andIsClip: {fileID: 8300000, guid: 2d07029d873d7014a970f6903e63a8f9, type: 3}
+  tooForwardClip: {fileID: 8300000, guid: 94e908679ee5e4148af40b9c6c65abe5, type: 3}
+  tooBackClip: {fileID: 8300000, guid: cf625a6900ad92e4082d2cc065bbb659, type: 3}
+  toClip: {fileID: 8300000, guid: 1bdf7267247312e4dbb517a6947e61a7, type: 3}
+  moveLeftClip: {fileID: 8300000, guid: 8182a8b6daf68b24dbfb0375c6ac63b0, type: 3}
+  moveRightClip: {fileID: 8300000, guid: 7e71ebfb8e6455e4cb78b600e5c52c77, type: 3}
   ballAndPosText: {fileID: 572556930}
   clockText: {fileID: 1322502142}
   IsTactileDouse: 0
@@ -3471,7 +3484,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1082073988}
-        m_MethodName: playerScores
+        m_MethodName: PlayerScoreCoroutine
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3487,7 +3500,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1082073988}
-        m_MethodName: opponentScores
+        m_MethodName: OpponentScoresCoroutine
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

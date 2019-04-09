@@ -263,43 +263,57 @@ public class ShowdownDrillManager : MonoBehaviour
         return false;
     }
 
-    public void playerScores()
+    public void PlayerScoreCoroutine()
     {
-        if (currentBall == null)
-        {
-            return;
-        }
+        StartCoroutine(playerScores());
+    }
 
-        AudioManager.Instance.PlaySfx(winClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+    public void OpponentScoresCoroutine()
+    {
+        StartCoroutine(opponentScores());
+    }
 
-        newBallOk = true;
-        if (hitPastHalfCoroutine != null)
+    public IEnumerator playerScores()
+    {
+        if (currentBall != null)
         {
-            StopCoroutine(hitPastHalfCoroutine);
-            hitPastHalfCoroutine = null;
+            Debug.Log("Rigidbody constraints all player");
+            currentBall.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+
+            AudioManager.Instance.PlaySfx(winClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+            yield return new WaitForSeconds(winClip.length);
+
+            newBallOk = true;
+            if (hitPastHalfCoroutine != null)
+            {
+                StopCoroutine(hitPastHalfCoroutine);
+                hitPastHalfCoroutine = null;
+            }
+            StartNextBall(HitRes.goal);
         }
-        StartNextBall(HitRes.goal);
         
     }
 
-    public void opponentScores()
+    public IEnumerator opponentScores()
     {
-        if (currentBall == null)
+        if (currentBall != null)
         {
-            return;
-        }
+            Debug.Log("Rigidbody constraints all opponent");
+            currentBall.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
 
-        newBallOk = true;
+            newBallOk = true;
 
-        AudioManager.Instance.PlaySfx(loseClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+            AudioManager.Instance.PlaySfx(loseClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+            yield return new WaitForSeconds(loseClip.length);
 
-        if (currentBallScript.ballHitOnce)
-        {
-            StartNextBall(HitRes.tipped);
-        }
-        else
-        {
-            StartNextBall(HitRes.miss);
+            if (currentBallScript.ballHitOnce)
+            {
+                StartNextBall(HitRes.tipped);
+            }
+            else
+            {
+                StartNextBall(HitRes.miss);
+            }
         }
     }
 
@@ -374,6 +388,7 @@ public class ShowdownDrillManager : MonoBehaviour
         else if (!IsAnnounceBall)
         {
             AudioManager.Instance.PlayNarration(nextBallClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+            yield return new WaitForSeconds(nextBallClip.length);
         }
 
         yield return SpawnBall();
@@ -495,6 +510,8 @@ public class ShowdownDrillManager : MonoBehaviour
     {
         Debug.Log("Ressting ball");
         currentBall.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        Debug.Log("Rigidbody constraints none");
+        currentBall.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
         currentBall.transform.position = (origin);
         currentBallScript.ballHitOnce = false;
     }
@@ -575,7 +592,7 @@ public class ShowdownDrillManager : MonoBehaviour
         {
             if (currentBallScript.ballHitOnce && maxDistance <= currentBall.transform.position.z)
             {
-                Debug.Log("Been hit and on other side! Yay: " + maxDistance);
+                // Debug.Log("Been hit and on other side! Yay: " + maxDistance);
                 maxDistance = currentBall.transform.position.z;
             }
             else
@@ -598,7 +615,7 @@ public class ShowdownDrillManager : MonoBehaviour
     /// <summary>
     /// Plays audio depending if the bat is too far to the right or to the left
     /// </summary>
-    private void PlayMidPointAudio()
+    private IEnumerator PlayMidPointAudio()
     {
         if (currentBall != null)
         {
@@ -613,10 +630,12 @@ public class ShowdownDrillManager : MonoBehaviour
                     if (snapShotBatPos.x < GetActualXDestination())
                     {
                         AudioManager.Instance.PlayNarration(moveRightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
+                        yield return new WaitForSeconds(moveRightClip.length);
                     }
                     else
                     {
                         AudioManager.Instance.PlayNarration(moveLeftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
+                        yield return new WaitForSeconds(moveLeftClip.length);
                     }
                 }
             }
@@ -787,10 +806,7 @@ public class ShowdownDrillManager : MonoBehaviour
 
             _currBallSpeed = DetermineCurrBallSpeed();
 
-            
-
-            // TODO: play the clickClip sound here;
-
+            // TODO: play the clickClip sound here
             currentBallScript.KickBallTowards(ballPositions[_currBallType].Destination, _currBallSpeed);
             
         }
@@ -819,59 +835,40 @@ public class ShowdownDrillManager : MonoBehaviour
         //Play where the ball is starting
         if (_currBallPath.BallOriginType == BallOriginType.left) //Left Start
         {
-            // TODO: play start left audio and wait until it's finished
-
-            // yield return new WaitForSeconds(startLeftAudio.clip.length);
+            playStartLeft();
         }
         else if (_currBallPath.BallOriginType == BallOriginType.center) //Center Start
         {
-            // TODO: play start center audio and wait until it's finished
-
-           // yield return new WaitForSeconds(startCenterAudio.clip.length);
+            playStartCenter();
         }
         else if (_currBallPath.BallOriginType == BallOriginType.right) //Right Start
         {
-            // TODO: play start right audio and wait until it's finished
-
-            //yield return new WaitForSeconds(startRightAudio.clip.length);
+            playStartRight();
         }
 
-        // TODO: play "andIs" audio and wait until it's finished;
-
-        // yield return new WaitForSeconds(andIsAudio.clip.length);
-
+        playAndIs();
 
         //Play the destination
 
         if (_currBallPath.BallDestType == BallDestType.farLeft)
         {
-            // TODO: play endFarLeft audio and wait for it to finish
-
-            //yield return new WaitForSeconds(endFarLeftAudio.clip.length);
+            playEndFarLeft();
         }
         else if (_currBallPath.BallDestType == BallDestType.centerLeft)
         {
-            // TODO: play endCenterLeft audio and wait for it to finish
-
-            //yield return new WaitForSeconds(endCenterLeftAudio.clip.length);
+            playEndCenterLeft();
         }
         else if (_currBallPath.BallDestType == BallDestType.center)
         {
-            // TODO: play endCenter audio and wait for it to finish
-
-            //yield return new WaitForSeconds(endCenterAudio.clip.length);
+            playEndCenter();
         }
         else if (_currBallPath.BallDestType == BallDestType.centerRight)
         {
-            // TODO: play endCenterRightAudio and wait for it to finish;
-
-            //yield return new WaitForSeconds(endCenterRightAudio.clip.length);
+            playEndCenterRight();
         }
         else if (_currBallPath.BallDestType == BallDestType.farRight)
         {
-            // TODO: play endFarRight audio and wait for it to finish
-
-            //yield return new WaitForSeconds(endFarRightAudio.clip.length);
+            playEndFarRight();
         }
 
         yield return new WaitForSeconds(0);
@@ -947,15 +944,17 @@ public class ShowdownDrillManager : MonoBehaviour
         if (CheckLevelUp())
         {
             playerLevel++;
-            // TODO: play levelUpAudio and wait for it to finish
 
-            //yield return new WaitForSeconds(levelUpAudio.clip.length);
+            AudioManager.Instance.PlayNarration(levelUpClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+            yield return new WaitForSeconds(levelUpClip.length);
         }
 
-        // TODO: play clapping audio
-        // TODO: play a random congrats positive reinforcement
-        // TODO: maybe? wait for those to finish. TBD.
-        // yield return new WaitForSeconds(_audioSources[0].clip.length);
+        AudioManager.Instance.PlaySfx(clappingClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+
+        int randomReinforcementToPlay = UnityEngine.Random.Range(0, positiveReinforcementSuccessClips.Length - 1);
+        AudioManager.Instance.PlayNarration(positiveReinforcementSuccessClips[randomReinforcementToPlay], AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+        yield return new WaitForSeconds(positiveReinforcementSuccessClips[randomReinforcementToPlay].length);
+  
         yield return NextBallComing();
     }
 
@@ -971,9 +970,9 @@ public class ShowdownDrillManager : MonoBehaviour
         //Randomly, 1/3 of the time, play a random lose voice sound effect
         if (UnityEngine.Random.Range(0, 2) == 0)
         {
-            // TODO: play a random whoops you missed sound effect. Wait for it to finish.
- 
-            //yield return new WaitForSeconds(_audioSources[rand].clip.length);
+            int randomReinforcementToPlay = UnityEngine.Random.Range(0, positiveReinforcementMissClips.Length - 1);
+            AudioManager.Instance.PlayNarration(positiveReinforcementMissClips[randomReinforcementToPlay], AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+            yield return new WaitForSeconds(positiveReinforcementMissClips[randomReinforcementToPlay].length);
         }
 
         if (IsCorrectionHints)
@@ -999,19 +998,22 @@ public class ShowdownDrillManager : MonoBehaviour
         {
             if (CollisionSnapshot.ballPos.x < CollisionSnapshot.batPos.x - 5)
             {
-                // TODO: Add tipped to the left audio
-                // play  tippedAudio
-                // play reachLeft
+                AudioManager.Instance.PlayNarration(tippedClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End3]);
+                yield return new WaitForSeconds(tippedClip.length);
+                AudioManager.Instance.PlayNarration(reachLeftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End1]);
+                yield return new WaitForSeconds(reachLeftClip.length);
             }
             else if (CollisionSnapshot.ballPos.x > CollisionSnapshot.batPos.x + 5)
             {
-                // TODO: Add ripped to the right audio
-                // play tippedAudio
-                // play reachRight
+                AudioManager.Instance.PlayNarration(tippedClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End3]);
+                yield return new WaitForSeconds(tippedClip.length);
+                AudioManager.Instance.PlayNarration(reachRightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End5]);
+                yield return new WaitForSeconds(reachRightClip.length);
             }
             else if (CollisionSnapshot.ballPos.z < CollisionSnapshot.batPos.z)
             {
-                // TODO: Play the: backward Audio / you hit this backwards
+                AudioManager.Instance.PlayNarration(backwardsClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End3]);
+                yield return new WaitForSeconds(backwardsClip.length);
             }
         }
         else if (absDist < 10)
@@ -1019,68 +1021,68 @@ public class ShowdownDrillManager : MonoBehaviour
             if (snapShotBatPos.z > snapShotBallPos.z)
             {
                 //Reached too far forward too soon.
-                // TODO: play the tooForward sound and wait for it to finish
-
-                //yield return new WaitForSeconds(tooForward.clip.length);
+                AudioManager.Instance.PlayNarration(tooForwardClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
+                yield return new WaitForSeconds(tooForwardClip.length);
             }
             else
             {
                 //Reached too far back
-                // TODO: play the tooBack sound and wait for it to finish
-
-                //yield return new WaitForSeconds(tooBack.clip.length);
+                AudioManager.Instance.PlayNarration(tooBackClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
+                yield return new WaitForSeconds(tooBackClip.length);
             }
         }
         else if (snapShotBallPos.x > 0 && snapShotBallPos.x > snapShotBatPos.x)
         {
             //Reach further to the right
             float distOff = snapShotBallPos.x - snapShotBatPos.x;
-            // TODO: play the reachRight sound and wait for it to finish
+            AudioManager.Instance.PlayNarration(reachRightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End5]);
+            yield return new WaitForSeconds(reachRightClip.length);
 
-           // yield return new WaitForSeconds(reachRight.clip.length);
             NumberSpeech.Instance.PlayFancyNumberAudio((int)distOff);
-            // TODO: wait long enough for that to finish, tbd if that's actually needed
+
             yield return new WaitForSeconds(2.5f);
         }
         else if (snapShotBallPos.x > 0 && snapShotBallPos.x < snapShotBatPos.x)
         {
             //Too far to the right
             float distOff = snapShotBatPos.x - snapShotBallPos.x;
-            // TODO: play the tooRight sound and wait for it to finish
 
-            //yield return new WaitForSeconds(tooRight.clip.length);
+            AudioManager.Instance.PlayNarration(tooFarRightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End5]);
+            yield return new WaitForSeconds(tooFarRightClip.length);
+
             NumberSpeech.Instance.PlayFancyNumberAudio((int)distOff);
-            // TODO: wait long enough for that to finish, tbd if it's actualyl needed
+
             yield return new WaitForSeconds(2.5f);
         }
         else if (snapShotBallPos.x < 0 && snapShotBallPos.x > snapShotBatPos.x)
         {
             //Too far to the left
             float distOff = Math.Abs(snapShotBatPos.x - snapShotBallPos.x);
-            // TODO: play tooLeft sound and wait for it to finish
 
-            //yield return new WaitForSeconds(tooLeft.clip.length);
+            AudioManager.Instance.PlayNarration(endTooFarLeftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End1]);
+            yield return new WaitForSeconds(endTooFarLeftClip.length);
+
             NumberSpeech.Instance.PlayFancyNumberAudio((int)distOff);
-            // TODO: wait long enough for that to finish, tbd if it's actualyl needed
+
             yield return new WaitForSeconds(2.5f);
         }
         else if (snapShotBallPos.x < 0 && snapShotBallPos.x < snapShotBatPos.x)
         {
             //Reach futher to the left
             float distOff = Math.Abs(snapShotBallPos.x - snapShotBatPos.x);
-            // TODO: play reachLeft sound and wait for it to finish
 
-            //yield return new WaitForSeconds(reachLeft.clip.length);
+            AudioManager.Instance.PlayNarration(reachLeftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End1]);
+            yield return new WaitForSeconds(reachLeftClip.length);
+
             NumberSpeech.Instance.PlayFancyNumberAudio((int)distOff);
-            // TODO: wait long enough for that to finish, tbd if it's actualyl needed
+
             yield return new WaitForSeconds(2.5f);
         }
         else if (snapShotBallPos.x == 0)
         {
             //Put it right in the middle
-            // TODO: play middleAudio and wait for it to finish
- 
-            //yield return new WaitForSeconds(middleAudio.clip.length);
+            AudioManager.Instance.PlayNarration(middleAudioClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End3]);
+            yield return new WaitForSeconds(middleAudioClip.length);
         }
         yield break;
     }
@@ -1123,6 +1125,8 @@ public class ShowdownDrillManager : MonoBehaviour
             AudioManager.Instance.PlayNarration(leftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
             yield return new WaitForSeconds(leftClip.length);
         }
+
+        // TODO: Add wait for else case, make last else case elif
     }
 
     private IEnumerator playStartCenter()
@@ -1142,6 +1146,8 @@ public class ShowdownDrillManager : MonoBehaviour
             AudioManager.Instance.PlayNarration(centerClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
             yield return new WaitForSeconds(centerClip.length);
         }
+
+        // TODO: Add wait for else case, make last else case elif
     }
 
     private IEnumerator playStartRight()
@@ -1161,6 +1167,8 @@ public class ShowdownDrillManager : MonoBehaviour
             AudioManager.Instance.PlayNarration(rightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
             yield return new WaitForSeconds(rightClip.length);
         }
+
+        // TODO: Add wait for else case, make last else case elif
     }
 
     private IEnumerator playEndFarLeft()
@@ -1180,6 +1188,8 @@ public class ShowdownDrillManager : MonoBehaviour
             AudioManager.Instance.PlayNarration(leftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
             yield return new WaitForSeconds(leftClip.length);
         }
+
+        // TODO: Add wait for else case, make last else case elif
     }
 
     private IEnumerator playEndCenterLeft()
@@ -1199,6 +1209,8 @@ public class ShowdownDrillManager : MonoBehaviour
             AudioManager.Instance.PlayNarration(centerLeftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
             yield return new WaitForSeconds(centerLeftClip.length);
         }
+
+        // TODO: Add wait for else case, make last else case elif
     }
 
     private IEnumerator playEndCenter()
@@ -1218,6 +1230,8 @@ public class ShowdownDrillManager : MonoBehaviour
             AudioManager.Instance.PlayNarration(centerClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
             yield return new WaitForSeconds(centerClip.length);
         }
+
+        // TODO: Add wait for else case, make last else case elif
     }
 
     private IEnumerator playEndCenterRight()
@@ -1237,6 +1251,8 @@ public class ShowdownDrillManager : MonoBehaviour
             AudioManager.Instance.PlayNarration(centerRightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
             yield return new WaitForSeconds(centerRightClip.length);
         }
+
+        // TODO: Add wait for else case, make last else case elif
     }
 
     private IEnumerator playEndFarRight()
@@ -1256,6 +1272,8 @@ public class ShowdownDrillManager : MonoBehaviour
             AudioManager.Instance.PlayNarration(rightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
             yield return new WaitForSeconds(rightClip.length);
         }
+
+        // TODO: Add wait for else case, make last else case elif
     }
 
     private IEnumerator playAndIs()
@@ -1270,9 +1288,12 @@ public class ShowdownDrillManager : MonoBehaviour
             AudioManager.Instance.PlayNarration(toClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
             yield return new WaitForSeconds(toClip.length);
         }
-        else // oldHintLen == HintLengthNonSpatial
+        else if (oldHintLen == HintLength.nonspatial)
         {
             AudioManager.Instance.PlayNarration(toClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
+            yield return new WaitForSeconds(toClip.length);
+        } else
+        {
             yield return new WaitForSeconds(toClip.length);
         }
     }
