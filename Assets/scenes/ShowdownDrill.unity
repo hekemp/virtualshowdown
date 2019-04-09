@@ -1547,7 +1547,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1082073988}
-        m_MethodName: PlayerScoreCoroutine
+        m_MethodName: OwnGoal
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1563,7 +1563,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1082073988}
-        m_MethodName: OpponentScoresCoroutine
+        m_MethodName: OpponentGoal
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3383,8 +3383,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d15e2abe750ad4e40aaf5b7d727e44c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ourBall: {fileID: 1988242986954202, guid: 00401e9af8e7daf41b18abe67b428a6a, type: 2}
+  BallPrefab: {fileID: 1988242986954202, guid: 00401e9af8e7daf41b18abe67b428a6a, type: 3}
   playerPaddle: {fileID: 1141653947}
+  IsTactileDouse: 0
+  IsCorrectionHints: 0
+  IsMidPointAnnounce: 0
   positiveReinforcementSuccessClips:
   - {fileID: 8300000, guid: 6c7fe36561ba2e1488be33a194778848, type: 3}
   - {fileID: 8300000, guid: 41a02c0132d0fed4aa63c57a0bffc6e6, type: 3}
@@ -3405,7 +3408,6 @@ MonoBehaviour:
   loseClip: {fileID: 8300000, guid: 842d5fa66a2f05142b3583113e7c33c7, type: 3}
   nextBallClip: {fileID: 8300000, guid: 7a5a1dbcb6af2bb42b99b495a5b3965d, type: 3}
   clickClip: {fileID: 8300000, guid: 7fd0880b2ae3d504d92167ee75e88ad6, type: 3}
-  announcerWithStereoPanAltering: {fileID: 0}
   farLeftClip: {fileID: 8300000, guid: bbf956746ecd07e469d2f8fdd84a001f, type: 3}
   reachLeftClip: {fileID: 8300000, guid: 8ae09026eec35df4fa7e54f2c84ae5f3, type: 3}
   endTooFarLeftClip: {fileID: 8300000, guid: bb82102174364d64fa9501f9869ae91e, type: 3}
@@ -3431,9 +3433,7 @@ MonoBehaviour:
   moveRightClip: {fileID: 8300000, guid: 7e71ebfb8e6455e4cb78b600e5c52c77, type: 3}
   ballAndPosText: {fileID: 572556930}
   clockText: {fileID: 1322502142}
-  IsTactileDouse: 0
-  IsCorrectionHints: 0
-  IsMidPointAnnounce: 0
+  CurrentState: 0
 --- !u!1 &1121752239
 GameObject:
   m_ObjectHideFlags: 0
@@ -3484,7 +3484,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1082073988}
-        m_MethodName: PlayerScoreCoroutine
+        m_MethodName: OwnGoal
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3500,7 +3500,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1082073988}
-        m_MethodName: OpponentScoresCoroutine
+        m_MethodName: OpponentGoal
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5236,6 +5236,10 @@ Prefab:
     - target: {fileID: 4573819851846728, guid: 0820f6f5f6852ca47a41ada4bf9fe2cd, type: 2}
       propertyPath: m_RootOrder
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4345460655864940, guid: 0820f6f5f6852ca47a41ada4bf9fe2cd, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 32.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0820f6f5f6852ca47a41ada4bf9fe2cd, type: 2}
