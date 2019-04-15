@@ -557,7 +557,7 @@ public class ShowdownDrillManager : MonoBehaviour
     private void TactileDouse()
     {
         Vector3 batPos = playerPaddle.transform.position;
-        if (currentBall != null && PreferenceManager.Instance.ControllerRumble)
+        if (PreferenceManager.Instance.ControllerRumble)
         {
             float absDist = Math.Abs(batPos.x - GetActualXDestination(currentBallPath));
             //float distAwayFromDest = 100 - absDist;
@@ -690,6 +690,9 @@ public class ShowdownDrillManager : MonoBehaviour
         {
             yield break;
         }
+
+        ballScript.StopBallSound();
+
         Debug.Log("Miss");
         // TODO: Update ball state to new shit
 
@@ -709,6 +712,9 @@ public class ShowdownDrillManager : MonoBehaviour
         {
             yield break;
         }
+
+        ballScript.StopBallSound();
+
         CurrentState = GameState.BallInactive;
         yield return new WaitForSeconds(1.5f);
         Debug.Log("Perfect hit");
@@ -725,6 +731,7 @@ public class ShowdownDrillManager : MonoBehaviour
 
     private IEnumerator FinishScoring()
     {
+
         HitRes hr = CurrentHitRes;
         gamePoints += hr == HitRes.miss ? 0 : (int)hr - 1;
         if (hr != HitRes.miss && hr != HitRes.tipped)

@@ -39,7 +39,7 @@ public class BallScript : MonoBehaviour {
 
     private void Start()
     {
-        StartBallSound();
+        //StartBallSound();
     }
 
     public float CurrentSpeed()
@@ -68,6 +68,7 @@ public class BallScript : MonoBehaviour {
     public void KickBallTowards(Vector3 Destination, int speedOfKick)
     {
         rb.AddForce(Destination * speedOfKick, ForceMode.Acceleration);
+        StartBallSound();
     }
 
     /// <summary>
@@ -144,9 +145,13 @@ public class BallScript : MonoBehaviour {
 
     private void StartBallSound()
     {
+
+        Debug.Log("Arrives at sound");
         // TODO: Optimize this to not set everything per call
-        if ((rb.velocity.x > 0 || rb.velocity.y > 0) && !_ballSoundSources[(int)BallSoundSource.Rolling].isPlaying)
+        // (rb.velocity.x > 0 || rb.velocity.y > 0) && 
+        if (!_ballSoundSources[(int)BallSoundSource.Rolling].isPlaying)
         {
+            Debug.Log("Sets Stuff/was not playing");
             _ballSoundSources[(int)BallSoundSource.Rolling].loop = true;
             _ballSoundSources[(int)BallSoundSource.Rolling].bypassEffects = false;
             _ballSoundSources[(int)BallSoundSource.Rolling].bypassReverbZones = true;
@@ -157,7 +162,16 @@ public class BallScript : MonoBehaviour {
             _ballSoundSources[(int)BallSoundSource.Rolling].reverbZoneMix = 0.559f;
             _ballSoundSources[(int)BallSoundSource.Rolling].clip = ballRollingSound;
             _ballSoundSources[(int)BallSoundSource.Rolling].Play();
+            _ballSoundSources[(int)BallSoundSource.Rolling].dopplerLevel = 0.25f;
+            _ballSoundSources[(int)BallSoundSource.Rolling].spread = 0;
+
+            _ballSoundSources[(int)BallSoundSource.Rolling].Play();
         }
+    }
+
+    public void StopBallSound()
+    {
+        _ballSoundSources[(int)BallSoundSource.Rolling].Stop();
     }
 
     private void StartWallCollideSound()
