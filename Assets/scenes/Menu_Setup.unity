@@ -588,15 +588,15 @@ MonoBehaviour:
   - {fileID: 2098531132}
   - {fileID: 881707698}
   NarratorAudioSource: {fileID: 87609705}
-  End1: {fileID: 0}
-  End2: {fileID: 0}
-  End3: {fileID: 0}
-  End4: {fileID: 0}
-  End5: {fileID: 0}
-  Start1: {fileID: 0}
-  Start2: {fileID: 0}
-  Start3: {fileID: 0}
-  Guideline: {fileID: 0}
+  End1: {fileID: 1913534665}
+  End2: {fileID: 1913534665}
+  End3: {fileID: 1913534665}
+  End4: {fileID: 1913534665}
+  End5: {fileID: 1913534665}
+  Start1: {fileID: 1913534665}
+  Start2: {fileID: 1913534665}
+  Start3: {fileID: 1913534665}
+  Guideline: {fileID: 1913534665}
 --- !u!4 &382932743
 Transform:
   m_ObjectHideFlags: 0

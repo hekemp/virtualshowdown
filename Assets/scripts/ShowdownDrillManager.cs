@@ -176,6 +176,17 @@ public class ShowdownDrillManager : MonoBehaviour
         // TODO: This
     }
 
+    public void restartGame()
+    {
+        // TODO: make this smoother
+        SceneManager.LoadScene("ShowdownDrill");
+    }
+
+    public void goToMainMenu()
+    {
+        SceneManager.LoadScene("Main_Menu");
+    }
+
     /// <summary>
     /// Initialize variables - this is run once when the game starts
     /// </summary>
