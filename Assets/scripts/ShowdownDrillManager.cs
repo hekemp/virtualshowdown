@@ -765,7 +765,7 @@ public class ShowdownDrillManager : MonoBehaviour
 
             int randomReinforcementToPlay = UnityEngine.Random.Range(0, positiveReinforcementSuccessClips.Length - 1);
             AudioManager.Instance.PlayNarration(positiveReinforcementSuccessClips[randomReinforcementToPlay], AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-            yield return new WaitForSeconds(positiveReinforcementSuccessClips[randomReinforcementToPlay].length);
+            yield return new WaitForSeconds(Math.Max(positiveReinforcementSuccessClips[randomReinforcementToPlay].length, clappingClip.length));
         }
         else
         {
