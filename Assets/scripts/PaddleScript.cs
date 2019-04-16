@@ -56,6 +56,10 @@ public class PaddleScript : MonoBehaviour {
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (BodySourceManager.Instance == null)
+        {
+            return;
+        }
 
         float centerXPoint = CheckCalibratedX(BodySourceManager.Instance.baseKinectPosition.X);
         float maxZPoint = CheckCalibratedZ(BodySourceManager.Instance.baseKinectPosition.Z);

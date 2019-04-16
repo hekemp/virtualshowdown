@@ -27,6 +27,11 @@ public class CameraControllerScript : MonoBehaviour {
     /// </summary>
     private void FixedUpdate()
     {
+        if (BodySourceManager.Instance == null)
+        {
+            return;
+        }
+
         CameraSpacePoint closestZPoint = BodySourceManager.Instance.closestZPoint;
         CameraSpacePoint headPos = BodySourceManager.Instance.headPosition;
 
