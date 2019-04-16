@@ -1427,7 +1427,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -1547,7 +1547,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1082073988}
-        m_MethodName: OwnGoal
+        m_MethodName: OpponentGoal
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1563,7 +1563,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1082073988}
-        m_MethodName: OpponentGoal
+        m_MethodName: OwnGoal
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3385,9 +3385,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BallPrefab: {fileID: 1988242986954202, guid: 00401e9af8e7daf41b18abe67b428a6a, type: 2}
   playerPaddle: {fileID: 1141653947}
-  IsTactileDouse: 0
-  IsCorrectionHints: 0
-  IsMidPointAnnounce: 0
+  IsTactileDouse: 1
+  IsCorrectionHints: 1
+  IsMidPointAnnounce: 1
   positiveReinforcementSuccessClips:
   - {fileID: 8300000, guid: 6c7fe36561ba2e1488be33a194778848, type: 3}
   - {fileID: 8300000, guid: 41a02c0132d0fed4aa63c57a0bffc6e6, type: 3}
@@ -3433,7 +3433,7 @@ MonoBehaviour:
   moveRightClip: {fileID: 8300000, guid: 7e71ebfb8e6455e4cb78b600e5c52c77, type: 3}
   ballAndPosText: {fileID: 572556930}
   clockText: {fileID: 1322502142}
-  CurrentState: 0
+  CurrentState: 3
 --- !u!1 &1121752239
 GameObject:
   m_ObjectHideFlags: 0
@@ -3484,7 +3484,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1082073988}
-        m_MethodName: OwnGoal
+        m_MethodName: OpponentGoal
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3500,7 +3500,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1082073988}
-        m_MethodName: OpponentGoal
+        m_MethodName: OwnGoal
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6753,7 +6753,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 24300002, guid: ec9122b34bfcdf547bb6f9787a067d3d,
     type: 2}
   m_audioClip: {fileID: 8300000, guid: bd1bcb47f11b2484b8f4167f3a584616, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

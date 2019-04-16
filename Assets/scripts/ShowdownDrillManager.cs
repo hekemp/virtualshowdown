@@ -127,7 +127,7 @@ public class ShowdownDrillManager : MonoBehaviour
     /// <summary>
     /// The level of the player
     /// </summary>
-    private int playerLevel;
+    public int playerLevel;
     /// <summary>
     /// Whether or not we should be announcing details about
     /// the ball trajectory (specific locations)
@@ -393,7 +393,7 @@ public class ShowdownDrillManager : MonoBehaviour
             shuffledBallPositions = ShuffleArray(ballPositions);
         }
 
-        if (shouldAnnounceDetailedBallTrajectory)
+        if (shouldAnnounceDetailedBallTrajectory && playerLevel < 3) // We should only announce ball positions when player level is 0, 1, or 2
         {
             yield return AnnounceBallPos(PlayerHintLength, currentBallPath);
         }
@@ -462,6 +462,8 @@ public class ShowdownDrillManager : MonoBehaviour
             SetupNonSpatialHintAudio();
         }
         //Play where the ball is starting
+
+        Debug.Log(ballPath.BallOriginType);
         if (ballPath.BallOriginType == BallOriginType.left) //Left Start
         {
             yield return playStartLeft();
@@ -509,6 +511,7 @@ public class ShowdownDrillManager : MonoBehaviour
     /// </summary>
     private void SetGameHints()
     {
+        
         if (playerLevel < 3)
         {
             if (IsTactileDouse)
@@ -517,7 +520,8 @@ public class ShowdownDrillManager : MonoBehaviour
             }
             if (IsMidPointAnnounce)
             {
-                PlayMidPointAudio();
+              //  Debug.Log("Hello!");
+                StartCoroutine(PlayMidPointAudio());
             }
             shouldAnnounceDetailedBallTrajectory = true;
         }
@@ -666,8 +670,12 @@ public class ShowdownDrillManager : MonoBehaviour
         yield return HandleMiss();
     }
 
+    /// <summary>
+    /// When the ball lands in the opponent's goal (i.e. we get a point)
+    /// </summary>
     public void OpponentGoal()
     {
+        Debug.Log("OPPONENT GOAL");
         if (checkMissCoroutine != null)
         {
             StopCoroutine(checkMissCoroutine);
@@ -675,8 +683,12 @@ public class ShowdownDrillManager : MonoBehaviour
         StartCoroutine(HandlePerfectHit());
     }
 
+    /// <summary>
+    /// When we score an own goal (i.e. this is bad)
+    /// </summary>
     public void OwnGoal()
     {
+        Debug.Log("OWN GOAL");
         if (checkMissCoroutine != null)
         {
             StopCoroutine(checkMissCoroutine);
@@ -713,10 +725,11 @@ public class ShowdownDrillManager : MonoBehaviour
             yield break;
         }
 
-        ballScript.StopBallSound();
+        
 
         CurrentState = GameState.BallInactive;
         yield return new WaitForSeconds(1.5f);
+        ballScript.StopBallSound();
         Debug.Log("Perfect hit");
         // TODO
 
@@ -734,7 +747,7 @@ public class ShowdownDrillManager : MonoBehaviour
 
         HitRes hr = CurrentHitRes;
         gamePoints += hr == HitRes.miss ? 0 : (int)hr - 1;
-        if (hr != HitRes.miss && hr != HitRes.tipped)
+        if (hr == HitRes.pastHalfHit || hr == HitRes.goal)
         {
             Debug.Log("Didn't miss");
             prevHits[currentBall % 6] = 1;
@@ -768,7 +781,8 @@ public class ShowdownDrillManager : MonoBehaviour
 
             if (IsCorrectionHints)
             {
-                yield return ReadHitCorrection(hr);
+                Debug.Log("Read correction hint");
+                yield return StartCoroutine(ReadHitCorrection(hr));
             }
         }
 
@@ -829,9 +843,13 @@ public class ShowdownDrillManager : MonoBehaviour
     {
         get
         {
-            if ((ballScript.ballHitOnce) && maxDistance > -50)
+            if ((ballScript.ballHitOnce) && maxDistance < 0)
             {
                 return HitRes.hitNotPastHalf;
+            }
+            else if ((ballScript.ballHitOnce) && maxDistance >= 0)
+            {
+                return HitRes.pastHalfHit;
             }
             else if ((ballScript.ballHitOnce))
             {
@@ -844,6 +862,7 @@ public class ShowdownDrillManager : MonoBehaviour
     #region Audio Players
     private IEnumerator playStartLeft()
     {
+        Debug.Log("At start left I guess");
         if (hintLength == HintLength.full)
         {
             AudioManager.Instance.PlayNarration(startLeftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Start1]);
@@ -886,6 +905,7 @@ public class ShowdownDrillManager : MonoBehaviour
 
     private IEnumerator playStartRight()
     {
+        Debug.Log("at start right i guess");
         if (hintLength == HintLength.full)
         {
             AudioManager.Instance.PlayNarration(startRightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Start3]);
@@ -907,6 +927,7 @@ public class ShowdownDrillManager : MonoBehaviour
 
     private IEnumerator playEndFarLeft()
     {
+        Debug.Log("at end far left I guess");
         if (hintLength == HintLength.full)
         {
             AudioManager.Instance.PlayNarration(farLeftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End1]);
@@ -970,6 +991,7 @@ public class ShowdownDrillManager : MonoBehaviour
 
     private IEnumerator playEndCenterRight()
     {
+        Debug.Log("at center right i guess");
         if (hintLength == HintLength.full)
         {
             AudioManager.Instance.PlayNarration(centerRightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End4]);
@@ -991,6 +1013,7 @@ public class ShowdownDrillManager : MonoBehaviour
 
     private IEnumerator playEndFarRight()
     {
+        Debug.Log("at right i guess");
         if (hintLength == HintLength.full)
         {
             AudioManager.Instance.PlayNarration(farRightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End5]);
@@ -1115,7 +1138,7 @@ public class ShowdownDrillManager : MonoBehaviour
             AudioManager.Instance.PlayNarration(reachRightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End5]);
             yield return new WaitForSeconds(reachRightClip.length);
 
-            NumberSpeech.Instance.PlayFancyNumberAudio((int)distOff);
+            yield return NumberSpeech.Instance.PlayFancyNumberAudio((int)distOff);
 
             yield return new WaitForSeconds(2.5f);
         }
@@ -1127,7 +1150,7 @@ public class ShowdownDrillManager : MonoBehaviour
             AudioManager.Instance.PlayNarration(tooFarRightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End5]);
             yield return new WaitForSeconds(tooFarRightClip.length);
 
-            NumberSpeech.Instance.PlayFancyNumberAudio((int)distOff);
+            yield return NumberSpeech.Instance.PlayFancyNumberAudio((int)distOff);
 
             yield return new WaitForSeconds(2.5f);
         }
@@ -1139,7 +1162,7 @@ public class ShowdownDrillManager : MonoBehaviour
             AudioManager.Instance.PlayNarration(endTooFarLeftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End1]);
             yield return new WaitForSeconds(endTooFarLeftClip.length);
 
-            NumberSpeech.Instance.PlayFancyNumberAudio((int)distOff);
+            yield return NumberSpeech.Instance.PlayFancyNumberAudio((int)distOff);
 
             yield return new WaitForSeconds(2.5f);
         }
@@ -1151,7 +1174,7 @@ public class ShowdownDrillManager : MonoBehaviour
             AudioManager.Instance.PlayNarration(reachLeftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End1]);
             yield return new WaitForSeconds(reachLeftClip.length);
 
-            NumberSpeech.Instance.PlayFancyNumberAudio((int)distOff);
+            yield return NumberSpeech.Instance.PlayFancyNumberAudio((int)distOff);
 
             yield return new WaitForSeconds(2.5f);
         }
