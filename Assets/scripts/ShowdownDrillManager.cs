@@ -47,6 +47,8 @@ public class ShowdownDrillManager : MonoBehaviour
     public bool IsTactileDouse;
     public bool IsCorrectionHints;
     public bool IsMidPointAnnounce;
+    public bool hasStartedGame;
+    public bool hasReached6Minutes;
 
     #region Audio Clips
     public AudioClip[] positiveReinforcementSuccessClips;
@@ -164,16 +166,22 @@ public class ShowdownDrillManager : MonoBehaviour
     private void Start()
     {
         Debug.Log("Starting game");
+        hasStartedGame = false;
         ConfirmOptions();
         // TODO: Wait for experiment to start
-        Debug.Log("Setting up experiment");
-        SetupExperiment();
-        StartCoroutine(KickBall());
+        
     }
 
-    private void ConfirmOptions()
+    public void ConfirmOptions()
     {
-        // TODO: This
+        // TODO: add the methods for changing options
+        if (!hasStartedGame)
+        {
+            Debug.Log("Setting up experiment");
+            hasStartedGame = true;
+            SetupExperiment();
+            StartCoroutine(KickBall());
+        }
     }
 
     public void restartGame()
@@ -184,6 +192,7 @@ public class ShowdownDrillManager : MonoBehaviour
 
     public void goToMainMenu()
     {
+        // TODO: make this smoother
         SceneManager.LoadScene("Main_Menu");
     }
 
@@ -723,8 +732,8 @@ public class ShowdownDrillManager : MonoBehaviour
         ball.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
         CurrentState = GameState.BallInactive;
 
-        AudioManager.Instance.PlaySfx(loseClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-        yield return new WaitForSeconds(loseClip.length);
+//        AudioManager.Instance.PlaySfx(loseClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+  //      yield return new WaitForSeconds(loseClip.length);
 
         yield return FinishScoring();
     }
@@ -747,8 +756,8 @@ public class ShowdownDrillManager : MonoBehaviour
         Debug.Log("Stop the ball");
         ball.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
 
-        AudioManager.Instance.PlaySfx(winClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-        yield return new WaitForSeconds(winClip.length);
+        //AudioManager.Instance.PlaySfx(winClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+        //yield return new WaitForSeconds(winClip.length);
 
         yield return FinishScoring();
     }

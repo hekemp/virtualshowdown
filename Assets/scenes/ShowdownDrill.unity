@@ -3388,6 +3388,8 @@ MonoBehaviour:
   IsTactileDouse: 1
   IsCorrectionHints: 1
   IsMidPointAnnounce: 1
+  hasStartedGame: 0
+  hasReached6Minutes: 0
   positiveReinforcementSuccessClips:
   - {fileID: 8300000, guid: 6c7fe36561ba2e1488be33a194778848, type: 3}
   - {fileID: 8300000, guid: 44ce67a4cad25c84a8247ca3e2dad508, type: 3}
@@ -7065,6 +7067,23 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 1082073988}
           m_MethodName: goToMainMenu
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - keyword: Ready
+    action:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1082073988}
+          m_MethodName: ConfirmOptions
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
