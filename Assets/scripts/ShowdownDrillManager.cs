@@ -167,7 +167,7 @@ public class ShowdownDrillManager : MonoBehaviour
     {
         Debug.Log("Starting game");
         hasStartedGame = false;
-        ConfirmOptions();
+//        ConfirmOptions();
         // TODO: Wait for experiment to start
         
     }
@@ -618,14 +618,17 @@ public class ShowdownDrillManager : MonoBehaviour
 
     private void Update()
     {
-        clockText.text = clockString;
-
-        if (CurrentState != GameState.BallInactive)
+        if (hasStartedGame)
         {
-            CheckBallPosition();
-        }
+            clockText.text = clockString;
 
-        SetGameHints();
+            if (CurrentState != GameState.BallInactive)
+            {
+                CheckBallPosition();
+            }
+
+            SetGameHints();
+        }
     }
 
     private void CheckBallPosition()
