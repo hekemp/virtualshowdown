@@ -64,6 +64,19 @@ public class BallScript : MonoBehaviour {
         Vector3 oldVel = rb.velocity;
         rb.velocity = Vector3.ClampMagnitude(oldVel, maxspeed);
 
+        if (ShowdownManager.currentGameState == ShowdownManager.ShowdownGameState.BallInPlay)
+        {
+
+            if (rb.velocity.x > 0 || rb.velocity.z > 0)
+            {
+                StartBallSound();
+            }
+            else
+            {
+                StopBallSound();
+            }
+        }
+
     }
 
     public void KickBallTowards(Vector3 Destination, int speedOfKick)
@@ -147,12 +160,10 @@ public class BallScript : MonoBehaviour {
     public void StartBallSound()
     {
 
-        Debug.Log("Arrives at sound");
         // TODO: Optimize this to not set everything per call
-        // (rb.velocity.x > 0 || rb.velocity.y > 0) && 
+        // (rb.velocity.x > 0 || rb.velocity.z > 0) && 
         if (!_ballSoundSources[(int)BallSoundSource.Rolling].isPlaying)
         {
-            Debug.Log("Sets Stuff/was not playing");
             _ballSoundSources[(int)BallSoundSource.Rolling].loop = true;
             _ballSoundSources[(int)BallSoundSource.Rolling].bypassEffects = false;
             _ballSoundSources[(int)BallSoundSource.Rolling].bypassReverbZones = true;

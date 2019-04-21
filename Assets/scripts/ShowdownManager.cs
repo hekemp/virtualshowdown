@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ShowdownManager : MonoBehaviour {
 
@@ -21,12 +22,16 @@ public class ShowdownManager : MonoBehaviour {
     public AudioClip theScoreIsAudioClip;
     public AudioClip toScoreAudioClip;
     public AudioClip readyGoAudioClip;
+    public AudioClip nowCalibratedAudioClip;
 
     public PaddleScript playerPaddle;
 
     public GameObject BallPrefab;
     private GameObject ball;
     private BallScript ballScript;
+    private bool ballHasStartedMoving;
+
+    private Coroutine checkStoppedBallPointCoroutine;
 
     public enum ShowdownGameState
     {
@@ -62,10 +67,24 @@ public class ShowdownManager : MonoBehaviour {
         currentGameState = ShowdownGameState.Setup;
         // TODO: wait for configuration confirmation
 
-        setupGame();
-        startGame();
+        StartCoroutine(setupGame());
+        
 		
 	}
+
+    public void restartGame()
+    {
+        // TODO: make this smoother
+        currentGameState = ShowdownGameState.Unstarted;
+        SceneManager.LoadScene("Showdown");
+    }
+
+    public void goToMainMenu()
+    {
+        // TODO: make this smoother
+        currentGameState = ShowdownGameState.Unstarted;
+        SceneManager.LoadScene("Main_Menu");
+    }
 
     private void createBall(Vector3 origin)
     {
@@ -75,7 +94,7 @@ public class ShowdownManager : MonoBehaviour {
         //ballScript.onBallCollisionEvent.AddListener(setCollisionSnapshot);
     }
 
-    private void setupGame()
+    private IEnumerator setupGame()
     {
         playerScore = 0;
         opponentScore = 0;
@@ -94,11 +113,13 @@ public class ShowdownManager : MonoBehaviour {
             PaddleScript.CenterX = BodySourceManager.Instance.baseKinectPosition.X;
         }
 
-        // TODO: say you're ready/calibrated
-        //AddAudioToPlayingList(nowCalibAudio);
+        AudioManager.Instance.PlayNarration(nowCalibratedAudioClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+        yield return new WaitForSeconds(nowCalibratedAudioClip.length);
+
         Debug.Log("Ready to go!");
 
         currentGameState = ShowdownGameState.SettingBall;
+        startGame();
     }
 
     private void Update()
@@ -108,7 +129,7 @@ public class ShowdownManager : MonoBehaviour {
 
     private void startGame()
     {
-        // TODO: set up stuff for starting the game
+        // TODO: set up stuff for starting the game, if there even is any for here
 
         StartCoroutine(serveBall());
         
@@ -128,23 +149,21 @@ public class ShowdownManager : MonoBehaviour {
 
     }
 
-    public void opponentScores()
+    public void opponentScores(int pointsToScore)
     {
-        Debug.Log(currentGameState);
         if (currentGameState == ShowdownGameState.BallInPlay)
         {
-            opponentScore += 2;
+            opponentScore += pointsToScore;
             PlayOpponentPointSound();
             handleGoal();
         }
     }
 
-    public void playerScores()
+    public void playerScores(int pointsToScore)
     {
-        Debug.Log(currentGameState);
         if(currentGameState == ShowdownGameState.BallInPlay)
         {
-            playerScore += 2;
+            playerScore += pointsToScore;
             PlayPlayerPointSound();
             handleGoal();
         }
@@ -156,7 +175,9 @@ public class ShowdownManager : MonoBehaviour {
 
         currentGameState = ShowdownGameState.GoalScored;
 
-        // TODO: reset the ball
+        ResetBall();
+
+        ballHasStartedMoving = false;
 
         serveNumber++;
 
@@ -284,13 +305,45 @@ public class ShowdownManager : MonoBehaviour {
             ballScript.GetComponent<Rigidbody>().velocity = Vector3.zero;
             ball.GetComponent<Rigidbody>().position = new Vector3(0, 5, 100f);
         }
+
+        ball.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY;
     }
 
     public void ResetBall()
     {
         ballScript.GetComponent<Rigidbody>().velocity = Vector3.zero;
         ball.GetComponent<Rigidbody>().position = new Vector3(0, transform.position.y, 0);
+        ball.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+        
     }
+
+    private IEnumerator CheckForBallStopPoints()
+    {
+        yield return new WaitForSeconds(2);
+
+        bool playerPoint;
+        if(ball.transform.position.z > 0)
+        {
+            playerPoint = true;
+        } 
+        else
+        {
+            playerPoint = false;
+        }
+
+        ResetBall();
+
+        if (playerPoint)
+        {
+            playerScores(1);
+        }
+        else
+        {
+            opponentScores(1);
+        }
+    }
+
+
 
     private void checkBall()
     {
@@ -324,14 +377,34 @@ public class ShowdownManager : MonoBehaviour {
         {
             ballScript.StopBallSound();
         }
+        else if (currentGameState == ShowdownGameState.BallInPlay)
+        {
+            Debug.Log((ballScript.GetComponent<Rigidbody>().velocity.magnitude));
+            if (ballScript.GetComponent<Rigidbody>().velocity.magnitude < 8)
+            {
+                if (checkStoppedBallPointCoroutine == null & ballHasStartedMoving)
+                {
+                    checkStoppedBallPointCoroutine = StartCoroutine(CheckForBallStopPoints());
+                }
+
+            }
+            else
+            {
+                ballHasStartedMoving = true;
+                if(checkStoppedBallPointCoroutine != null)
+                {
+                    StopCoroutine(checkStoppedBallPointCoroutine);
+                    checkStoppedBallPointCoroutine = null;
+                }
+                
+            }
+        }
         //Unstarted, 
         //DifficultySet,
         //Setup,
         //SettingBall, 
         
         //BallSet,
-        //BallInPlay,
-        //GoalScored,
         //GameOver
     }
 
@@ -351,53 +424,4 @@ public class ShowdownManager : MonoBehaviour {
         ballScript.StartBallSound();
     }
 
-
-    // TODO: method for handling ball speed points
-
-    /*
-     * RYAN'S CODE
-     * 
-    
-
-    private void BallSpeedPoints()
-    {
-        if (rb.velocity.magnitude < 8 && GameUtils.playState == GameUtils.GamePlayState.InPlay)
-        {
-            if (timerStarted)
-            {
-                if (Time.time > oldTime + 2)
-                {
-                    GameUtils.ResetBall(transform.gameObject);
-                    timerStarted = false;
-                    GameUtils.playState = GameUtils.GamePlayState.SettingBall;
-                    rb.isKinematic = true;
-                    if (transform.position.z > 0)
-                    {
-                        GoalScript.PlayerScore++;
-                        GoalScript.PlayWinSound();
-                    }
-                    else
-                    {
-                        GoalScript.OpponentScore++;
-                        GoalScript.PlayLoseSound();
-                    }
-                    StartCoroutine(GoalScript.ReadScore());
-                }
-            }
-            else
-            {
-                timerStarted = true;
-                oldTime = Time.time;
-            }
-        }
-        else
-        {
-        // TODO: if that timer coroutine is in and not null stop it
-            timerStarted = false;
-        }
-    }
-
-
-    }*/
-
-    }
+}

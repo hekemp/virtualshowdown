@@ -1235,6 +1235,8 @@ MonoBehaviour:
   theScoreIsAudioClip: {fileID: 8300000, guid: bd6eaf63c44658048bf00561bf6bdae1, type: 3}
   toScoreAudioClip: {fileID: 8300000, guid: d9b816547b00b2546b46090777116aa3, type: 3}
   readyGoAudioClip: {fileID: 8300000, guid: 94d3800d537cb0c41b7141e3ab311c36, type: 3}
+  nowCalibratedAudioClip: {fileID: 8300000, guid: a882fd3aeeb84f34d8e882fdc30f4551,
+    type: 3}
   playerPaddle: {fileID: 618168922}
   BallPrefab: {fileID: 1988242986954202, guid: 00401e9af8e7daf41b18abe67b428a6a, type: 2}
 --- !u!4 &684376967
@@ -2166,11 +2168,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 684376966}
         m_MethodName: playerScores
-        m_Mode: 1
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -2182,11 +2184,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 684376966}
         m_MethodName: opponentScores
-        m_Mode: 1
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -2301,11 +2303,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 684376966}
         m_MethodName: playerScores
-        m_Mode: 1
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -2317,11 +2319,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 684376966}
         m_MethodName: opponentScores
-        m_Mode: 1
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0

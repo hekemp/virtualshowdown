@@ -43,12 +43,10 @@ public class JoyconController : MonoBehaviour {
 
     private void Update()
     {
-        Debug.Log("Hello!");
         // Use keyboard presses when joycon isn't available, otherwise just return
        
         if (!CheckJoyconAvail())
         {
-            Debug.Log("Joycons not here");
             //DEBUG Simulate button press on Keyboard
             if (Input.GetKeyUp(KeyCode.Space))
             {
