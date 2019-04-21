@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ShowdownManager : MonoBehaviour {
 
-    private TextMesh scoreText;
+    public TextMesh scoreText;
     private int playerScore;
     private int opponentScore;
 
@@ -20,6 +20,19 @@ public class ShowdownManager : MonoBehaviour {
 
     public AudioClip theScoreIsAudioClip;
     public AudioClip toScoreAudioClip;
+    public AudioClip readyGoAudioClip;
+
+    public PaddleScript playerPaddle;
+
+    public GameObject BallPrefab;
+    private GameObject ball;
+    private BallScript ballScript;
+
+    public enum ShowdownGameState
+    {
+        Unstarted, DifficultySet, Setup, SettingBall, BallSet, BallInPlay, GoalScored, GameOver
+    }
+    public static ShowdownGameState currentGameState;
 
     private int serveNumber;
     private bool isPlayerServe
@@ -41,63 +54,113 @@ public class ShowdownManager : MonoBehaviour {
     // Use this for initialization
     void Start () {
 
-        // TODO: wait for configuration confirmation
+        currentGameState = ShowdownGameState.Unstarted;
+        
+        currentGameState = ShowdownGameState.DifficultySet;
         // TODO: wait for difficulty setter
+
+        currentGameState = ShowdownGameState.Setup;
+        // TODO: wait for configuration confirmation
+
         setupGame();
         startGame();
 		
 	}
+
+    private void createBall(Vector3 origin)
+    {
+        ball = Instantiate(BallPrefab, origin, new Quaternion());
+        ballScript = ball.GetComponent<BallScript>();
+        //ballScript.onBallCollisionEvent = new UnityEvent();
+        //ballScript.onBallCollisionEvent.AddListener(setCollisionSnapshot);
+    }
 
     private void setupGame()
     {
         playerScore = 0;
         opponentScore = 0;
         serveNumber = 0;
+        createBall(new Vector3(0, 5, 0));
 
-        // TODO: set the paddle's location 
-        //PaddleScript.TableEdge = BodySourceManager.Instance.baseKinectPosition.Z;
-        //PaddleScript.CenterX = BodySourceManager.Instance.baseKinectPosition.X;
+        GoalScript[] goalScriptList = GameObject.FindObjectsOfType<GoalScript>();
+        foreach (GoalScript goal in goalScriptList)
+        {
+            goal.isInDrillMode = false;
+        }
+
+        if (BodySourceManager.Instance)
+        {
+            PaddleScript.TableEdge = BodySourceManager.Instance.baseKinectPosition.Z;
+            PaddleScript.CenterX = BodySourceManager.Instance.baseKinectPosition.X;
+        }
 
         // TODO: say you're ready/calibrated
         //AddAudioToPlayingList(nowCalibAudio);
+        Debug.Log("Ready to go!");
+
+        currentGameState = ShowdownGameState.SettingBall;
+    }
+
+    private void Update()
+    {
+        checkBall();
     }
 
     private void startGame()
     {
-        // TODO: read the serve
-        // TODO: set the ball at the center, i guess 
+        // TODO: set up stuff for starting the game
 
-        //StartCoroutine(ReadInitServe());
-        //BallObj.transform.position = new Vector3(0, BallObj.transform.position.y, 0);
+        StartCoroutine(serveBall());
+        
     }
 
-    // Update is called once per frame
-    void Update () {
-		
-	}
+    private IEnumerator serveBall()
+    {
+        ResetBall();
+
+        ballScript.GetComponent<Rigidbody>().isKinematic = true;
+
+        yield return StartCoroutine(ReadServe());
+
+        currentGameState = ShowdownGameState.SettingBall;
+
+        ResetBallForServe();
+
+    }
 
     public void opponentScores()
     {
-        opponentScore += 2;
-        PlayOpponentPointSound();
-        scoreText.text = "Player: " + playerScore + "\nComputer: " + opponentScore;
-
-        // TODO:  update state
-        //StartCoroutine(ReadScore());
-        // TODO: reset the ball
-        // TODO: trigger the next thing?
+        Debug.Log(currentGameState);
+        if (currentGameState == ShowdownGameState.BallInPlay)
+        {
+            opponentScore += 2;
+            PlayOpponentPointSound();
+            handleGoal();
+        }
     }
 
     public void playerScores()
     {
-        playerScore += 2;
-        PlayPlayerPointSound();
+        Debug.Log(currentGameState);
+        if(currentGameState == ShowdownGameState.BallInPlay)
+        {
+            playerScore += 2;
+            PlayPlayerPointSound();
+            handleGoal();
+        }
+    }
+
+    private void handleGoal()
+    {
         scoreText.text = "Player: " + playerScore + "\nComputer: " + opponentScore;
 
-        // TODO: update state
-       // StartCoroutine(ReadScore());
+        currentGameState = ShowdownGameState.GoalScored;
+
         // TODO: reset the ball
-        // TODO: trigger the next thing?
+
+        serveNumber++;
+
+        StartCoroutine(ReadScore());
     }
 
     /// <summary>
@@ -130,23 +193,16 @@ public class ShowdownManager : MonoBehaviour {
         yield return new WaitForSeconds(timeToWait);
     }
 
-    private void serve()
-    {
-        serveNumber++; 
-
-        // TODO: do serve logic?
-    }
-
     private IEnumerator playerWins()
     {
-        // TODO: set game state to gameover;
+        currentGameState = ShowdownGameState.GameOver;
         AudioManager.Instance.PlayNarration(playerWinClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
         yield return new WaitForSeconds(playerWinClip.length);
     }
 
     private IEnumerator opponentWins()
     {
-        // TODO: set game state to gameover;
+        currentGameState = ShowdownGameState.GameOver;
         AudioManager.Instance.PlayNarration(opponentWinClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
         yield return new WaitForSeconds(opponentWinClip.length);
     }
@@ -171,7 +227,6 @@ public class ShowdownManager : MonoBehaviour {
 
     public IEnumerator ReadScore()
     {
-        // TODO: reset ball position? this needs to be moved
 
         // Read both players' scores like normal if we haven't hit a game over and both of their scores are less than or equal to 12
         if (playerScore <= 12 && opponentScore <= 12)
@@ -179,12 +234,12 @@ public class ShowdownManager : MonoBehaviour {
             AudioManager.Instance.PlayNarration(theScoreIsAudioClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
             yield return new WaitForSeconds(theScoreIsAudioClip.length);
 
-            NumberSpeech.Instance.PlayNumbersAudio(playerScore);
+            yield return NumberSpeech.Instance.PlayNumbersAudio(playerScore);
 
             AudioManager.Instance.PlayNarration(toScoreAudioClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
             yield return new WaitForSeconds(toScoreAudioClip.length);
 
-            NumberSpeech.Instance.PlayNumbersAudio(opponentScore);
+            yield return NumberSpeech.Instance.PlayNumbersAudio(opponentScore);
         }
         // Both players are greater than or equal to 10 points, so we'll only need to keep track of who has advantage now rather than numbers
         else if (playerScore >= 10 && opponentScore >= 10)
@@ -213,27 +268,136 @@ public class ShowdownManager : MonoBehaviour {
         // So we only need to worry about/handle the cases where it is false
         if (!isItGameOver())
         {
-            StartCoroutine(ReadServe());
+            StartCoroutine(serveBall());
         }
 
+    }
+
+    public void ResetBallForServe()
+    {
+        if(isPlayerServe)
+        {
+            ballScript.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            ball.GetComponent<Rigidbody>().position = new Vector3(0, 5, -100f);
+        } else
+        {
+            ballScript.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            ball.GetComponent<Rigidbody>().position = new Vector3(0, 5, 100f);
+        }
     }
 
     public void ResetBall()
     {
-        // TODO: stop the ball, and reset the ball
-
-        if(isPlayerServe)
-        {
-            // TODO: move ball to new Vector3(0, 5, -100f);
-        } else
-        {
-            // TODO: move ball to new Vector3(0, 5, 100f);
-        }
+        ballScript.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        ball.GetComponent<Rigidbody>().position = new Vector3(0, transform.position.y, 0);
     }
+
+    private void checkBall()
+    {
+
+        if (currentGameState == ShowdownGameState.SettingBall)
+        {
+            if (isPlayerServe)
+            {
+                var paddlePos = playerPaddle.transform.position;
+                if (JoyconController.ButtonPressed)
+                {
+                    // Is our paddle within the bounds of the stage>
+                    if (paddlePos.x < 50 && paddlePos.x > -50 && paddlePos.z > -130)
+                    {
+                        currentGameState = ShowdownGameState.BallSet;
+                        StartCoroutine(PauseForBallSetAudio(new Vector3(paddlePos.x, ball.transform.position.y, paddlePos.z + 10)));
+                    }
+                }
+                else //Still thinking where to place ball
+                {
+                    ballScript.GetComponent<Rigidbody>().MovePosition(new Vector3(paddlePos.x, ball.transform.position.y, paddlePos.z + 10));
+                }
+            } else
+            {
+                currentGameState = ShowdownGameState.BallSet;
+                StartCoroutine(PauseForBallSetAudio(new Vector3(0, transform.position.y, 100)));
+            }
+            
+        }
+        else if (currentGameState == ShowdownGameState.GoalScored)
+        {
+            ballScript.StopBallSound();
+        }
+        //Unstarted, 
+        //DifficultySet,
+        //Setup,
+        //SettingBall, 
+        
+        //BallSet,
+        //BallInPlay,
+        //GoalScored,
+        //GameOver
+    }
+
+    private IEnumerator PauseForBallSetAudio(Vector3 ballPos)
+    {
+        // Set our ball's velocity to 0 and start it at the specified ball position
+        
+        ballScript.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        ballScript.GetComponent<Rigidbody>().MovePosition(ballPos);
+
+        AudioManager.Instance.PlayNarration(readyGoAudioClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+        yield return new WaitForSeconds(readyGoAudioClip.length - 0.5f); //Give 1 second to move the bat way bc of jitters
+
+        currentGameState = ShowdownGameState.BallInPlay;
+
+        ballScript.GetComponent<Rigidbody>().isKinematic = false;
+        ballScript.StartBallSound();
+    }
+
+
+    // TODO: method for handling ball speed points
+
+    /*
+     * RYAN'S CODE
+     * 
     
 
+    private void BallSpeedPoints()
+    {
+        if (rb.velocity.magnitude < 8 && GameUtils.playState == GameUtils.GamePlayState.InPlay)
+        {
+            if (timerStarted)
+            {
+                if (Time.time > oldTime + 2)
+                {
+                    GameUtils.ResetBall(transform.gameObject);
+                    timerStarted = false;
+                    GameUtils.playState = GameUtils.GamePlayState.SettingBall;
+                    rb.isKinematic = true;
+                    if (transform.position.z > 0)
+                    {
+                        GoalScript.PlayerScore++;
+                        GoalScript.PlayWinSound();
+                    }
+                    else
+                    {
+                        GoalScript.OpponentScore++;
+                        GoalScript.PlayLoseSound();
+                    }
+                    StartCoroutine(GoalScript.ReadScore());
+                }
+            }
+            else
+            {
+                timerStarted = true;
+                oldTime = Time.time;
+            }
+        }
+        else
+        {
+        // TODO: if that timer coroutine is in and not null stop it
+            timerStarted = false;
+        }
+    }
 
-   
 
+    }*/
 
-}
+    }

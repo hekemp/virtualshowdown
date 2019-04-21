@@ -25,6 +25,7 @@ public class BallScript : MonoBehaviour {
         PaddleHit = 1,
         HitWall = 2,
         Click = 3,
+        SettingBall = 4,
     }
 
     private const float maxspeed = 250;
@@ -143,7 +144,7 @@ public class BallScript : MonoBehaviour {
         }
     }
 
-    private void StartBallSound()
+    public void StartBallSound()
     {
 
         Debug.Log("Arrives at sound");
@@ -161,7 +162,6 @@ public class BallScript : MonoBehaviour {
             _ballSoundSources[(int)BallSoundSource.Rolling].spatialBlend = 1.0f;
             _ballSoundSources[(int)BallSoundSource.Rolling].reverbZoneMix = 0.559f;
             _ballSoundSources[(int)BallSoundSource.Rolling].clip = ballRollingSound;
-            _ballSoundSources[(int)BallSoundSource.Rolling].Play();
             _ballSoundSources[(int)BallSoundSource.Rolling].dopplerLevel = 0.25f;
             _ballSoundSources[(int)BallSoundSource.Rolling].spread = 0;
 
@@ -173,6 +173,36 @@ public class BallScript : MonoBehaviour {
     {
         _ballSoundSources[(int)BallSoundSource.Rolling].Stop();
     }
+
+    /// <summary>
+    /// Sound when the ball is set for a serve. It's essentially the same as ball rolling but a static pitch
+    /// </summary>
+    private void StartBallSettingSound()
+    {
+        if (!_ballSoundSources[(int)BallSoundSource.SettingBall].isPlaying)
+        {
+            _ballSoundSources[(int)BallSoundSource.SettingBall].pitch = .35f;
+            _ballSoundSources[(int)BallSoundSource.SettingBall].loop = true;
+            _ballSoundSources[(int)BallSoundSource.SettingBall].bypassEffects = false;
+            _ballSoundSources[(int)BallSoundSource.SettingBall].bypassReverbZones = true;
+            _ballSoundSources[(int)BallSoundSource.SettingBall].priority = 64;
+            _ballSoundSources[(int)BallSoundSource.SettingBall].volume = .25f;
+            _ballSoundSources[(int)BallSoundSource.SettingBall].panStereo = 0.0f;
+            _ballSoundSources[(int)BallSoundSource.SettingBall].spatialBlend = 1.0f;
+            _ballSoundSources[(int)BallSoundSource.SettingBall].reverbZoneMix = 0.559f;
+            _ballSoundSources[(int)BallSoundSource.SettingBall].clip = ballRollingSound;
+            _ballSoundSources[(int)BallSoundSource.SettingBall].dopplerLevel = 0.25f;
+            _ballSoundSources[(int)BallSoundSource.SettingBall].spread = 0;
+
+            _ballSoundSources[(int)BallSoundSource.SettingBall].Play();
+        }
+    }
+
+    public void StopBallSettingSound()
+    {
+        _ballSoundSources[(int)BallSoundSource.SettingBall].Stop();
+    }
+
 
     private void StartWallCollideSound()
     {
