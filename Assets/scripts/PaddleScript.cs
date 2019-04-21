@@ -56,7 +56,6 @@ public class PaddleScript : MonoBehaviour {
     // Update is called once per frame
     void FixedUpdate()
     {
-        CheckBatInGame();
 
         if (BodySourceManager.Instance == null)
         {
@@ -130,8 +129,7 @@ public class PaddleScript : MonoBehaviour {
         float outOfBoundsBy = 0;
         float xSide = 50 - halfBatLen;
         float zSide = 130 - halfBatThick;
-        Debug.Log("x: " + xSide);
-        Debug.Log("z: " + zSide);
+
         if ((transform.position.x > xSide || transform.position.x < -xSide || transform.position.z < -zSide))
         {
 
