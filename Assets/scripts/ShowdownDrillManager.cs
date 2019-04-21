@@ -164,7 +164,7 @@ public class ShowdownDrillManager : MonoBehaviour
     private const int centerStartXPos = 0;
 
     private void Start()
-    {
+    { 
         Debug.Log("Starting game");
         hasStartedGame = false;
         //        ConfirmOptions();
