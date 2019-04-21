@@ -62,7 +62,7 @@ public class BatAI : MonoBehaviour
     void Update()
     {
         //It might be our serve, but either way, we want to be by our goal when it happens
-        if (ShowdownManager.currentGameState == ShowdownManager.ShowdownGameState.SettingBall || ShowdownManager.currentGameState == ShowdownManager.ShowdownGameState.GoalScored )
+        if (ShowdownManager.currentGameState == ShowdownManager.ShowdownGameState.SettingBall || ShowdownManager.currentGameState == ShowdownManager.ShowdownGameState.GoalScored)
         {
             GoHome();
         }
