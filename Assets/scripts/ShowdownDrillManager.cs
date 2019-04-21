@@ -167,9 +167,9 @@ public class ShowdownDrillManager : MonoBehaviour
     {
         Debug.Log("Starting game");
         hasStartedGame = false;
-//        ConfirmOptions();
+        //        ConfirmOptions();
         // TODO: Wait for experiment to start
-        
+
     }
 
     public void ConfirmOptions()
@@ -180,6 +180,7 @@ public class ShowdownDrillManager : MonoBehaviour
             Debug.Log("Setting up experiment");
             hasStartedGame = true;
             SetupExperiment();
+            StartCoroutine(CheckSixMinuteTimeLimit());
             StartCoroutine(KickBall());
         }
     }
@@ -194,6 +195,12 @@ public class ShowdownDrillManager : MonoBehaviour
     {
         // TODO: make this smoother
         SceneManager.LoadScene("Main_Menu");
+    }
+
+    private IEnumerator CheckSixMinuteTimeLimit()
+    {
+        yield return new WaitForSeconds(360);
+        hasReached6Minutes = true;
     }
 
     /// <summary>
@@ -531,7 +538,7 @@ public class ShowdownDrillManager : MonoBehaviour
     /// </summary>
     private void SetGameHints()
     {
-        
+
         if (playerLevel < 3)
         {
             if (IsTactileDouse)
@@ -540,7 +547,7 @@ public class ShowdownDrillManager : MonoBehaviour
             }
             if (IsMidPointAnnounce)
             {
-              //  Debug.Log("Hello!");
+                //  Debug.Log("Hello!");
                 StartCoroutine(PlayMidPointAudio());
             }
             shouldAnnounceDetailedBallTrajectory = true;
@@ -735,8 +742,8 @@ public class ShowdownDrillManager : MonoBehaviour
         ball.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
         CurrentState = GameState.BallInactive;
 
-//        AudioManager.Instance.PlaySfx(loseClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-  //      yield return new WaitForSeconds(loseClip.length);
+        //        AudioManager.Instance.PlaySfx(loseClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+        //      yield return new WaitForSeconds(loseClip.length);
 
         yield return FinishScoring();
     }
@@ -748,7 +755,7 @@ public class ShowdownDrillManager : MonoBehaviour
             yield break;
         }
 
-        
+
 
         CurrentState = GameState.BallInactive;
         yield return new WaitForSeconds(1.5f);
@@ -808,8 +815,20 @@ public class ShowdownDrillManager : MonoBehaviour
                 yield return StartCoroutine(ReadHitCorrection(hr));
             }
         }
+        if (!hasReached6Minutes)
+        {
+            yield return KickBall();
+        }
+        else
+        {
+            yield return handleGameOver();
+        }
+    }
 
-        yield return KickBall();
+    private IEnumerator handleGameOver()
+    {
+        Debug.Log("Game over!");
+        yield return null;
     }
 
     /// <summary>
