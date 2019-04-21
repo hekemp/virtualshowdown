@@ -18,6 +18,9 @@ public class MainMenuSetup : MonoBehaviour
 		ShowdownDrillBtn.onClick.AddListener(StartDrillMode);
 		ShowdownBtn.onClick.AddListener(StartShowdown);
 		PreferencesBtn.onClick.AddListener(StartPreferencesMenu);
+
+        // TODO: play welcome music
+        // TODO: play welcome audio
 	}
 	
 	// Update is called once per frame
