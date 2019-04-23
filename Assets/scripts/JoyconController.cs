@@ -20,6 +20,8 @@ public class JoyconController : MonoBehaviour {
         {
             j = JoyconManager.Instance.j;
         }
+        
+        
     }
 
     public static void RumbleJoycon(float lowFreq, float higFreq, float amp, int time = 0)
@@ -38,7 +40,9 @@ public class JoyconController : MonoBehaviour {
     public static bool CheckJoyconAvail()
     {
         // make sure the Joycon only gets checked if at least 1 is attached
-        return j != null && j.Exists(joycon => joycon.state == Joycon.state_.ATTACHED);
+        
+
+        return j != null && j.Exists(joycon => joycon.state >= Joycon.state_.ATTACHED);
     }
 
     private void Update()
@@ -61,9 +65,10 @@ public class JoyconController : MonoBehaviour {
             return;
         }
 
+
         foreach (var joycon in j)
         {
-            if (joycon.state == Joycon.state_.ATTACHED)
+            if (joycon.state >= Joycon.state_.ATTACHED)
             {
                 // GetButtonDown checks if a button has been released
                 if (joycon.GetButtonUp(Joycon.Button.SHOULDER_2) ||
