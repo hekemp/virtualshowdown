@@ -918,7 +918,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 051141e71c600ef44bd64937f74966b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyboardControl: 1
+  keyboardControl: 0
   wallHitSound: {fileID: 8300000, guid: b9ed0c6583a20ec4ca2990f20b85a334, type: 3}
 --- !u!23 &618168923
 MeshRenderer:
