@@ -11,18 +11,46 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
+/// <summary>
+/// Class that defines the path a ball will go in the Experiment
+/// </summary>
+public class BallPath
+{
+    public Vector3 Origin { get; set; }
+    public Vector3 Destination { get; set; }
+    public BallOriginType BallOriginType { get; set; }
+    public BallDestType BallDestType { get; set; }
+}
+public enum BallOriginType { left, center, right }
+public enum BallDestType { farLeft, centerLeft, center, centerRight, farRight }
+
+public class Snapshot { public Vector3 ballPos { get; set; } public Vector3 batPos { get; set; } }
+
 public class ShowdownDrillManager : MonoBehaviour
 {
+    [Serializable]
+    public enum GameState
+    {
+        BallStart,
+        BallYourSide,
+        BallFinish,
+        BallInactive,
+    }
 
+    private enum HintLength { full, shortLen, nonspatial }
+    private enum HitRes { miss = 0, tipped = 1, hitNotPastHalf = 2, pastHalfHit = 3, goal = 4 }
 
-    public GameObject ourBall;
-    private GameObject currentBall;
-    private BallScript currentBallScript;
+    public GameObject BallPrefab;
     public PaddleScript playerPaddle;
-    private BallScript bs;
-    private int[] prevHits;
-    public static Snapshot CollisionSnapshot { get; set; }
-    private Snapshot endSnapshot;
+
+    // Flags
+    public bool IsTactileDouse;
+    public bool IsCorrectionHints;
+    public bool IsMidPointAnnounce;
+    public bool hasStartedGame;
+    public bool hasReached6Minutes;
+
+    #region Audio Clips
     public AudioClip[] positiveReinforcementSuccessClips;
     public AudioClip[] positiveReinforcementMissClips;
     public AudioClip clappingClip;
@@ -31,10 +59,7 @@ public class ShowdownDrillManager : MonoBehaviour
     public AudioClip loseClip;
     public AudioClip nextBallClip;
 
-    private IEnumerator<int> _expList;
     public AudioClip clickClip;
-    public AudioSource announcerWithStereoPanAltering;
-    private Coroutine hitPastHalfCoroutine;
 
     // From originally "End1" --> -1 Stereo
     public AudioClip farLeftClip;
@@ -62,15 +87,15 @@ public class ShowdownDrillManager : MonoBehaviour
 
     // From Originally "Start1" --> -1 Stereo
     public AudioClip startLeftClip;
-  //  public AudioClip leftClip;
+    //  public AudioClip leftClip;
 
     // From Originally "Start2" --> 0 Stereo
     public AudioClip startCenterClip;
-   // public AudioClip centerClip;
+    // public AudioClip centerClip;
 
     // From Originally "Start 3" --> 1 Stereo
     public AudioClip startRightClip;
-   // public AudioClip rightClip;
+    // public AudioClip rightClip;
 
     // From originally guideline --> 0 stereo, variable volume
     public AudioClip andIsClip; // .69 v.
@@ -83,82 +108,155 @@ public class ShowdownDrillManager : MonoBehaviour
     //public AudioClip rightClip; // .67
     public AudioClip moveLeftClip; // 1 v
     public AudioClip moveRightClip; // .67 v
+    #endregion
 
-    // Use this for initialization
-     void Start () {
-        /*
-         currentBall = Instantiate(ourBall, new Vector3(37, 5, 110), new Quaternion());
-         bs = currentBall.GetComponent<BallScript>();
-         bs.KickBallTowards(new Vector3(-42, 5, -110), 40);
-         */
+    // UI
+    public Text ballAndPosText;
+    public Text clockText;
 
-        startDrills();
-         ////////////
-         ///
-     }
+    public GameState CurrentState;
 
+    private List<BallPath> ballPositions = null;
+    private GameObject ball;
+    private BallScript ballScript;
+    private Snapshot collisionSnapshot;
+    private Snapshot endSnapshot;
+    private IEnumerator<int> shuffledBallPositions;
     /// <summary>
-    /// Class that defines the path a ball will go in the Experiment
+    /// How many balls have been launched
     /// </summary>
-    public class BallPath
-    {
-        public Vector3 Origin { get; set; }
-        public Vector3 Destination { get; set; }
-        public BallOriginType BallOriginType { get; set; }
-        public BallDestType BallDestType { get; set; }
+    private int currentBall;
+    /// <summary>
+    /// The level of the player
+    /// </summary>
+    public int playerLevel;
+    /// <summary>
+    /// Whether or not we should be announcing details about
+    /// the ball trajectory (specific locations)
+    /// </summary>
+    private bool shouldAnnounceDetailedBallTrajectory;
+    /// <summary>
+    /// How detailed of hints to be giving
+    /// </summary>
+    private HintLength hintLength;
+    /// <summary>
+    /// How many points the user has scored
+    /// </summary>
+    private int gamePoints;
+    /// <summary>
+    /// The current path the ball will take
+    /// </summary>
+    private BallPath currentBallPath;
+    /// <summary>
+    /// Whether or not this is the ball's first time past the midpoint
+    /// </summary>
+    private bool isFirstPass;
+    private string clockString;
+    private int[] prevHits;
+    private float maxDistance;
+
+    private Coroutine checkMissCoroutine;
+
+    // CONSTS
+    // TODO: Make constants for start 1-3 and end 1-5
+    private const int rightStartXPos = 37;
+    private const int leftStartXPos = -37;
+    private const int centerStartXPos = 0;
+
+    private void Start()
+    { 
+        Debug.Log("Starting game");
+        hasStartedGame = false;
+        //        ConfirmOptions();
+        // TODO: Wait for experiment to start
+
     }
-    public enum BallOriginType { left, center, right }
-    public enum BallDestType { farLeft, centerLeft, center, centerRight, farRight }
 
-    public class Snapshot { public Vector3 ballPos { get; set; } public Vector3 batPos { get; set; } }
-
-    private void SaveSnapshotOfGame()
+    public void ConfirmOptions()
     {
-        if (currentBall != null && currentBall.transform.position.z < -75 && currentBall.transform.position.z > -85)
+        // TODO: add the methods for changing options
+        if (!hasStartedGame)
         {
-            endSnapshot = new Snapshot()
-            {
-                ballPos = currentBall.transform.position,
-                batPos = playerPaddle.transform.position
-            };
+            Debug.Log("Setting up experiment");
+            hasStartedGame = true;
+            SetupExperiment();
+            StartCoroutine(CheckSixMinuteTimeLimit());
+            StartCoroutine(KickBall());
         }
     }
 
-    /// <summary>
-    /// Creation of list of ball positions and their destinations.
-    /// </summary>
-    private void CreateBallPosition()
+    public void restartGame()
     {
+        // TODO: make this smoother
+        SceneManager.LoadScene("ShowdownDrill");
+    }
+
+    public void goToMainMenu()
+    {
+        // TODO: make this smoother
+        SceneManager.LoadScene("Main_Menu");
+    }
+
+    private IEnumerator CheckSixMinuteTimeLimit()
+    {
+        yield return new WaitForSeconds(360);
+        hasReached6Minutes = true;
+    }
+
+    /// <summary>
+    /// Initialize variables - this is run once when the game starts
+    /// </summary>
+    private void SetupExperiment()
+    {
+        ballPositions = CreateBallPositions();
+        shuffledBallPositions = ShuffleArray(ballPositions);
+        currentBall = -1;
+        shouldAnnounceDetailedBallTrajectory = true;
+        prevHits = new int[] { 0, 0, 0, 0, 0, 0 };
+
+        // TODO: Clock bullshit
+
+        createBall(new Vector3(0, -2000, 0)); // TODO: Replace with start2? Currently way below the board
+    }
+
+    /// <summary>
+    /// Creates a list of ball positions for later use
+    /// </summary>
+    /// <returns>A list of all possible ball paths</returns>
+    private List<BallPath> CreateBallPositions()
+    {
+        List<BallPath> ballPositions = new List<BallPath>();
+
         //Left Start
-        ballPositions.Add(0, new BallPath
+        ballPositions.Add(new BallPath
         {
             Origin = new Vector3(leftStartXPos, 5, 110),
             Destination = new Vector3(0, 5, -110),
             BallOriginType = BallOriginType.left,
             BallDestType = BallDestType.farLeft
         });
-        ballPositions.Add(1, new BallPath
+        ballPositions.Add(new BallPath
         {
             Origin = new Vector3(leftStartXPos, 5, 110),
             Destination = new Vector3(11, 5, -110),
             BallOriginType = BallOriginType.left,
             BallDestType = BallDestType.centerLeft
         });
-        ballPositions.Add(2, new BallPath
+        ballPositions.Add(new BallPath
         {
             Origin = new Vector3(leftStartXPos, 5, 110),
             Destination = new Vector3(21, 5, -110),
             BallOriginType = BallOriginType.left,
             BallDestType = BallDestType.center
         });
-        ballPositions.Add(3, new BallPath
+        ballPositions.Add(new BallPath
         {
             Origin = new Vector3(leftStartXPos, 5, 110),
             Destination = new Vector3(31, 5, -110),
             BallOriginType = BallOriginType.left,
             BallDestType = BallDestType.centerRight
         });
-        ballPositions.Add(4, new BallPath
+        ballPositions.Add(new BallPath
         {
             Origin = new Vector3(leftStartXPos, 5, 110),
             Destination = new Vector3(42, 5, -110),
@@ -167,35 +265,35 @@ public class ShowdownDrillManager : MonoBehaviour
         });
 
         //Center Start
-        ballPositions.Add(5, new BallPath
+        ballPositions.Add(new BallPath
         {
             Origin = new Vector3(centerStartXPos, 5, 110),
             Destination = new Vector3(-21, 5, -110),
             BallOriginType = BallOriginType.center,
             BallDestType = BallDestType.farLeft
         });
-        ballPositions.Add(6, new BallPath
+        ballPositions.Add(new BallPath
         {
             Origin = new Vector3(centerStartXPos, 5, 110),
             Destination = new Vector3(-11, 5, -110),
             BallOriginType = BallOriginType.center,
             BallDestType = BallDestType.centerLeft
         });
-        ballPositions.Add(7, new BallPath
+        ballPositions.Add(new BallPath
         {
             Origin = new Vector3(centerStartXPos, 5, 110),
             Destination = new Vector3(0, 5, -110),
             BallOriginType = BallOriginType.center,
             BallDestType = BallDestType.center
         });
-        ballPositions.Add(8, new BallPath
+        ballPositions.Add(new BallPath
         {
             Origin = new Vector3(centerStartXPos, 5, 110),
             Destination = new Vector3(11, 5, -110),
             BallOriginType = BallOriginType.center,
             BallDestType = BallDestType.centerRight
         });
-        ballPositions.Add(9, new BallPath
+        ballPositions.Add(new BallPath
         {
             Origin = new Vector3(centerStartXPos, 5, 110),
             Destination = new Vector3(21, 5, -110),
@@ -204,206 +302,53 @@ public class ShowdownDrillManager : MonoBehaviour
         });
 
         //Right Start
-        ballPositions.Add(10, new BallPath
+        ballPositions.Add(new BallPath
         {
             Origin = new Vector3(rightStartXPos, 5, 110),
             Destination = new Vector3(-42, 5, -110),
             BallOriginType = BallOriginType.right,
             BallDestType = BallDestType.farLeft
         });
-        ballPositions.Add(11, new BallPath
+        ballPositions.Add(new BallPath
         {
             Origin = new Vector3(rightStartXPos, 5, 110),
             Destination = new Vector3(-31, 5, -110),
             BallOriginType = BallOriginType.right,
             BallDestType = BallDestType.centerLeft
         });
-        ballPositions.Add(12, new BallPath
+        ballPositions.Add(new BallPath
         {
             Origin = new Vector3(rightStartXPos, 5, 110),
             Destination = new Vector3(-21, 5, -110),
             BallOriginType = BallOriginType.right,
             BallDestType = BallDestType.center
         });
-        ballPositions.Add(13, new BallPath
+        ballPositions.Add(new BallPath
         {
             Origin = new Vector3(rightStartXPos, 5, 110),
             Destination = new Vector3(-11, 5, -110),
             BallOriginType = BallOriginType.right,
             BallDestType = BallDestType.centerRight
         });
-        ballPositions.Add(14, new BallPath
+        ballPositions.Add(new BallPath
         {
             Origin = new Vector3(rightStartXPos, 5, 110),
             Destination = new Vector3(0, 5, -110),
             BallOriginType = BallOriginType.right,
             BallDestType = BallDestType.farRight
         });
-    }
 
-    /// <summary>
-    /// Checks if a player can level by checking if the last 6 hits were hit or not.
-    /// </summary>
-    /// <returns></returns>
-    private bool CheckLevelUp()
-    {
-        int hits = 0;
-        foreach (int h in prevHits)
-        {
-            if (h == 1)
-            {
-                hits++;
-            }
-        }
-        if (hits > 3) // 4 out of 6 hits, level up!
-        {
-            prevHits = new int[6] { 0, 0, 0, 0, 0, 0 };
-            return true;
-        }
-        return false;
-    }
-
-    public void PlayerScoreCoroutine()
-    {
-        StartCoroutine(playerScores());
-    }
-
-    public void OpponentScoresCoroutine()
-    {
-        StartCoroutine(opponentScores());
-    }
-
-    public IEnumerator playerScores()
-    {
-        if (currentBall != null)
-        {
-            Debug.Log("Rigidbody constraints all player");
-            currentBall.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-
-            AudioManager.Instance.PlaySfx(winClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-            yield return new WaitForSeconds(winClip.length);
-
-            newBallOk = true;
-            if (hitPastHalfCoroutine != null)
-            {
-                StopCoroutine(hitPastHalfCoroutine);
-                hitPastHalfCoroutine = null;
-            }
-            StartNextBall(HitRes.goal);
-        }
-        
-    }
-
-    public IEnumerator opponentScores()
-    {
-        if (currentBall != null)
-        {
-            Debug.Log("Rigidbody constraints all opponent");
-            currentBall.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-
-            newBallOk = true;
-
-            AudioManager.Instance.PlaySfx(loseClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-            yield return new WaitForSeconds(loseClip.length);
-
-            if (currentBallScript.ballHitOnce)
-            {
-                StartNextBall(HitRes.tipped);
-            }
-            else
-            {
-                StartNextBall(HitRes.miss);
-            }
-        }
-    }
-
-    public void setCollisionSnapshot()
-    {
-        CollisionSnapshot = new Snapshot()
-        {
-            batPos = playerPaddle.transform.position,
-            ballPos = currentBall.transform.position
-        };
-    }
-
-    /// <summary>
-    /// Sets the ball speed per ball
-    /// </summary>
-    /// <returns></returns>
-    private int DetermineCurrBallSpeed()
-    {
-        if (playerLevel <= 4)
-        {
-            return 40;
-        }
-        else if (playerLevel == 5)
-        {
-            return 50;
-        }
-        else if (playerLevel == 6)
-        {
-            return 60;
-        }
-        else // if playerLevel >= 7
-        {
-            return 70;
-        }
-    }
-
-    /// <summary>
-    /// Resets the game points for the game.
-    /// This method is called a fwe times just to be safe
-    /// </summary>
-    private void ResetGamePoints()
-    {
-        gamePoints = 0;
-        playerLevel = 0;
-        newBallOk = true;
-        prevHits = new int[6] { 0, 0, 0, 0, 0, 0 };
-        past6Min = false;
-    }
-
-    /// <summary>
-    /// Plays audio on how many points the player has.
-    /// This is a Coroutine menthod and by nature is async
-    /// </summary>
-    /// <returns></returns>
-    private void ReadGamePoints()
-    {
-        NumberSpeech.Instance.PlayExpPointsAudio(gamePoints);
-    }
-
-    /// <summary>
-    /// Audio for next ball and calls spawnBall to start a new ball
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator NextBallComing()
-    {
-        Debug.Log("Next ball coming");
-        if ((UnityEngine.Random.Range(0, 3) == 0 && _currBallNumber != -1 && gamePoints != 1)
-            || _currBallNumber == 29) //Randomly 1/3 of the time say how many points
-        {
-            NumberSpeech.Instance.PlayExpPointsAudio(gamePoints);
-        }
-        else if (!IsAnnounceBall)
-        {
-            AudioManager.Instance.PlayNarration(nextBallClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-            yield return new WaitForSeconds(nextBallClip.length);
-        }
-
-        yield return SpawnBall();
-        timerStarted = true;
-        oldTime = Time.time;
-        //newBallOk = true;
+        return ballPositions;
     }
 
     /// <summary>
     /// Utilty to shuffle the array of Exp ball locations
     /// </summary>
-    private void ShuffleArray()
+    /// <returns>An enumerator of shuffled array indices</returns>
+    private IEnumerator<int> ShuffleArray<T>(List<T> inList)
     {
         List<int> expListLoc = new List<int>();
-        for (int i = 0; i <= 14; i++) //Range of positions
+        for (int i = 0; i < inList.Count; i++) //Range of positions
         {
             for (int j = 0; j < 2; j++) //Times per position
             {
@@ -420,123 +365,171 @@ public class ShowdownDrillManager : MonoBehaviour
             expListLoc[k] = expListLoc[n];
             expListLoc[n] = value;
         }
-        _expList = expListLoc.GetEnumerator();
+        return expListLoc.GetEnumerator();
     }
-
 
     /// <summary>
-    /// /////////////////////////
+    /// Create a copy of the ball prefab and set up collision helpers
     /// </summary>
-
-    public Text ballAndPosText;
-    public Text clockText;
-
-    public bool IsTactileDouse;
-    public bool IsCorrectionHints;
-    public bool IsMidPointAnnounce;
-
-    public static bool TactileAndAudio { private get; set; }
-    public static string globalClockString;
-
-    private string clockString;
-    private BallPath _currBallPath;
-    private Dictionary<int, BallPath> ballPositions = new Dictionary<int, BallPath>();
-    private int _currBallNumber;
-    private int _currBallType;
-    private int _currBallSpeed;
-    private bool playerReady;
-    private AudioClip batSound;
-    private float oldTime;
-    private bool timerStarted;
-    private float maxDistance;
-    private Timer clockTimer;
-    private Timer globalTimer;
-    private bool canPressStartButton;
-    private int gamePoints;
-    private enum HitRes { miss = 0, tipped = 1, hitNotPastHalf = 2, pastHalfHit = 3, goal = 4 }
-    private HitRes thisHitres;
-    private const int rightStartXPos = 37;
-    private const int leftStartXPos = -37;
-    private const int centerStartXPos = 0;
-    private bool IsAnnounceBall;
-    private bool newBallOk;
-    private DateTime startTime;
-    private bool canPressButton;
-    private int playerLevel;
-
-    private enum HintLength { full, shortLen, nonspatial }
-    private HintLength oldHintLen;
-    private bool firstPass;
-    private bool past6Min;
-
-    public void startDrills()
-    {
-        _currBallNumber = -1;
-        CreateBallPosition();
-        ShuffleArray();
-
-        playerReady = true;
-        // TODO: Play Intro Music
-        // StartCoroutine(GameUtils.PlayIntroMusic());
-        newBallOk = true;
-        clockTimer = new Timer(100);
-        clockTimer.Elapsed += ClockTimer_Elapsed;
-        globalTimer = new Timer(100);
-        globalTimer.Elapsed += GlobalTimer_Elapsed;
-        globalTimer.Start();
-        gamePoints = 0;
-        playerLevel = 0;
-        past6Min = false;
-        prevHits = new int[6] { 0, 0, 0, 0, 0, 0 };
-
-        /*
-         * 
-         */
-        clockTimer.Start();
-        startTime = DateTime.Now;
-        StartNextBall(HitRes.hitNotPastHalf); //Starting game, params don't matter here.
-        ResetGamePoints();
-    }
-
+    /// <param name="origin">The location to create the ball at</param>
     private void createBall(Vector3 origin)
     {
-        currentBall = Instantiate(ourBall, origin, new Quaternion());
-        currentBallScript = currentBall.GetComponent<BallScript>();
-        currentBallScript.onBallCollisionEvent = new UnityEvent();
-        currentBallScript.onBallCollisionEvent.AddListener(setCollisionSnapshot);
+        ball = Instantiate(BallPrefab, origin, new Quaternion());
+        ballScript = ball.GetComponent<BallScript>();
+        ballScript.onBallCollisionEvent = new UnityEvent();
+        ballScript.onBallCollisionEvent.AddListener(setCollisionSnapshot);
     }
 
-    private void resetBall(Vector3 origin)
+    public void setCollisionSnapshot()
     {
-        Debug.Log("Ressting ball");
-        currentBall.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        Debug.Log("Rigidbody constraints none");
-        currentBall.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-        currentBall.transform.position = (origin);
-        currentBallScript.ballHitOnce = false;
-    }
-
-
-    private void Update()
-    {
-
-        if (TactileAndAudio)
+        collisionSnapshot = new Snapshot()
         {
-            IsTactileDouse = true;
-            IsMidPointAnnounce = true;
+            batPos = playerPaddle.transform.position,
+            ballPos = ball.transform.position
+        };
+    }
+
+    private void SaveSnapshotOfGame()
+    {
+        if (ball != null && ball.transform.position.z < -75 && ball.transform.position.z > -85)
+        {
+            endSnapshot = new Snapshot()
+            {
+                ballPos = ball.transform.position,
+                batPos = playerPaddle.transform.position
+            };
+        }
+    }
+
+    /// <summary>
+    /// Pick a random location to kick the ball from and then kick it
+    /// </summary>
+    private IEnumerator KickBall()
+    {
+        Debug.Log("Kicking ball");
+        currentBall++;
+        int currentBallType = shuffledBallPositions.Current;
+        ballAndPosText.text = "Ball: " + currentBall + "   Pos: " + currentBallType + "   Level: " + playerLevel;
+
+        currentBallPath = ballPositions[currentBallType];
+
+        bool isNextBallAvailable = shuffledBallPositions.MoveNext();
+        if (!isNextBallAvailable)
+        {
+            Debug.Log("Reshuffle ball paths");
+            shuffledBallPositions = ShuffleArray(ballPositions);
+        }
+
+        if (shouldAnnounceDetailedBallTrajectory && playerLevel < 3) // We should only announce ball positions when player level is 0, 1, or 2
+        {
+            yield return AnnounceBallPos(PlayerHintLength, currentBallPath);
         }
         else
         {
-            IsTactileDouse = false;
-            IsMidPointAnnounce = true;
+            bool shouldAnnounceGameScore = ((UnityEngine.Random.Range(0, 3) == 0 && currentBall != -1 && gamePoints != 1)
+            || currentBall == 29); //Randomly 1/3 of the time say how many points
+            if (shouldAnnounceGameScore)
+            {
+                NumberSpeech.Instance.PlayExpPointsAudio(gamePoints);
+            }
+            else
+            {
+                AudioManager.Instance.PlayNarration(nextBallClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+                yield return new WaitForSeconds(nextBallClip.length);
+            }
         }
 
-        clockText.text = clockString;
+        isFirstPass = true;
 
-        CheckHitResult();
+        // Set up and kick the ball
+        CurrentState = GameState.BallStart;
+        maxDistance = -130;
+        checkMissCoroutine = StartCoroutine(CheckMiss(shouldAnnounceDetailedBallTrajectory));
+        SetupBall(currentBallPath.Origin);
+        ballScript.KickBallTowards(currentBallPath.Destination, BallSpeed);
+    }
 
-        SetGameHints();
+    private void SetupBall(Vector3 start)
+    {
+        Debug.Log("Setup Ball");
+        ball.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        ball.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY;
+        ball.transform.position = (start);
+        ballScript.ballHitOnce = false;
+    }
 
+    private bool shouldLevelUp()
+    {
+        int numHits = 0;
+        for (int i = 0; i < prevHits.Length; i++)
+        {
+            numHits += prevHits[i];
+        }
+        return (numHits > 3); // at least 4/6 hits
+    }
+
+    /// <summary>
+    /// Announces the ball postion when a new ball is created
+    /// </summary>
+    /// <param name="hintLength"></param>
+    /// <returns></returns>
+    private IEnumerator AnnounceBallPos(HintLength hintLength, BallPath ballPath)
+    {
+        Debug.Log("Announce something plz");
+        if (hintLength == HintLength.full)
+        {
+            SetupFullHintAudio();
+        }
+        else if (hintLength == HintLength.shortLen)
+        {
+            SetupShortLenHintAudio();
+        }
+        else if (hintLength == HintLength.nonspatial)
+        {
+            SetupNonSpatialHintAudio();
+        }
+        //Play where the ball is starting
+
+        Debug.Log(ballPath.BallOriginType);
+        if (ballPath.BallOriginType == BallOriginType.left) //Left Start
+        {
+            yield return playStartLeft();
+        }
+        else if (ballPath.BallOriginType == BallOriginType.center) //Center Start
+        {
+            yield return playStartCenter();
+        }
+        else if (ballPath.BallOriginType == BallOriginType.right) //Right Start
+        {
+            yield return playStartRight();
+        }
+
+        yield return playAndIs();
+
+        //Play the destination
+
+        if (ballPath.BallDestType == BallDestType.farLeft)
+        {
+            yield return playEndFarLeft();
+        }
+        else if (ballPath.BallDestType == BallDestType.centerLeft)
+        {
+            yield return playEndCenterLeft();
+        }
+        else if (ballPath.BallDestType == BallDestType.center)
+        {
+            yield return playEndCenter();
+        }
+        else if (ballPath.BallDestType == BallDestType.centerRight)
+        {
+            yield return playEndCenterRight();
+        }
+        else if (ballPath.BallDestType == BallDestType.farRight)
+        {
+            yield return playEndFarRight();
+        }
+
+        yield return null;
     }
 
     /// <summary>
@@ -545,6 +538,7 @@ public class ShowdownDrillManager : MonoBehaviour
     /// </summary>
     private void SetGameHints()
     {
+
         if (playerLevel < 3)
         {
             if (IsTactileDouse)
@@ -553,9 +547,10 @@ public class ShowdownDrillManager : MonoBehaviour
             }
             if (IsMidPointAnnounce)
             {
-                PlayMidPointAudio();
+                //  Debug.Log("Hello!");
+                StartCoroutine(PlayMidPointAudio());
             }
-            IsAnnounceBall = true;
+            shouldAnnounceDetailedBallTrajectory = true;
         }
 
         if (IsCorrectionHints)
@@ -565,81 +560,26 @@ public class ShowdownDrillManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Checks the results of the ball if it was hit or not.
+    /// Calculations of where the ball was
     /// </summary>
-    private void CheckHitResult()
+    /// <returns></returns>
+    private float GetActualXDestination(BallPath ballPath)
     {
-
-        // If we don't have a ball we don't care
-        if (currentBall == null)
+        var bt = ballPath.BallOriginType;
+        int startXPos = 0;
+        if (bt == BallOriginType.center)
         {
-            return;
+            startXPos = centerStartXPos;
         }
-
-        //Perfect hit, start new ball
-        if ((currentBallScript.ballHitOnce) && maxDistance > 10)
+        else if (bt == BallOriginType.left)
         {
-            Debug.Log("Perfect hit!");
-            timerStarted = false;
-
-            hitPastHalfCoroutine = StartCoroutine(HitPastHalfStartNextBall());
-            maxDistance = -130;
-            return;
+            startXPos = leftStartXPos;
         }
-
-        //Wait for result of hit
-        if (timerStarted)
+        else if (bt == BallOriginType.right)
         {
-            if (currentBallScript.ballHitOnce && maxDistance <= currentBall.transform.position.z)
-            {
-                // Debug.Log("Been hit and on other side! Yay: " + maxDistance);
-                maxDistance = currentBall.transform.position.z;
-            }
-            else
-            {
-                maxDistance = -130;
-            }
-
-            int timerInterval = IsAnnounceBall ? 10 : 8;
-
-            if (Time.time > oldTime + timerInterval)
-            {
-                oldTime = Time.time;
-                //expState = ExpState.noBall;
-                newBallOk = true;
-                StartNextBall(DetermineHitRes(currentBallScript));
-            }
+            startXPos = rightStartXPos;
         }
-    }
-
-    /// <summary>
-    /// Plays audio depending if the bat is too far to the right or to the left
-    /// </summary>
-    private IEnumerator PlayMidPointAudio()
-    {
-        if (currentBall != null)
-        {
-            if (firstPass && currentBall.transform.position.z < 5 && currentBall.transform.position.z > -5)
-            {
-                firstPass = false;
-                var snapShotBatPos = playerPaddle.transform.position;
-                float absDist = Math.Abs(snapShotBatPos.x - GetActualXDestination());
-
-                if (absDist > 20)
-                {
-                    if (snapShotBatPos.x < GetActualXDestination())
-                    {
-                        AudioManager.Instance.PlayNarration(moveRightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
-                        yield return new WaitForSeconds(moveRightClip.length);
-                    }
-                    else
-                    {
-                        AudioManager.Instance.PlayNarration(moveLeftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
-                        yield return new WaitForSeconds(moveLeftClip.length);
-                    }
-                }
-            }
-        }
+        return startXPos + (2 * ballPath.Destination.x);
     }
 
     /// <summary>
@@ -648,9 +588,9 @@ public class ShowdownDrillManager : MonoBehaviour
     private void TactileDouse()
     {
         Vector3 batPos = playerPaddle.transform.position;
-        if (currentBall != null && PreferenceManager.Instance.ControllerRumble)
+        if (PreferenceManager.Instance.ControllerRumble)
         {
-            float absDist = Math.Abs(batPos.x - GetActualXDestination());
+            float absDist = Math.Abs(batPos.x - GetActualXDestination(currentBallPath));
             //float distAwayFromDest = 100 - absDist;
             if (absDist < 30 && absDist > 20)
             {
@@ -667,212 +607,228 @@ public class ShowdownDrillManager : MonoBehaviour
         }
     }
 
-
-    /// <summary>
-    /// Calculations of where the ball was
-    /// </summary>
-    /// <returns></returns>
-    private float GetActualXDestination()
+    private HintLength PlayerHintLength
     {
-        var bt = _currBallPath.BallOriginType;
-        int startXPos = 0;
-        if (bt == BallOriginType.center)
+        get
         {
-            startXPos = centerStartXPos;
-        }
-        else if (bt == BallOriginType.left)
-        {
-            startXPos = leftStartXPos;
-        }
-        else if (bt == BallOriginType.right)
-        {
-            startXPos = rightStartXPos;
-        }
-        return startXPos + (2 * _currBallPath.Destination.x);
-    }
-
-    /// <summary>
-    /// Timer for the global events clock
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void GlobalTimer_Elapsed(object sender, ElapsedEventArgs e)
-    {
-        globalClockString = e.SignalTime.ToLongTimeString() + " +" + e.SignalTime.Millisecond; ;
-    }
-
-    /// <summary>
-    /// Timer set to 6 min and counting the seconds of the exp trial
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void ClockTimer_Elapsed(object sender, ElapsedEventArgs e)
-    {
-        TimeSpan diff = e.SignalTime - startTime;
-        clockString = diff.Minutes + ":" + diff.Seconds + "." + diff.Milliseconds;
-        if (diff.Minutes > 5)
-        {
-            past6Min = true;
-        }
-    }
-
-    /// <summary>
-    /// Starts a new ball after waiting 1.5 seconds based on a perfect hit (a hit that went past the halfway point)
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator HitPastHalfStartNextBall()
-    {
-        Debug.Log("Hit past half start next ball");
-        yield return new WaitForSeconds(1.5f); //Time allowed once ball goes past halfway point
-        //BallScript.BallHitOnce = false;
-        newBallOk = true;
-        StartNextBall(HitRes.pastHalfHit);
-    }
-
-    /// <summary>
-    /// Determines if the ball was hit, and didn't go past the halfway or it was missed
-    /// </summary>
-    /// <param name="ball"></param>
-    /// <returns>HitRes.miss or HitRes.hit</returns>
-    private HitRes DetermineHitRes(BallScript ball)
-    {
-        if ((ball.ballHitOnce) && maxDistance > -50)
-        {
-            return HitRes.hitNotPastHalf;
-        }
-        else if ((ball.ballHitOnce))
-        {
-            return HitRes.tipped;
-        }
-        return HitRes.miss;
-    }
-
-    private void FinishExp()
-    {
-        // TODO: Load the we're done, wanna play again or leave
-    }
-
-    /// <summary>
-    /// Spawns a new ball based on the 30 balls of the experiment list.
-    /// </summary>
-    private IEnumerator SpawnBall()
-    {
-        if (playerReady) //Double check to present sending two balls in transition
-        {
-            if (past6Min)
+            if (playerLevel == 0)
             {
-                FinishExp();
+                return HintLength.full;
             }
-            _currBallNumber++;
-            _currBallType = _expList.Current;
-            ballAndPosText.text = "Ball: " + _currBallNumber + "   Pos: " + _currBallType + "   Level: " + playerLevel;
-
-            _currBallPath = ballPositions[_currBallType];
-
-            bool isNewBallAvail = _expList.MoveNext();
-            if (!isNewBallAvail)
+            if (playerLevel == 1)
             {
-                ShuffleArray();
-                yield break;
+                return HintLength.shortLen;
+            }
+            return HintLength.nonspatial;
+        }
+    }
+
+    private void Update()
+    {
+        if (hasStartedGame)
+        {
+            clockText.text = clockString;
+
+            if (CurrentState != GameState.BallInactive)
+            {
+                CheckBallPosition();
             }
 
-            if (IsAnnounceBall)
-            {
-                if (playerLevel == 0)
-                {
-                    yield return AnnounceBallPos(HintLength.full);
-                }
-                if (playerLevel == 1)
-                {
-                    yield return AnnounceBallPos(HintLength.shortLen);
-                }
-                if (playerLevel == 2)
-                {
-                    yield return AnnounceBallPos(HintLength.nonspatial);
-                }
-            }
-
-            newBallOk = false;
-            firstPass = true;
-            if (currentBall == null)
-            {
-                createBall(_currBallPath.Origin);
-            } else
-            {
-                resetBall(_currBallPath.Origin);
-            }
-
-            //expState = ExpState.ballInPlay;
-
-            _currBallSpeed = DetermineCurrBallSpeed();
-
-            // TODO: play the clickClip sound here
-            currentBallScript.KickBallTowards(ballPositions[_currBallType].Destination, _currBallSpeed);
-            
+            SetGameHints();
         }
     }
 
-    /// <summary>
-    /// Announces the ball postion when a new ball is created
-    /// </summary>
-    /// <param name="hintLength"></param>
-    /// <returns></returns>
-    private IEnumerator AnnounceBallPos(HintLength hintLength)
+    private void CheckBallPosition()
     {
- 
-        if (hintLength == HintLength.full)
+        // We don't care if a ball isn't here yet
+        if (ball == null)
         {
-            SetupFullHintAudio();
-        }
-        else if (hintLength == HintLength.shortLen)
-        {
-            SetupShortLenHintAudio();
-        }
-        else if (hintLength == HintLength.nonspatial)
-        {
-            SetupNonSpatialHintAudio();
-        }
-        //Play where the ball is starting
-        if (_currBallPath.BallOriginType == BallOriginType.left) //Left Start
-        {
-            playStartLeft();
-        }
-        else if (_currBallPath.BallOriginType == BallOriginType.center) //Center Start
-        {
-            playStartCenter();
-        }
-        else if (_currBallPath.BallOriginType == BallOriginType.right) //Right Start
-        {
-            playStartRight();
+            return;
         }
 
-        playAndIs();
+        if (CurrentState == GameState.BallStart)
+        {
+            // Check if the ball has made it to the player's half of the stage
+            if (ball.transform.position.z < 0)
+            {
+                // It's on the player's side
+                CurrentState = GameState.BallYourSide;
+                maxDistance = -130;
+            }
+        }
+        else if (CurrentState == GameState.BallYourSide)
+        {
+            if (ballScript.ballHitOnce && maxDistance < ball.transform.position.z)
+            {
+                maxDistance = ball.transform.position.z;
+            }
 
-        //Play the destination
+            // Check if the ball has made it to the opponent's half of the stage
+            if (ball.transform.position.z > 0)
+            {
+                // It's on the opponent's side again - we hit it!
+                CurrentState = GameState.BallFinish;
+            }
+        }
+        else if (CurrentState == GameState.BallFinish)
+        {
+            if (ballScript.ballHitOnce && maxDistance < ball.transform.position.z)
+            {
+                maxDistance = ball.transform.position.z;
+            }
 
-        if (_currBallPath.BallDestType == BallDestType.farLeft)
-        {
-            playEndFarLeft();
+            // Check if we get a perfect hit
+            if (maxDistance > 10)
+            {
+                StopCoroutine(checkMissCoroutine);
+                checkMissCoroutine = null;
+                StartCoroutine(HandlePerfectHit());
+            }
         }
-        else if (_currBallPath.BallDestType == BallDestType.centerLeft)
+    }
+
+    private IEnumerator CheckMiss(bool shouldAnnounce)
+    {
+        if (shouldAnnounce)
         {
-            playEndCenterLeft();
+            yield return new WaitForSeconds(10);
         }
-        else if (_currBallPath.BallDestType == BallDestType.center)
+        else
         {
-            playEndCenter();
+            yield return new WaitForSeconds(8);
         }
-        else if (_currBallPath.BallDestType == BallDestType.centerRight)
+        yield return HandleMiss();
+    }
+
+    /// <summary>
+    /// When the ball lands in the opponent's goal (i.e. we get a point)
+    /// </summary>
+    public void OpponentGoal()
+    {
+        Debug.Log("OPPONENT GOAL");
+        if (checkMissCoroutine != null)
         {
-            playEndCenterRight();
+            StopCoroutine(checkMissCoroutine);
         }
-        else if (_currBallPath.BallDestType == BallDestType.farRight)
+        StartCoroutine(HandlePerfectHit());
+    }
+
+    /// <summary>
+    /// When we score an own goal (i.e. this is bad)
+    /// </summary>
+    public void OwnGoal()
+    {
+        Debug.Log("OWN GOAL");
+        if (checkMissCoroutine != null)
         {
-            playEndFarRight();
+            StopCoroutine(checkMissCoroutine);
+        }
+        StartCoroutine(HandleMiss());
+    }
+
+    private IEnumerator HandleMiss()
+    {
+        if (CurrentState == GameState.BallInactive)
+        {
+            yield break;
         }
 
-        yield return new WaitForSeconds(0);
+        ballScript.StopBallSound();
 
+        Debug.Log("Miss");
+        // TODO: Update ball state to new shit
+
+        Debug.Log("Rigidbody constraints all opponent");
+        ball.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+        CurrentState = GameState.BallInactive;
+
+        //        AudioManager.Instance.PlaySfx(loseClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+        //      yield return new WaitForSeconds(loseClip.length);
+
+        yield return FinishScoring();
+    }
+
+    private IEnumerator HandlePerfectHit()
+    {
+        if (CurrentState == GameState.BallInactive)
+        {
+            yield break;
+        }
+
+
+
+        CurrentState = GameState.BallInactive;
+        yield return new WaitForSeconds(1.5f);
+        ballScript.StopBallSound();
+        Debug.Log("Perfect hit");
+        // TODO
+
+        Debug.Log("Stop the ball");
+        ball.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+
+        //AudioManager.Instance.PlaySfx(winClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+        //yield return new WaitForSeconds(winClip.length);
+
+        yield return FinishScoring();
+    }
+
+    private IEnumerator FinishScoring()
+    {
+
+        HitRes hr = CurrentHitRes;
+        gamePoints += hr == HitRes.miss ? 0 : (int)hr - 1;
+        if (hr == HitRes.pastHalfHit || hr == HitRes.goal)
+        {
+            Debug.Log("Didn't miss");
+            prevHits[currentBall % 6] = 1;
+            if (shouldLevelUp())
+            {
+                // TODO: Extract this into separate level up function
+                playerLevel++;
+                prevHits = new int[6] { 0, 0, 0, 0, 0, 0 };
+
+                AudioManager.Instance.PlayNarration(levelUpClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+                yield return new WaitForSeconds(levelUpClip.length);
+            }
+
+            AudioManager.Instance.PlaySfx(clappingClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+
+            int randomReinforcementToPlay = UnityEngine.Random.Range(0, positiveReinforcementSuccessClips.Length - 1);
+            AudioManager.Instance.PlayNarration(positiveReinforcementSuccessClips[randomReinforcementToPlay], AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+            yield return new WaitForSeconds(Math.Max(positiveReinforcementSuccessClips[randomReinforcementToPlay].length, clappingClip.length));
+        }
+        else
+        {
+            Debug.Log("Missed");
+            prevHits[currentBall % 6] = 0;
+            //Randomly, 1/3 of the time, play a random lose voice sound effect
+            if (UnityEngine.Random.Range(0, 2) == 0)
+            {
+                int randomReinforcementToPlay = UnityEngine.Random.Range(0, positiveReinforcementMissClips.Length - 1);
+                AudioManager.Instance.PlayNarration(positiveReinforcementMissClips[randomReinforcementToPlay], AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+                yield return new WaitForSeconds(positiveReinforcementMissClips[randomReinforcementToPlay].length);
+            }
+
+            if (IsCorrectionHints)
+            {
+                Debug.Log("Read correction hint");
+                yield return StartCoroutine(ReadHitCorrection(hr));
+            }
+        }
+        if (!hasReached6Minutes)
+        {
+            yield return KickBall();
+        }
+        else
+        {
+            yield return handleGameOver();
+        }
+    }
+
+    private IEnumerator handleGameOver()
+    {
+        Debug.Log("Game over!");
+        yield return null;
     }
 
     /// <summary>
@@ -880,7 +836,7 @@ public class ShowdownDrillManager : MonoBehaviour
     /// </summary>
     private void SetupFullHintAudio()
     {
-        oldHintLen = HintLength.full;
+        hintLength = HintLength.full;
     }
 
     /// <summary>
@@ -888,7 +844,7 @@ public class ShowdownDrillManager : MonoBehaviour
     /// </summary>
     private void SetupShortLenHintAudio()
     {
-        oldHintLen = HintLength.shortLen;
+        hintLength = HintLength.shortLen;
     }
 
     /// <summary>
@@ -896,91 +852,277 @@ public class ShowdownDrillManager : MonoBehaviour
     /// </summary>
     private void SetupNonSpatialHintAudio()
     {
-        oldHintLen = HintLength.nonspatial;
+        hintLength = HintLength.nonspatial;
     }
 
     /// <summary>
-    /// Starts the next ball and adds to the total gamePoints
+    /// Gets the ball speed
     /// </summary>
-    /// <param name="hitres"></param>
-    /// <param name="pointsToAdd"></param>
-    private void StartNextBall(HitRes hitres)
+    private int BallSpeed
     {
-        Debug.Log("StartNextBall");
-        Debug.Log(hitres);
-        if (!playerReady)
+        get
         {
-            return;
-        }
-        if (newBallOk)
-        {
-            newBallOk = false;
-            Debug.Log("Sending Ball");
-            // Sending Ball
-            if (_currBallNumber != -1)
+            if (playerLevel <= 4)
             {
-                gamePoints += hitres == HitRes.miss ? 0 : (int)hitres - 1; //The points correlate to the hitres
+                return 40;
             }
-
-            if (_currBallNumber != -1)
+            else if (playerLevel == 5)
             {
-                StartCoroutine((hitres != HitRes.miss && hitres != HitRes.tipped) ? NextBallHit() : NextBallMissed(hitres));
+                return 50;
             }
-            else
+            else if (playerLevel == 6)
             {
-                StartCoroutine(NextBallComing());
+                return 60;
+            }
+            else // if playerLevel >= 7
+            {
+                return 70;
             }
         }
+    }
 
+    private HitRes CurrentHitRes
+    {
+        get
+        {
+            if ((ballScript.ballHitOnce) && maxDistance < 0)
+            {
+                return HitRes.hitNotPastHalf;
+            }
+            else if ((ballScript.ballHitOnce) && maxDistance >= 0)
+            {
+                return HitRes.pastHalfHit;
+            }
+            else if ((ballScript.ballHitOnce))
+            {
+                return HitRes.tipped;
+            }
+            return HitRes.miss;
+        }
+    }
+
+    #region Audio Players
+    private IEnumerator playStartLeft()
+    {
+        Debug.Log("At start left I guess");
+        if (hintLength == HintLength.full)
+        {
+            AudioManager.Instance.PlayNarration(startLeftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Start1]);
+            yield return new WaitForSeconds(startLeftClip.length);
+        }
+        else if (hintLength == HintLength.shortLen)
+        {
+            AudioManager.Instance.PlayNarration(leftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Start1]);
+            yield return new WaitForSeconds(leftClip.length);
+        }
+        else // oldHintLen == HintLengthNonSpatial
+        {
+            AudioManager.Instance.PlayNarration(leftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
+            yield return new WaitForSeconds(leftClip.length);
+        }
+
+        // TODO: Add wait for else case, make last else case elif
+    }
+
+    private IEnumerator playStartCenter()
+    {
+        if (hintLength == HintLength.full)
+        {
+            AudioManager.Instance.PlayNarration(startCenterClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Start2]);
+            yield return new WaitForSeconds(startCenterClip.length);
+        }
+        else if (hintLength == HintLength.shortLen)
+        {
+            AudioManager.Instance.PlayNarration(centerClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Start2]);
+            yield return new WaitForSeconds(centerClip.length);
+        }
+        else // oldHintLen == HintLengthNonSpatial
+        {
+            AudioManager.Instance.PlayNarration(centerClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
+            yield return new WaitForSeconds(centerClip.length);
+        }
+
+        // TODO: Add wait for else case, make last else case elif
+    }
+
+    private IEnumerator playStartRight()
+    {
+        Debug.Log("at start right i guess");
+        if (hintLength == HintLength.full)
+        {
+            AudioManager.Instance.PlayNarration(startRightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Start3]);
+            yield return new WaitForSeconds(startRightClip.length);
+        }
+        else if (hintLength == HintLength.shortLen)
+        {
+            AudioManager.Instance.PlayNarration(rightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Start3]);
+            yield return new WaitForSeconds(rightClip.length);
+        }
+        else // oldHintLen == HintLengthNonSpatial
+        {
+            AudioManager.Instance.PlayNarration(rightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
+            yield return new WaitForSeconds(rightClip.length);
+        }
+
+        // TODO: Add wait for else case, make last else case elif
+    }
+
+    private IEnumerator playEndFarLeft()
+    {
+        Debug.Log("at end far left I guess");
+        if (hintLength == HintLength.full)
+        {
+            AudioManager.Instance.PlayNarration(farLeftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End1]);
+            yield return new WaitForSeconds(farLeftClip.length);
+        }
+        else if (hintLength == HintLength.shortLen)
+        {
+            AudioManager.Instance.PlayNarration(leftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End1]);
+            yield return new WaitForSeconds(leftClip.length);
+        }
+        else // oldHintLen == HintLengthNonSpatial
+        {
+            AudioManager.Instance.PlayNarration(leftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
+            yield return new WaitForSeconds(leftClip.length);
+        }
+
+        // TODO: Add wait for else case, make last else case elif
+    }
+
+    private IEnumerator playEndCenterLeft()
+    {
+        if (hintLength == HintLength.full)
+        {
+            AudioManager.Instance.PlayNarration(centerLeftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End2]);
+            yield return new WaitForSeconds(centerLeftClip.length);
+        }
+        else if (hintLength == HintLength.shortLen)
+        {
+            AudioManager.Instance.PlayNarration(centerLeftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End2]);
+            yield return new WaitForSeconds(centerLeftClip.length);
+        }
+        else // oldHintLen == HintLengthNonSpatial
+        {
+            AudioManager.Instance.PlayNarration(centerLeftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
+            yield return new WaitForSeconds(centerLeftClip.length);
+        }
+
+        // TODO: Add wait for else case, make last else case elif
+    }
+
+    private IEnumerator playEndCenter()
+    {
+        if (hintLength == HintLength.full)
+        {
+            AudioManager.Instance.PlayNarration(centerClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End3]);
+            yield return new WaitForSeconds(centerClip.length);
+        }
+        else if (hintLength == HintLength.shortLen)
+        {
+            AudioManager.Instance.PlayNarration(centerClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End3]);
+            yield return new WaitForSeconds(centerClip.length);
+        }
+        else // oldHintLen == HintLengthNonSpatial
+        {
+            AudioManager.Instance.PlayNarration(centerClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
+            yield return new WaitForSeconds(centerClip.length);
+        }
+
+        // TODO: Add wait for else case, make last else case elif
+    }
+
+    private IEnumerator playEndCenterRight()
+    {
+        Debug.Log("at center right i guess");
+        if (hintLength == HintLength.full)
+        {
+            AudioManager.Instance.PlayNarration(centerRightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End4]);
+            yield return new WaitForSeconds(centerRightClip.length);
+        }
+        else if (hintLength == HintLength.shortLen)
+        {
+            AudioManager.Instance.PlayNarration(centerRightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End4]);
+            yield return new WaitForSeconds(centerRightClip.length);
+        }
+        else // oldHintLen == HintLengthNonSpatial
+        {
+            AudioManager.Instance.PlayNarration(centerRightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
+            yield return new WaitForSeconds(centerRightClip.length);
+        }
+
+        // TODO: Add wait for else case, make last else case elif
+    }
+
+    private IEnumerator playEndFarRight()
+    {
+        Debug.Log("at right i guess");
+        if (hintLength == HintLength.full)
+        {
+            AudioManager.Instance.PlayNarration(farRightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End5]);
+            yield return new WaitForSeconds(farRightClip.length);
+        }
+        else if (hintLength == HintLength.shortLen)
+        {
+            AudioManager.Instance.PlayNarration(rightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End5]);
+            yield return new WaitForSeconds(rightClip.length);
+        }
+        else // oldHintLen == HintLengthNonSpatial
+        {
+            AudioManager.Instance.PlayNarration(rightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
+            yield return new WaitForSeconds(rightClip.length);
+        }
+
+        // TODO: Add wait for else case, make last else case elif
+    }
+
+    private IEnumerator playAndIs()
+    {
+        if (hintLength == HintLength.full)
+        {
+            AudioManager.Instance.PlayNarration(andIsClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
+            yield return new WaitForSeconds(andIsClip.length);
+        }
+        else if (hintLength == HintLength.shortLen)
+        {
+            AudioManager.Instance.PlayNarration(toClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
+            yield return new WaitForSeconds(toClip.length);
+        }
+        else if (hintLength == HintLength.nonspatial)
+        {
+            AudioManager.Instance.PlayNarration(toClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
+            yield return new WaitForSeconds(toClip.length);
+        }
+        else
+        {
+            yield return new WaitForSeconds(toClip.length);
+        }
     }
 
     /// <summary>
-    /// Audio for a hit ball and starts a new ball
+    /// Plays audio depending if the bat is too far to the right or to the left
     /// </summary>
-    /// <returns></returns>
-    private IEnumerator NextBallHit()
+    private IEnumerator PlayMidPointAudio()
     {
-        prevHits[_currBallNumber % 6] = 1;
-        if (CheckLevelUp())
+        if (isFirstPass && ball.transform.position.z < 5 && ball.transform.position.z > -5)
         {
-            playerLevel++;
+            isFirstPass = false;
+            var snapShotBatPos = playerPaddle.transform.position;
+            float absDist = Math.Abs(snapShotBatPos.x - GetActualXDestination(currentBallPath));
 
-            AudioManager.Instance.PlayNarration(levelUpClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-            yield return new WaitForSeconds(levelUpClip.length);
+            if (absDist > 20)
+            {
+                if (snapShotBatPos.x < GetActualXDestination(currentBallPath))
+                {
+                    AudioManager.Instance.PlayNarration(moveRightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
+                    yield return new WaitForSeconds(moveRightClip.length);
+                }
+                else
+                {
+                    AudioManager.Instance.PlayNarration(moveLeftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
+                    yield return new WaitForSeconds(moveLeftClip.length);
+                }
+            }
         }
-
-        AudioManager.Instance.PlaySfx(clappingClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-
-        int randomReinforcementToPlay = UnityEngine.Random.Range(0, positiveReinforcementSuccessClips.Length - 1);
-        AudioManager.Instance.PlayNarration(positiveReinforcementSuccessClips[randomReinforcementToPlay], AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-        yield return new WaitForSeconds(positiveReinforcementSuccessClips[randomReinforcementToPlay].length);
-  
-        yield return NextBallComing();
-    }
-
-
-
-    /// <summary>
-    /// Audio for a missed ball and starts a new ball
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator NextBallMissed(HitRes hitRes)
-    {
-        prevHits[_currBallNumber % 6] = 0;
-        //Randomly, 1/3 of the time, play a random lose voice sound effect
-        if (UnityEngine.Random.Range(0, 2) == 0)
-        {
-            int randomReinforcementToPlay = UnityEngine.Random.Range(0, positiveReinforcementMissClips.Length - 1);
-            AudioManager.Instance.PlayNarration(positiveReinforcementMissClips[randomReinforcementToPlay], AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-            yield return new WaitForSeconds(positiveReinforcementMissClips[randomReinforcementToPlay].length);
-        }
-
-        if (IsCorrectionHints)
-        {
-            yield return ReadHitCorrection(hitRes);
-        }
-
-        yield return NextBallComing();
     }
 
     /// <summary>
@@ -996,21 +1138,21 @@ public class ShowdownDrillManager : MonoBehaviour
         float absDist = Math.Abs(snapShotBatPos.x - snapShotBallPos.x);
         if (hitRes == HitRes.tipped)
         {
-            if (CollisionSnapshot.ballPos.x < CollisionSnapshot.batPos.x - 5)
+            if (collisionSnapshot.ballPos.x < collisionSnapshot.batPos.x - 5)
             {
                 AudioManager.Instance.PlayNarration(tippedClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End3]);
                 yield return new WaitForSeconds(tippedClip.length);
                 AudioManager.Instance.PlayNarration(reachLeftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End1]);
                 yield return new WaitForSeconds(reachLeftClip.length);
             }
-            else if (CollisionSnapshot.ballPos.x > CollisionSnapshot.batPos.x + 5)
+            else if (collisionSnapshot.ballPos.x > collisionSnapshot.batPos.x + 5)
             {
                 AudioManager.Instance.PlayNarration(tippedClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End3]);
                 yield return new WaitForSeconds(tippedClip.length);
                 AudioManager.Instance.PlayNarration(reachRightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End5]);
                 yield return new WaitForSeconds(reachRightClip.length);
             }
-            else if (CollisionSnapshot.ballPos.z < CollisionSnapshot.batPos.z)
+            else if (collisionSnapshot.ballPos.z < collisionSnapshot.batPos.z)
             {
                 AudioManager.Instance.PlayNarration(backwardsClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End3]);
                 yield return new WaitForSeconds(backwardsClip.length);
@@ -1038,7 +1180,7 @@ public class ShowdownDrillManager : MonoBehaviour
             AudioManager.Instance.PlayNarration(reachRightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End5]);
             yield return new WaitForSeconds(reachRightClip.length);
 
-            NumberSpeech.Instance.PlayFancyNumberAudio((int)distOff);
+            yield return NumberSpeech.Instance.PlayFancyNumberAudio((int)distOff);
 
             yield return new WaitForSeconds(2.5f);
         }
@@ -1050,7 +1192,7 @@ public class ShowdownDrillManager : MonoBehaviour
             AudioManager.Instance.PlayNarration(tooFarRightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End5]);
             yield return new WaitForSeconds(tooFarRightClip.length);
 
-            NumberSpeech.Instance.PlayFancyNumberAudio((int)distOff);
+            yield return NumberSpeech.Instance.PlayFancyNumberAudio((int)distOff);
 
             yield return new WaitForSeconds(2.5f);
         }
@@ -1062,7 +1204,7 @@ public class ShowdownDrillManager : MonoBehaviour
             AudioManager.Instance.PlayNarration(endTooFarLeftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End1]);
             yield return new WaitForSeconds(endTooFarLeftClip.length);
 
-            NumberSpeech.Instance.PlayFancyNumberAudio((int)distOff);
+            yield return NumberSpeech.Instance.PlayFancyNumberAudio((int)distOff);
 
             yield return new WaitForSeconds(2.5f);
         }
@@ -1074,7 +1216,7 @@ public class ShowdownDrillManager : MonoBehaviour
             AudioManager.Instance.PlayNarration(reachLeftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End1]);
             yield return new WaitForSeconds(reachLeftClip.length);
 
-            NumberSpeech.Instance.PlayFancyNumberAudio((int)distOff);
+            yield return NumberSpeech.Instance.PlayFancyNumberAudio((int)distOff);
 
             yield return new WaitForSeconds(2.5f);
         }
@@ -1087,215 +1229,5 @@ public class ShowdownDrillManager : MonoBehaviour
         yield break;
     }
 
-    
-
-
-    /// <summary>
-    /// Resets all the parameters of an experiment between Naive and our mode.
-    /// </summary>
-    private void ResetExp()
-    {
-        // TODO: figure out what's different from here and the start and if we can't just use that
-        _currBallNumber = -1;
-        gamePoints = 0;
-        playerLevel = 0;
-        playerReady = false;
-        // TODO: play IntroMusic from old GameUtils
-
-        newBallOk = true;
-        prevHits = new int[6] { 0, 0, 0, 0, 0, 0 };
-        past6Min = false;
-        ResetGamePoints();
-    }
-
-    private IEnumerator playStartLeft()
-    {
-        if (oldHintLen == HintLength.full)
-        {
-            AudioManager.Instance.PlayNarration(startLeftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Start1]);
-            yield return new WaitForSeconds(startLeftClip.length);
-        }
-        else if (oldHintLen == HintLength.shortLen)
-        {
-            AudioManager.Instance.PlayNarration(leftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Start1]);
-            yield return new WaitForSeconds(leftClip.length);
-        }
-        else // oldHintLen == HintLengthNonSpatial
-        {
-            AudioManager.Instance.PlayNarration(leftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
-            yield return new WaitForSeconds(leftClip.length);
-        }
-
-        // TODO: Add wait for else case, make last else case elif
-    }
-
-    private IEnumerator playStartCenter()
-    {
-        if (oldHintLen == HintLength.full)
-        {
-            AudioManager.Instance.PlayNarration(startCenterClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Start2]);
-            yield return new WaitForSeconds(startCenterClip.length);
-        }
-        else if (oldHintLen == HintLength.shortLen)
-        {
-            AudioManager.Instance.PlayNarration(centerClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Start2]);
-            yield return new WaitForSeconds(centerClip.length);
-        }
-        else // oldHintLen == HintLengthNonSpatial
-        {
-            AudioManager.Instance.PlayNarration(centerClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
-            yield return new WaitForSeconds(centerClip.length);
-        }
-
-        // TODO: Add wait for else case, make last else case elif
-    }
-
-    private IEnumerator playStartRight()
-    {
-        if (oldHintLen == HintLength.full)
-        {
-            AudioManager.Instance.PlayNarration(startRightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Start3]);
-            yield return new WaitForSeconds(startRightClip.length);
-        }
-        else if (oldHintLen == HintLength.shortLen)
-        {
-            AudioManager.Instance.PlayNarration(rightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Start3]);
-            yield return new WaitForSeconds(rightClip.length);
-        }
-        else // oldHintLen == HintLengthNonSpatial
-        {
-            AudioManager.Instance.PlayNarration(rightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
-            yield return new WaitForSeconds(rightClip.length);
-        }
-
-        // TODO: Add wait for else case, make last else case elif
-    }
-
-    private IEnumerator playEndFarLeft()
-    {
-        if (oldHintLen == HintLength.full)
-        {
-            AudioManager.Instance.PlayNarration(farLeftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End1]);
-            yield return new WaitForSeconds(farLeftClip.length);
-        }
-        else if (oldHintLen == HintLength.shortLen)
-        {
-            AudioManager.Instance.PlayNarration(leftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End1]);
-            yield return new WaitForSeconds(leftClip.length);
-        }
-        else // oldHintLen == HintLengthNonSpatial
-        {
-            AudioManager.Instance.PlayNarration(leftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
-            yield return new WaitForSeconds(leftClip.length);
-        }
-
-        // TODO: Add wait for else case, make last else case elif
-    }
-
-    private IEnumerator playEndCenterLeft()
-    {
-        if (oldHintLen == HintLength.full)
-        {
-            AudioManager.Instance.PlayNarration(centerLeftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End2]);
-            yield return new WaitForSeconds(centerLeftClip.length);
-        }
-        else if (oldHintLen == HintLength.shortLen)
-        {
-            AudioManager.Instance.PlayNarration(centerLeftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End2]);
-            yield return new WaitForSeconds(centerLeftClip.length);
-        }
-        else // oldHintLen == HintLengthNonSpatial
-        {
-            AudioManager.Instance.PlayNarration(centerLeftClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
-            yield return new WaitForSeconds(centerLeftClip.length);
-        }
-
-        // TODO: Add wait for else case, make last else case elif
-    }
-
-    private IEnumerator playEndCenter()
-    {
-        if (oldHintLen == HintLength.full)
-        {
-            AudioManager.Instance.PlayNarration(centerClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End3]);
-            yield return new WaitForSeconds(centerClip.length);
-        }
-        else if (oldHintLen == HintLength.shortLen)
-        {
-            AudioManager.Instance.PlayNarration(centerClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End3]);
-            yield return new WaitForSeconds(centerClip.length);
-        }
-        else // oldHintLen == HintLengthNonSpatial
-        {
-            AudioManager.Instance.PlayNarration(centerClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
-            yield return new WaitForSeconds(centerClip.length);
-        }
-
-        // TODO: Add wait for else case, make last else case elif
-    }
-
-    private IEnumerator playEndCenterRight()
-    {
-        if (oldHintLen == HintLength.full)
-        {
-            AudioManager.Instance.PlayNarration(centerRightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End4]);
-            yield return new WaitForSeconds(centerRightClip.length);
-        }
-        else if (oldHintLen == HintLength.shortLen)
-        {
-            AudioManager.Instance.PlayNarration(centerRightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End4]);
-            yield return new WaitForSeconds(centerRightClip.length);
-        }
-        else // oldHintLen == HintLengthNonSpatial
-        {
-            AudioManager.Instance.PlayNarration(centerRightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
-            yield return new WaitForSeconds(centerRightClip.length);
-        }
-
-        // TODO: Add wait for else case, make last else case elif
-    }
-
-    private IEnumerator playEndFarRight()
-    {
-        if (oldHintLen == HintLength.full)
-        {
-            AudioManager.Instance.PlayNarration(farRightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End5]);
-            yield return new WaitForSeconds(farRightClip.length);
-        }
-        else if (oldHintLen == HintLength.shortLen)
-        {
-            AudioManager.Instance.PlayNarration(rightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.End5]);
-            yield return new WaitForSeconds(rightClip.length);
-        }
-        else // oldHintLen == HintLengthNonSpatial
-        {
-            AudioManager.Instance.PlayNarration(rightClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
-            yield return new WaitForSeconds(rightClip.length);
-        }
-
-        // TODO: Add wait for else case, make last else case elif
-    }
-
-    private IEnumerator playAndIs()
-    {
-        if (oldHintLen == HintLength.full)
-        {  
-            AudioManager.Instance.PlayNarration(andIsClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
-            yield return new WaitForSeconds(andIsClip.length);
-        }
-        else if (oldHintLen == HintLength.shortLen)
-        {
-            AudioManager.Instance.PlayNarration(toClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
-            yield return new WaitForSeconds(toClip.length);
-        }
-        else if (oldHintLen == HintLength.nonspatial)
-        {
-            AudioManager.Instance.PlayNarration(toClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Guideline]);
-            yield return new WaitForSeconds(toClip.length);
-        } else
-        {
-            yield return new WaitForSeconds(toClip.length);
-        }
-    }
-
+    #endregion
 }

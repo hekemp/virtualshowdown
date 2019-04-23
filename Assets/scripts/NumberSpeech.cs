@@ -121,7 +121,7 @@ public class NumberSpeech : MonoBehaviour {
             yield return new WaitForSeconds(pinchClip.length);
         }
 
-        PlayNumbersAudio(inchNum);
+        yield return PlayNumbersAudio(inchNum);
 
         AudioManager.Instance.PlayNarration(inchesClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
         yield return new WaitForSeconds(inchesClip.length);

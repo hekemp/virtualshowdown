@@ -21,6 +21,7 @@ public class PaddleScript : MonoBehaviour {
     private const float estAvgError = 7f; //Prev 26
     private const float unityTableEdge = 130f;
 
+
     private UnityEngine.AudioSource _paddleAudio;
 
     void PlayWallHit()
@@ -57,6 +58,11 @@ public class PaddleScript : MonoBehaviour {
     void FixedUpdate()
     {
 
+        if (BodySourceManager.Instance == null)
+        {
+            return;
+        }
+
         float centerXPoint = CheckCalibratedX(BodySourceManager.Instance.baseKinectPosition.X);
         float maxZPoint = CheckCalibratedZ(BodySourceManager.Instance.baseKinectPosition.Z);
 
@@ -65,30 +71,6 @@ public class PaddleScript : MonoBehaviour {
               zPos = (maxZPoint - BodySourceManager.Instance.handPosition.Z) * 100,
               yPos = transform.position.y;
 
-        ////If screen press, lift bat
-      /*  if (GameUtils.playState == GameUtils.GamePlayState.InPlay)
-        {
-            if (JoyconController.ButtonPressed || ScreenPressDown)
-            {
-                yPos = 20;
-                batDownOnce = true;
-                if (batUpOnce)
-                {
-                    PlayBatUpAudio();
-                    batUpOnce = false;
-                }
-            }
-            else
-            {
-                yPos = 5f;
-                batUpOnce = true;
-                if (batDownOnce)
-                {
-                    PlayBatDownAudio();
-                    batDownOnce = false;
-                }
-            }
-        }*/
 
         //Smoothing applied to slow down bat so it doesn't phase through ball
         Vector3 newPosition = new Vector3(-xPos, yPos, (zPos - unityTableEdge - estAvgError));
@@ -124,6 +106,7 @@ public class PaddleScript : MonoBehaviour {
         float outOfBoundsBy = 0;
         float xSide = 50 - halfBatLen;
         float zSide = 130 - halfBatThick;
+
         if ((transform.position.x > xSide || transform.position.x < -xSide || transform.position.z < -zSide))
         {
 

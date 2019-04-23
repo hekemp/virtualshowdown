@@ -164,6 +164,7 @@ public class AudioManager : MonoBehaviour
 	/// <param name="clip">The clip to enqueue</param>
 	public void PlayNarration(AudioClip clip, AudioSettings clipSettings)
 	{
+        Debug.Log("Speaking " + clip.name);
 		_narratorQueue.Enqueue(clip);
         _narratorSettingsQueue.Enqueue(clipSettings);
 	}

@@ -5,6 +5,7 @@ using UnityEngine.Events;
 
 public class GoalScript : MonoBehaviour {
 
+    public bool isInDrillMode = true;
     public UnityEvent onPlayerGoalScore;
     public UnityEvent onOpponentGoalScore;
 
@@ -16,9 +17,20 @@ public class GoalScript : MonoBehaviour {
             {
                 onOpponentGoalScore.Invoke();
             }
-            if (gameObject.CompareTag("NorthGoal") && other.gameObject.GetComponent<BallScript>() != null && other.gameObject.GetComponent<BallScript>().ballHitOnce)
+            // this if should be only if drill mode
+            if (gameObject.CompareTag("NorthGoal") && other.gameObject.GetComponent<BallScript>() != null)
             {
-                onPlayerGoalScore.Invoke();
+                if (isInDrillMode)
+                {
+                    if (other.gameObject.GetComponent<BallScript>().ballHitOnce)
+                    {
+                        onPlayerGoalScore.Invoke();
+                    }
+                } else
+                {
+                    onPlayerGoalScore.Invoke();
+                }
+                
             }
         }
     }

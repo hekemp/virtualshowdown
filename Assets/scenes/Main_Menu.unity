@@ -397,6 +397,15 @@ MonoBehaviour:
   - {fileID: 2098531132}
   - {fileID: 881707698}
   NarratorAudioSource: {fileID: 87609705}
+  End1: {fileID: 1913534665}
+  End2: {fileID: 1913534665}
+  End3: {fileID: 1913534665}
+  End4: {fileID: 382932741}
+  End5: {fileID: 382932741}
+  Start1: {fileID: 382932741}
+  Start2: {fileID: 382932741}
+  Start3: {fileID: 382932741}
+  Guideline: {fileID: 382932741}
 --- !u!4 &382932743
 Transform:
   m_ObjectHideFlags: 0
@@ -1356,6 +1365,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1282365865}
   - component: {fileID: 1282365864}
+  - component: {fileID: 1282365866}
   m_Layer: 0
   m_Name: Joycon Manager
   m_TagString: Untagged
@@ -1389,6 +1399,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1282365866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1282365863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 303aa306d767ca34e9a43f54d9579083, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1452375288
 GameObject:
   m_ObjectHideFlags: 0

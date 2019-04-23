@@ -420,9 +420,15 @@ MonoBehaviour:
   wallHitSound: {fileID: 8300000, guid: 3c145c77d80e54f4b99430c9aed50c7b, type: 3}
   ballRollingSound: {fileID: 8300000, guid: 96c0cbafd70a6e04bbddf2231e283fc9, type: 3}
   hitPaddleSound: {fileID: 8300000, guid: 7fd0880b2ae3d504d92167ee75e88ad6, type: 3}
+  clickSound: {fileID: 0}
   farSideSnap: {fileID: 245765757212363544, guid: 1dd706bb85d8aef4e83a6229dbd62c36,
     type: 2}
   closeSideSnap: {fileID: 24500003, guid: 1dd706bb85d8aef4e83a6229dbd62c36, type: 2}
+  onBallCollisionEvent:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   ballHitOnce: 0
 --- !u!135 &135435362158440468
 SphereCollider:
