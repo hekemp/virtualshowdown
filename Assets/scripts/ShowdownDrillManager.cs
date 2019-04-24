@@ -169,6 +169,7 @@ public class ShowdownDrillManager : MonoBehaviour
     { 
         Debug.Log("Starting game");
         hasStartedGame = false;
+        CurrentState = GameState.Unstarted;
         //        ConfirmOptions();
         // TODO: Wait for experiment to start
 
@@ -176,6 +177,7 @@ public class ShowdownDrillManager : MonoBehaviour
 
     public void handleHandednessPrompt(bool shouldKeepSame)
     {
+        Debug.Log(CurrentState);
         if (CurrentState != GameState.Unstarted)
         {
             return;
@@ -204,22 +206,21 @@ public class ShowdownDrillManager : MonoBehaviour
 
     }
 
-    public IEnumerator explainDrill()
+    public void explainDrill()
     {
         if (CurrentState == GameState.HandednessSet)
         {
             // TODO: explain showdown drill 
         }
-        yield return null;
     }
 
-    public IEnumerator sayMenuOption()
+    public void sayMenuOption()
     {
         if (CurrentState == GameState.HandednessSet)
         {
             // TODO: say menu options for start menu / before ready
         }
-        yield return null;
+
     }
 
     public void ConfirmOptions()
