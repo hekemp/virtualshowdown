@@ -31,11 +31,13 @@ public class ShowdownManager : MonoBehaviour {
     private BallScript ballScript;
     private bool ballHasStartedMoving;
 
+    public BatAI opponentAI;
+
     private Coroutine checkStoppedBallPointCoroutine;
 
     public enum ShowdownGameState
     {
-        Unstarted, DifficultySet, Setup, SettingBall, BallSet, BallInPlay, GoalScored, GameOver
+        Unstarted, HandednessSet, DifficultySet, Setup, SettingBall, BallSet, BallInPlay, GoalScored, GameOver
     }
     public static ShowdownGameState currentGameState;
 
@@ -60,17 +62,82 @@ public class ShowdownManager : MonoBehaviour {
     void Start () {
 
         currentGameState = ShowdownGameState.Unstarted;
-        
-        currentGameState = ShowdownGameState.DifficultySet;
-        // TODO: wait for difficulty setter
-
-        currentGameState = ShowdownGameState.Setup;
-        // TODO: wait for configuration confirmation
-
-        StartCoroutine(setupGame());
-        
-		
+        Debug.Log("Unstarted");
+                
 	}
+
+    public void handleHandednessPrompt(bool shouldKeepSame)
+    {
+        if (currentGameState != ShowdownGameState.Unstarted)
+        {
+            return;
+        }
+
+        if (!shouldKeepSame) {
+            // they were right handed, so we should set them to be left handed
+           if (PreferenceManager.Instance.PlayerHandedness == Handedness.Right)
+            {
+                // TODO: vocally say this
+                Debug.Log("Now leftie");
+                PreferenceManager.Instance.PlayerHandedness = Handedness.Left;
+            }
+           else // they were left handed, so we should set them to be right handed
+            {
+                // TODO: vocally say this
+                Debug.Log("Now righty");
+                PreferenceManager.Instance.PlayerHandedness = Handedness.Right;
+            }
+        }
+
+        Debug.Log("HandednessSet");
+
+        currentGameState = ShowdownGameState.HandednessSet;
+
+    }
+
+    public void handleDifficultyPrompt(int difficulty)
+    {
+        if (currentGameState != ShowdownGameState.HandednessSet)
+        {
+            return;
+        }
+
+        opponentAI.updateDifficulty(difficulty);
+        Debug.Log("DifficultySet");
+        currentGameState = ShowdownGameState.DifficultySet;
+    }
+
+    public void ConfirmOptions()
+    {
+        Debug.Log("ready");
+        if (currentGameState == ShowdownGameState.DifficultySet)
+        {
+            // TODO: Do some other things if needed?
+            Debug.Log("Setting up game");
+            currentGameState = ShowdownGameState.Setup;
+            StartCoroutine(setupGame());
+        }
+    }
+
+    public IEnumerator explainShowdown()
+    {
+        if (currentGameState == ShowdownGameState.DifficultySet)
+        {
+            // TODO: explain showdown 
+        }
+        yield return null;
+    }
+
+    public IEnumerator sayMenuOption()
+    {
+        if (currentGameState == ShowdownGameState.DifficultySet)
+        {
+            // TODO: say menu options for start menu / before ready
+        }
+        yield return null;
+    }
+
+
 
     public void restartGame()
     {
@@ -219,6 +286,7 @@ public class ShowdownManager : MonoBehaviour {
         currentGameState = ShowdownGameState.GameOver;
         AudioManager.Instance.PlayNarration(playerWinClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
         yield return new WaitForSeconds(playerWinClip.length);
+        StartCoroutine(handleGameOver());
     }
 
     private IEnumerator opponentWins()
@@ -226,6 +294,13 @@ public class ShowdownManager : MonoBehaviour {
         currentGameState = ShowdownGameState.GameOver;
         AudioManager.Instance.PlayNarration(opponentWinClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
         yield return new WaitForSeconds(opponentWinClip.length);
+        StartCoroutine(handleGameOver());
+    }
+
+    private IEnumerator handleGameOver()
+    {
+        // TODO: add audio for game over
+        yield return null;
     }
 
     private bool isItGameOver()

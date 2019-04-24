@@ -31,6 +31,8 @@ public class ShowdownDrillManager : MonoBehaviour
     [Serializable]
     public enum GameState
     {
+        Unstarted,
+        HandednessSet,
         BallStart,
         BallYourSide,
         BallFinish,
@@ -172,13 +174,62 @@ public class ShowdownDrillManager : MonoBehaviour
 
     }
 
+    public void handleHandednessPrompt(bool shouldKeepSame)
+    {
+        if (CurrentState != GameState.Unstarted)
+        {
+            return;
+        }
+
+        if (!shouldKeepSame)
+        {
+            // they were right handed, so we should set them to be left handed
+            if (PreferenceManager.Instance.PlayerHandedness == Handedness.Right)
+            {
+                // TODO: vocally say this
+                Debug.Log("Now leftie");
+                PreferenceManager.Instance.PlayerHandedness = Handedness.Left;
+            }
+            else // they were left handed, so we should set them to be right handed
+            {
+                // TODO: vocally say this
+                Debug.Log("Now righty");
+                PreferenceManager.Instance.PlayerHandedness = Handedness.Right;
+            }
+        }
+
+        Debug.Log("HandednessSet");
+
+        CurrentState = GameState.HandednessSet;
+
+    }
+
+    public IEnumerator explainDrill()
+    {
+        if (CurrentState == GameState.HandednessSet)
+        {
+            // TODO: explain showdown drill 
+        }
+        yield return null;
+    }
+
+    public IEnumerator sayMenuOption()
+    {
+        if (CurrentState == GameState.HandednessSet)
+        {
+            // TODO: say menu options for start menu / before ready
+        }
+        yield return null;
+    }
+
     public void ConfirmOptions()
     {
         // TODO: add the methods for changing options
-        if (!hasStartedGame)
+        if (CurrentState == GameState.HandednessSet)
         {
             Debug.Log("Setting up experiment");
             hasStartedGame = true;
+            CurrentState = GameState.BallStart;
             SetupExperiment();
             StartCoroutine(CheckSixMinuteTimeLimit());
             StartCoroutine(KickBall());
@@ -214,7 +265,6 @@ public class ShowdownDrillManager : MonoBehaviour
         shouldAnnounceDetailedBallTrajectory = true;
         prevHits = new int[] { 0, 0, 0, 0, 0, 0 };
 
-        // TODO: Clock bullshit
 
         createBall(new Vector3(0, -2000, 0)); // TODO: Replace with start2? Currently way below the board
     }
