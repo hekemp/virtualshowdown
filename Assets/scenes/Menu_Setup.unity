@@ -392,6 +392,9 @@ MonoBehaviour:
       Culture=neutral, PublicKeyToken=null
   bodyAnnounced: 0
   multipleBodiesAnnounced: 0
+  narrationForQuestion: {fileID: 8300000, guid: a9ed6866029094e49a3f65e18d85b72c,
+    type: 3}
+  extraNarrationForQuestion: []
 --- !u!1 &260496814
 GameObject:
   m_ObjectHideFlags: 0
@@ -555,6 +558,14 @@ MonoBehaviour:
       Culture=neutral, PublicKeyToken=null
   bodyAnnounced: 0
   multipleBodiesAnnounced: 0
+  narrationForQuestion: {fileID: 8300000, guid: c28eabeeae3dd5347819024e2d334e22,
+    type: 3}
+  extraNarrationForQuestion:
+  - {fileID: 8300000, guid: 26d10cf11e0943d4f9e045a5c2e8d686, type: 3}
+  - {fileID: 8300000, guid: c252a55db91ce4242a5c3b818974167c, type: 3}
+  - {fileID: 8300000, guid: cab07018b6d00904b8e3ed2dfccaaea2, type: 3}
+  - {fileID: 8300000, guid: 1acf4dea672e005488ee9c7341e7f2bf, type: 3}
+  - {fileID: 8300000, guid: 26b6bfd625f404044bef2fbf12e9f70a, type: 3}
 --- !u!1 &382932741
 GameObject:
   m_ObjectHideFlags: 0
@@ -859,6 +870,9 @@ MonoBehaviour:
       Culture=neutral, PublicKeyToken=null
   bodyAnnounced: 0
   multipleBodiesAnnounced: 0
+  narrationForQuestion: {fileID: 8300000, guid: 6cd381f3b3f1a9b4d9aee467b9449657,
+    type: 3}
+  extraNarrationForQuestion: []
 --- !u!1 &651950235
 GameObject:
   m_ObjectHideFlags: 0
@@ -1469,6 +1483,8 @@ MonoBehaviour:
       Culture=neutral, PublicKeyToken=null
   bodyAnnounced: 0
   multipleBodiesAnnounced: 0
+  narrationForQuestion: {fileID: 0}
+  extraNarrationForQuestion: []
 --- !u!1 &1008088370
 GameObject:
   m_ObjectHideFlags: 0
@@ -2464,6 +2480,7 @@ MonoBehaviour:
   - {fileID: 222977325}
   - {fileID: 529672408}
   - {fileID: 315797226}
+  joyconSkipAudioClip: {fileID: 8300000, guid: 31f2c5299d108144ebfe09930d9cbf8e, type: 3}
 --- !u!1 &1588099779
 GameObject:
   m_ObjectHideFlags: 0
@@ -2991,6 +3008,11 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 114479872739058226, guid: e3908da46f3ba2944a712ba4f9e4774e,
+        type: 2}
+      propertyPath: narrationForQuestion
+      value: 
+      objectReference: {fileID: 8300000, guid: 6cd381f3b3f1a9b4d9aee467b9449657, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e3908da46f3ba2944a712ba4f9e4774e, type: 2}
   m_IsPrefabParent: 0
