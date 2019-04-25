@@ -109,7 +109,6 @@ public class ShowdownManager : MonoBehaviour {
         yield return new WaitForSeconds(narrationToRead.length);
 
         AudioManager.Instance.PlayNarrationImmediate(optionsToRead, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-        //yield return new WaitForSeconds(optionsToRead.length);
 
     }
 
@@ -136,7 +135,6 @@ public class ShowdownManager : MonoBehaviour {
             }
         }
 
-        Debug.Log("HandednessSet");
 
         playerHandednessText.text = PreferenceManager.Instance.PlayerHandedness == Handedness.Right ? "Hand: Right" : "Hand: Left";
 
@@ -154,6 +152,9 @@ public class ShowdownManager : MonoBehaviour {
             return;
         }
 
+        // For some reason the text doesn't update if i don't blank it out first.
+        // TODO: research why this is
+
         opponentDifficultyText.text = "";
 
         if (difficulty == 0)
@@ -170,7 +171,7 @@ public class ShowdownManager : MonoBehaviour {
         }
 
         opponentAI.updateDifficulty(difficulty);
-        Debug.Log("DifficultySet");
+
         currentGameState = ShowdownGameState.DifficultySet;
 
         StartCoroutine(sayMenuOption());
@@ -181,8 +182,6 @@ public class ShowdownManager : MonoBehaviour {
     {
         if (currentGameState == ShowdownGameState.DifficultySet)
         {
-            // TODO: Do some other things if needed?
-            Debug.Log("Setting up game");
             currentGameState = ShowdownGameState.Setup;
             StartCoroutine(setupGame());
         }
@@ -224,7 +223,6 @@ public class ShowdownManager : MonoBehaviour {
 
     public IEnumerator sayGameOverPrompts()
     {
-        // TODO: say
         if (currentGameState == ShowdownGameState.GameOver)
         {
             AudioManager.Instance.PlayNarration(toPlayAgainOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
@@ -279,8 +277,6 @@ public class ShowdownManager : MonoBehaviour {
         AudioManager.Instance.PlayNarrationImmediate(nowCalibratedAudioClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
         yield return new WaitForSeconds(nowCalibratedAudioClip.length);
 
-        Debug.Log("Ready to go!");
-
         currentGameState = ShowdownGameState.SettingBall;
         startGame();
     }
@@ -292,8 +288,7 @@ public class ShowdownManager : MonoBehaviour {
 
     private void startGame()
     {
-        // TODO: set up stuff for starting the game, if there even is any for here
-
+        // You can add more start game stuff here if more shows up
         StartCoroutine(serveBall());
         
     }
@@ -395,7 +390,6 @@ public class ShowdownManager : MonoBehaviour {
 
     private IEnumerator handleGameOver()
     {
-        // TODO: add audio for game over
         StartCoroutine(sayGameOverPrompts());
         yield return null;
     }
@@ -551,10 +545,9 @@ public class ShowdownManager : MonoBehaviour {
         }
         else if (currentGameState == ShowdownGameState.BallInPlay)
         {
-            Debug.Log((ballScript.GetComponent<Rigidbody>().velocity.magnitude));
             if (ballScript.GetComponent<Rigidbody>().velocity.magnitude < 8)
             {
-                if (checkStoppedBallPointCoroutine == null & ballHasStartedMoving)
+                if (checkStoppedBallPointCoroutine == null && ballHasStartedMoving)
                 {
                     checkStoppedBallPointCoroutine = StartCoroutine(CheckForBallStopPoints());
                 }

@@ -62,4 +62,9 @@ public class KinectAudioParser : MonoBehaviour
     {
 
     }
+
+    private void OnDestroy()
+    {
+        _keywordRecognizer.Dispose();
+    }
 }

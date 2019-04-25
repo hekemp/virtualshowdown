@@ -3435,6 +3435,32 @@ MonoBehaviour:
   toClip: {fileID: 8300000, guid: 1bdf7267247312e4dbb517a6947e61a7, type: 3}
   moveLeftClip: {fileID: 8300000, guid: 8182a8b6daf68b24dbfb0375c6ac63b0, type: 3}
   moveRightClip: {fileID: 8300000, guid: 7e71ebfb8e6455e4cb78b600e5c52c77, type: 3}
+  welcomeToShowdownDrillClip: {fileID: 8300000, guid: dc04fe44d27e1724aafd3a360092b7b2,
+    type: 3}
+  currentlyLeftHandedClip: {fileID: 8300000, guid: 1ad8d3d9cd312964783aedf26b9a9509,
+    type: 3}
+  currentlyRightHandedClip: {fileID: 8300000, guid: 2a40db57908417546a8d18e2c6af9575,
+    type: 3}
+  handednessOptionsForLeftyClip: {fileID: 8300000, guid: 47ae709bbe0b3c14ebb84aef4bf86f19,
+    type: 3}
+  handednessOptionsForRightyClip: {fileID: 8300000, guid: 8cd565ec9a45699419fa32afa9ac509b,
+    type: 3}
+  nowSetToLefty: {fileID: 8300000, guid: 150469b253b49ad449abb347e24dc7e2, type: 3}
+  nowSetToRightyClip: {fileID: 8300000, guid: 690b7c6853753c244ad1f1af7d969f37, type: 3}
+  quitByMainMenuOptionClip: {fileID: 8300000, guid: 3fcafac8861ded54a95bcc851b543fbf,
+    type: 3}
+  restartGameOptionClip: {fileID: 8300000, guid: 411f437227fd1614288c2bb59abefa87,
+    type: 3}
+  explainDrillOptionClip: {fileID: 8300000, guid: f918cb0b50622a641a86a49160ef6821,
+    type: 3}
+  explainDrillClip: {fileID: 8300000, guid: 893e20714900db543b22efdd1da197d5, type: 3}
+  repeatOptionClip: {fileID: 8300000, guid: 6b02beef45d250943b083f426d54b6c8, type: 3}
+  readyOptionClip: {fileID: 8300000, guid: 034c8efd0238cc946a2befdecdfc9c28, type: 3}
+  yourFinalScoreWas: {fileID: 8300000, guid: 4d5b72762eca7a4479e290d3fa4f4a11, type: 3}
+  toPlayAgainOptionClip: {fileID: 8300000, guid: ca515c350ed49f04688aca5521cdf413,
+    type: 3}
+  goToMainMenuOptionClip: {fileID: 8300000, guid: a7fa05065a93ecc4f810e4bc9e889283,
+    type: 3}
   ballAndPosText: {fileID: 572556930}
   clockText: {fileID: 1322502142}
   CurrentState: 3

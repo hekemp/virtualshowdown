@@ -37,6 +37,7 @@ public class ShowdownDrillManager : MonoBehaviour
         BallYourSide,
         BallFinish,
         BallInactive,
+        GameOver,
     }
 
     private enum HintLength { full, shortLen, nonspatial }
@@ -110,6 +111,25 @@ public class ShowdownDrillManager : MonoBehaviour
     //public AudioClip rightClip; // .67
     public AudioClip moveLeftClip; // 1 v
     public AudioClip moveRightClip; // .67 v
+
+    public AudioClip welcomeToShowdownDrillClip;
+    public AudioClip currentlyLeftHandedClip;
+    public AudioClip currentlyRightHandedClip;
+    public AudioClip handednessOptionsForLeftyClip;
+    public AudioClip handednessOptionsForRightyClip;
+    public AudioClip nowSetToLefty;
+    public AudioClip nowSetToRightyClip;
+
+    public AudioClip quitByMainMenuOptionClip;
+    public AudioClip restartGameOptionClip;
+    public AudioClip explainDrillOptionClip;
+    public AudioClip explainDrillClip;
+    public AudioClip repeatOptionClip;
+    public AudioClip readyOptionClip;
+
+    public AudioClip yourFinalScoreWas;
+    public AudioClip toPlayAgainOptionClip;
+    public AudioClip goToMainMenuOptionClip;
     #endregion
 
     // UI
@@ -170,14 +190,39 @@ public class ShowdownDrillManager : MonoBehaviour
         Debug.Log("Starting game");
         hasStartedGame = false;
         CurrentState = GameState.Unstarted;
-        //        ConfirmOptions();
-        // TODO: Wait for experiment to start
+
+        StartCoroutine(startNarration());
+
+    }
+
+    IEnumerator startNarration()
+    {
+        AudioManager.Instance.PlayNarrationImmediate(welcomeToShowdownDrillClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+        yield return new WaitForSeconds(welcomeToShowdownDrillClip.length);
+
+        AudioClip narrationToRead;
+        AudioClip optionsToRead;
+        if (PreferenceManager.Instance.PlayerHandedness == Handedness.Left)
+        {
+            narrationToRead = currentlyLeftHandedClip;
+            optionsToRead = handednessOptionsForLeftyClip;
+        }
+        else
+        {
+            narrationToRead = currentlyRightHandedClip;
+            optionsToRead = handednessOptionsForRightyClip;
+        }
+
+        AudioManager.Instance.PlayNarrationImmediate(narrationToRead, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+        yield return new WaitForSeconds(narrationToRead.length);
+
+        AudioManager.Instance.PlayNarrationImmediate(optionsToRead, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
 
     }
 
     public void handleHandednessPrompt(bool shouldKeepSame)
     {
-        Debug.Log(CurrentState);
+
         if (CurrentState != GameState.Unstarted)
         {
             return;
@@ -188,21 +233,20 @@ public class ShowdownDrillManager : MonoBehaviour
             // they were right handed, so we should set them to be left handed
             if (PreferenceManager.Instance.PlayerHandedness == Handedness.Right)
             {
-                // TODO: vocally say this
-                Debug.Log("Now leftie");
+                AudioManager.Instance.PlayNarrationImmediate(nowSetToLefty, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+
                 PreferenceManager.Instance.PlayerHandedness = Handedness.Left;
             }
             else // they were left handed, so we should set them to be right handed
             {
-                // TODO: vocally say this
-                Debug.Log("Now righty");
+                AudioManager.Instance.PlayNarrationImmediate(nowSetToRightyClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+
                 PreferenceManager.Instance.PlayerHandedness = Handedness.Right;
             }
         }
 
-        Debug.Log("HandednessSet");
-
         CurrentState = GameState.HandednessSet;
+        sayMenuOption();
 
     }
 
@@ -210,7 +254,8 @@ public class ShowdownDrillManager : MonoBehaviour
     {
         if (CurrentState == GameState.HandednessSet)
         {
-            // TODO: explain showdown drill 
+            AudioManager.Instance.PlayNarrationImmediate(explainDrillClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+
         }
     }
 
@@ -218,9 +263,35 @@ public class ShowdownDrillManager : MonoBehaviour
     {
         if (CurrentState == GameState.HandednessSet)
         {
-            // TODO: say menu options for start menu / before ready
+            AudioManager.Instance.PlayNarrationImmediate(quitByMainMenuOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+            AudioManager.Instance.PlayNarration(restartGameOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+            AudioManager.Instance.PlayNarration(explainDrillOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+            AudioManager.Instance.PlayNarration(repeatOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+            AudioManager.Instance.PlayNarration(readyOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
         }
 
+    }
+
+
+    public void playGameOverNarration()
+    {
+        if (CurrentState == GameState.GameOver) {
+        AudioManager.Instance.PlayNarration(toPlayAgainOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+        AudioManager.Instance.PlayNarration(goToMainMenuOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+        AudioManager.Instance.PlayNarration(repeatOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+        }
+    }
+
+    public void repeatOptions()
+    {
+
+        if (CurrentState == GameState.HandednessSet) {
+            sayMenuOption();
+        }
+        if (CurrentState == GameState.GameOver)
+        {
+            playGameOverNarration();
+        }
     }
 
     public void ConfirmOptions()
@@ -228,6 +299,7 @@ public class ShowdownDrillManager : MonoBehaviour
         // TODO: add the methods for changing options
         if (CurrentState == GameState.HandednessSet)
         {
+            AudioManager.Instance.StopAllNarration();
             Debug.Log("Setting up experiment");
             hasStartedGame = true;
             CurrentState = GameState.BallStart;
@@ -878,7 +950,14 @@ public class ShowdownDrillManager : MonoBehaviour
 
     private IEnumerator handleGameOver()
     {
+        CurrentState = GameState.GameOver;
         Debug.Log("Game over!");
+        AudioManager.Instance.PlayNarration(yourFinalScoreWas, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+        yield return new WaitForSeconds(yourFinalScoreWas.length);
+
+        yield return NumberSpeech.Instance.PlayExpPointsAudio(gamePoints);
+
+        playGameOverNarration();
         yield return null;
     }
 
