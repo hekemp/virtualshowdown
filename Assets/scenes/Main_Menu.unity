@@ -1521,6 +1521,21 @@ MonoBehaviour:
   ShowdownDrillBtn: {fileID: 1112154414}
   ShowdownBtn: {fileID: 1084049125}
   PreferencesBtn: {fileID: 1088257582}
+  welcomeSFXClip: {fileID: 8300000, guid: 5e7e69fff93e23a4c9b283ebc87525f9, type: 3}
+  welcomeClip: {fileID: 8300000, guid: f8becd8916b476e44ae1d880159757e8, type: 3}
+  readShowdownOptionClip: {fileID: 8300000, guid: 022cca0fcbecaaa4aa7a01f4995cf605,
+    type: 3}
+  readDrillOptionClip: {fileID: 8300000, guid: c1f48918cbf28c54c99a9bd7858a753a, type: 3}
+  readPreferencesOptionClip: {fileID: 8300000, guid: e26468c784f7a524394a96f11093bf7e,
+    type: 3}
+  readExplainShowdownOptionClip: {fileID: 8300000, guid: d5b7fe59e75e43c49a7c85a708c65ba7,
+    type: 3}
+  readExplainDrillOptionClip: {fileID: 8300000, guid: b2c9e127bb1576348b42ca4d83b925ff,
+    type: 3}
+  readRepeatOptionClip: {fileID: 8300000, guid: c443e48dfe64c964cbd05d085bb9de8e,
+    type: 3}
+  explainShowdownClip: {fileID: 8300000, guid: acfd5c76075f2c542b03c7d258e716d8, type: 3}
+  explainDrillClip: {fileID: 8300000, guid: 893e20714900db543b22efdd1da197d5, type: 3}
 --- !u!1 &1708147810
 GameObject:
   m_ObjectHideFlags: 0
@@ -1766,63 +1781,80 @@ MonoBehaviour:
           m_CallState: 2
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-  - keyword: Showdown Drill
-    action:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1452375293}
-          m_MethodName: StartDrillMode
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-  - keyword: Preference
-    action:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1452375293}
-          m_MethodName: StartPreferencesMenu
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-  - keyword: Update Preferences
-    action:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1452375293}
-          m_MethodName: StartPreferencesMenu
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
   - keyword: Drill
     action:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 1452375293}
           m_MethodName: StartDrillMode
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - keyword: Preferences
+    action:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1452375293}
+          m_MethodName: StartPreferencesMenu
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - keyword: What is Showdown
+    action:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1452375293}
+          m_MethodName: explainShowdown
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - keyword: What is Drill
+    action:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1452375293}
+          m_MethodName: explainDrill
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - keyword: Repeat
+    action:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1452375293}
+          m_MethodName: playOptionsAgain
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}

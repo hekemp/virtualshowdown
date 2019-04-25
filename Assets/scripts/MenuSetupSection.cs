@@ -176,6 +176,7 @@ public class MenuSetupSection : MonoBehaviour
 		}
 	}
 
+
 	void Finish()
 	{
 //		foreach (var btn in Buttons)
