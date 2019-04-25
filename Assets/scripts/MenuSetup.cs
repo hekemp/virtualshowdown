@@ -10,6 +10,8 @@ public class MenuSetup : MonoBehaviour
     public  List<MenuSetupSection> Sections;
 	private int _activeSection = 0;
 
+    public AudioClip joyconSkipAudioClip;
+
 	// Use this for initialization
 	void Start () {
 		foreach (var section in Sections)
@@ -54,7 +56,9 @@ public class MenuSetup : MonoBehaviour
         // If the next section is for the controller rumble but we don't have a controller attatched, we can skip the rumble setting
         if ((Sections[_activeSection].Section == MenuSetupSectionType.ControllerRumble) && (!JoyconController.CheckJoyconAvail()))
 		{
-			_activeSection += 1;
+            AudioManager.Instance.PlayNarrationImmediate(joyconSkipAudioClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+
+            _activeSection += 1;
 			PreferenceManager.Instance.ControllerRumble = false;
 		}
 		SetSections();
