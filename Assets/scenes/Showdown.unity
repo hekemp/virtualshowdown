@@ -441,7 +441,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 684376966}
-          m_MethodName: 
+          m_MethodName: readPrompts
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -458,7 +458,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 684376966}
-          m_MethodName: 
+          m_MethodName: explainShowdown
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -1341,6 +1341,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreText: {fileID: 61980804}
+  opponentDifficultyText: {fileID: 674190836}
+  playerHandednessText: {fileID: 984922027}
   playerPointClip: {fileID: 8300000, guid: 36f4371d7d166c1469dab3c6754b3198, type: 3}
   opponentPointClip: {fileID: 8300000, guid: 842d5fa66a2f05142b3583113e7c33c7, type: 3}
   playerServeClip: {fileID: 8300000, guid: 46fce3b854ffc8e42903cef9ee9c2dd9, type: 3}
@@ -1358,6 +1360,33 @@ MonoBehaviour:
     type: 3}
   playerPaddle: {fileID: 618168922}
   BallPrefab: {fileID: 1988242986954202, guid: 00401e9af8e7daf41b18abe67b428a6a, type: 2}
+  welcomeToShowdownClip: {fileID: 8300000, guid: 6227eaed74e4f204583ec68645b0c069,
+    type: 3}
+  currentlyLeftHandedClip: {fileID: 8300000, guid: 1ad8d3d9cd312964783aedf26b9a9509,
+    type: 3}
+  currentlyRightHandedClip: {fileID: 8300000, guid: 2a40db57908417546a8d18e2c6af9575,
+    type: 3}
+  handednessOptionsForLeftyClip: {fileID: 8300000, guid: 47ae709bbe0b3c14ebb84aef4bf86f19,
+    type: 3}
+  handednessOptionsForRightyClip: {fileID: 8300000, guid: 8cd565ec9a45699419fa32afa9ac509b,
+    type: 3}
+  nowSetToLefty: {fileID: 8300000, guid: 150469b253b49ad449abb347e24dc7e2, type: 3}
+  nowSetToRightyClip: {fileID: 8300000, guid: 690b7c6853753c244ad1f1af7d969f37, type: 3}
+  opponentDifficultyPromptClip: {fileID: 8300000, guid: 496684db97cfe974d88f5bf233d9ee31,
+    type: 3}
+  quitByMainMenuOptionClip: {fileID: 8300000, guid: caaa5506641738b47aa761a6b34fc3b2,
+    type: 3}
+  restartGameOptionClip: {fileID: 8300000, guid: c678daf5b0a155141968398df80eb734,
+    type: 3}
+  explainShowdownOptionClip: {fileID: 8300000, guid: 4e0302b5ce0aa2e46b05dd28611e21c6,
+    type: 3}
+  explainShowdownClip: {fileID: 8300000, guid: ee9f4aa339b5d5c4d8ce9ecf2293f6da, type: 3}
+  repeatOptionClip: {fileID: 8300000, guid: 6b02beef45d250943b083f426d54b6c8, type: 3}
+  readyOptionClip: {fileID: 8300000, guid: 034c8efd0238cc946a2befdecdfc9c28, type: 3}
+  toPlayAgainOptionClip: {fileID: 8300000, guid: ca515c350ed49f04688aca5521cdf413,
+    type: 3}
+  goToMainMenuOptionClip: {fileID: 8300000, guid: a7fa05065a93ecc4f810e4bc9e889283,
+    type: 3}
   opponentAI: {fileID: 9267671}
 --- !u!4 &684376967
 Transform:
@@ -1561,10 +1590,10 @@ RectTransform:
   m_Father: {fileID: 2056372693}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0, y: -58.5}
+  m_SizeDelta: {x: 200, y: 41.5}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &798967774
 MonoBehaviour:
@@ -1917,10 +1946,10 @@ RectTransform:
   m_Father: {fileID: 2056372693}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 100, y: -24.25}
+  m_SizeDelta: {x: 200, y: 48.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &934088144
 MonoBehaviour:
@@ -2158,7 +2187,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1267146784
 MonoBehaviour:
   m_ObjectHideFlags: 0

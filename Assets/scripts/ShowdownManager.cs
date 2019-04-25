@@ -6,6 +6,9 @@ using UnityEngine.SceneManagement;
 public class ShowdownManager : MonoBehaviour {
 
     public TextMesh scoreText;
+    public TextMesh opponentDifficultyText;
+    public TextMesh playerHandednessText;
+
     private int playerScore;
     private int opponentScore;
 
@@ -30,6 +33,25 @@ public class ShowdownManager : MonoBehaviour {
     private GameObject ball;
     private BallScript ballScript;
     private bool ballHasStartedMoving;
+
+    public AudioClip welcomeToShowdownClip;
+    public AudioClip currentlyLeftHandedClip;
+    public AudioClip currentlyRightHandedClip;
+    public AudioClip handednessOptionsForLeftyClip;
+    public AudioClip handednessOptionsForRightyClip;
+    public AudioClip nowSetToLefty;
+    public AudioClip nowSetToRightyClip;
+    public AudioClip opponentDifficultyPromptClip;
+
+    public AudioClip quitByMainMenuOptionClip;
+    public AudioClip restartGameOptionClip;
+    public AudioClip explainShowdownOptionClip;
+    public AudioClip explainShowdownClip;
+    public AudioClip repeatOptionClip;
+    public AudioClip readyOptionClip;
+
+    public AudioClip toPlayAgainOptionClip;
+    public AudioClip goToMainMenuOptionClip;
 
     public BatAI opponentAI;
 
@@ -57,14 +79,39 @@ public class ShowdownManager : MonoBehaviour {
         }
     }
 
-    // TODO: Difficulty getters/setters
     // Use this for initialization
     void Start () {
 
         currentGameState = ShowdownGameState.Unstarted;
         Debug.Log("Unstarted");
-                
+
+        StartCoroutine(startNarration());
 	}
+
+    IEnumerator startNarration()
+    {
+        AudioManager.Instance.PlayNarrationImmediate(welcomeToShowdownClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+        yield return new WaitForSeconds(welcomeToShowdownClip.length);
+
+        AudioClip narrationToRead;
+        AudioClip optionsToRead;
+        if (PreferenceManager.Instance.PlayerHandedness == Handedness.Left)
+        {
+            narrationToRead = currentlyLeftHandedClip;
+            optionsToRead = handednessOptionsForLeftyClip;
+        } else
+        {
+            narrationToRead = currentlyRightHandedClip;
+            optionsToRead = handednessOptionsForRightyClip;
+        }
+
+        AudioManager.Instance.PlayNarrationImmediate(narrationToRead, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+        yield return new WaitForSeconds(narrationToRead.length);
+
+        AudioManager.Instance.PlayNarrationImmediate(optionsToRead, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+        //yield return new WaitForSeconds(optionsToRead.length);
+
+    }
 
     public void handleHandednessPrompt(bool shouldKeepSame)
     {
@@ -77,21 +124,26 @@ public class ShowdownManager : MonoBehaviour {
             // they were right handed, so we should set them to be left handed
            if (PreferenceManager.Instance.PlayerHandedness == Handedness.Right)
             {
-                // TODO: vocally say this
-                Debug.Log("Now leftie");
+                AudioManager.Instance.PlayNarrationImmediate(nowSetToLefty, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+
                 PreferenceManager.Instance.PlayerHandedness = Handedness.Left;
             }
            else // they were left handed, so we should set them to be right handed
             {
-                // TODO: vocally say this
-                Debug.Log("Now righty");
+                AudioManager.Instance.PlayNarrationImmediate(nowSetToRightyClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+
                 PreferenceManager.Instance.PlayerHandedness = Handedness.Right;
             }
         }
 
         Debug.Log("HandednessSet");
 
+        playerHandednessText.text = PreferenceManager.Instance.PlayerHandedness == Handedness.Right ? "Hand: Right" : "Hand: Left";
+
+
         currentGameState = ShowdownGameState.HandednessSet;
+
+        AudioManager.Instance.PlayNarration(opponentDifficultyPromptClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
 
     }
 
@@ -102,14 +154,31 @@ public class ShowdownManager : MonoBehaviour {
             return;
         }
 
+        opponentDifficultyText.text = "";
+
+        if (difficulty == 0)
+        {
+            opponentDifficultyText.text = "Difficulty: Easy";
+
+        } else if (difficulty == 1)
+        {
+            opponentDifficultyText.text = "Difficulty: Medium";
+
+        } else // difficulty == 2 / hard mode
+        {
+            opponentDifficultyText.text = "Difficulty: Hard";
+        }
+
         opponentAI.updateDifficulty(difficulty);
         Debug.Log("DifficultySet");
         currentGameState = ShowdownGameState.DifficultySet;
+
+        StartCoroutine(sayMenuOption());
+
     }
 
     public void ConfirmOptions()
     {
-        Debug.Log("ready");
         if (currentGameState == ShowdownGameState.DifficultySet)
         {
             // TODO: Do some other things if needed?
@@ -119,24 +188,51 @@ public class ShowdownManager : MonoBehaviour {
         }
     }
 
-    public IEnumerator explainShowdown()
+    public void explainShowdown()
     {
         if (currentGameState == ShowdownGameState.DifficultySet)
         {
-            // TODO: explain showdown 
+            AudioManager.Instance.PlayNarrationImmediate(explainShowdownClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
         }
-        yield return null;
     }
 
     public IEnumerator sayMenuOption()
     {
         if (currentGameState == ShowdownGameState.DifficultySet)
         {
-            // TODO: say menu options for start menu / before ready
+            AudioManager.Instance.PlayNarration(quitByMainMenuOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+            AudioManager.Instance.PlayNarration(restartGameOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+            AudioManager.Instance.PlayNarration(explainShowdownOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+            AudioManager.Instance.PlayNarration(repeatOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+            AudioManager.Instance.PlayNarration(readyOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
         }
         yield return null;
     }
 
+    // using if switch to reuse for repeat command
+    public void readPrompts()
+    {
+        if (currentGameState == ShowdownGameState.DifficultySet)
+        {
+            StartCoroutine(sayMenuOption());
+        }
+        if (currentGameState == ShowdownGameState.GameOver)
+        {
+            StartCoroutine(sayGameOverPrompts());
+        }
+    }
+
+    public IEnumerator sayGameOverPrompts()
+    {
+        // TODO: say
+        if (currentGameState == ShowdownGameState.GameOver)
+        {
+            AudioManager.Instance.PlayNarration(toPlayAgainOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+            AudioManager.Instance.PlayNarration(goToMainMenuOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+            AudioManager.Instance.PlayNarration(repeatOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+        }
+        yield return null;
+    }
 
 
     public void restartGame()
@@ -180,7 +276,7 @@ public class ShowdownManager : MonoBehaviour {
             PaddleScript.CenterX = BodySourceManager.Instance.baseKinectPosition.X;
         }
 
-        AudioManager.Instance.PlayNarration(nowCalibratedAudioClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+        AudioManager.Instance.PlayNarrationImmediate(nowCalibratedAudioClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
         yield return new WaitForSeconds(nowCalibratedAudioClip.length);
 
         Debug.Log("Ready to go!");
@@ -300,6 +396,7 @@ public class ShowdownManager : MonoBehaviour {
     private IEnumerator handleGameOver()
     {
         // TODO: add audio for game over
+        StartCoroutine(sayGameOverPrompts());
         yield return null;
     }
 
