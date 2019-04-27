@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657934, g: 0.4964134, b: 0.5748173, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657958, g: 0.49641377, b: 0.57481766, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -2587,8 +2587,8 @@ MonoBehaviour:
   congratsClip: {fileID: 8300000, guid: 41a02c0132d0fed4aa63c57a0bffc6e6, type: 3}
   lostClip: {fileID: 8300000, guid: 61c2740b5e3dd0849a459acf56b54cfb, type: 3}
   thanksClip: {fileID: 8300000, guid: b21aa6b9381137f4c8e6d7e089d78fae, type: 3}
-  welcomeClip: {fileID: 8300000, guid: 4754ad372717f58459e32be53b95b6fe, type: 3}
-  welcomeMusicClip: {fileID: 8300000, guid: f8becd8916b476e44ae1d880159757e8, type: 3}
+  welcomeClip: {fileID: 8300000, guid: dc04fe44d27e1724aafd3a360092b7b2, type: 3}
+  welcomeMusicClip: {fileID: 8300000, guid: 5e7e69fff93e23a4c9b283ebc87525f9, type: 3}
   multiplesOf10From20To90Clips:
   - {fileID: 8300000, guid: 7bac3a043d0b1bd4482f650d697404f6, type: 3}
   - {fileID: 8300000, guid: 5cdda16ff6b89f540a7d263300e1909b, type: 3}
