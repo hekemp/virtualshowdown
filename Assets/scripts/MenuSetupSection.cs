@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
+using UnityEngine.EventSystems;
 
 public enum MenuSetupSectionType
 {
@@ -25,7 +26,10 @@ public class MenuSetupSection : MonoBehaviour
 	public bool bodyAnnounced = false;
     public bool multipleBodiesAnnounced = false;
 
+	public EventSystem es;
+
     public AudioClip narrationForQuestion;
+
 
     // Extra Array for Kinect Feedback Clips
     public AudioClip[] extraNarrationForQuestion;
@@ -51,6 +55,7 @@ public class MenuSetupSection : MonoBehaviour
 					lefthandBtn.onClick.AddListener(OnLeftHandSelected);
 					var righthandBtn = Buttons[1].GetComponent<Button>();
 					righthandBtn.onClick.AddListener(OnRightHandSelected);
+					
                     break;
 				case MenuSetupSectionType.ControllerRumble:
 					var rumbleButton = Buttons[0].GetComponent<Button>();
@@ -157,6 +162,7 @@ public class MenuSetupSection : MonoBehaviour
 
     public void OnQuestionShown()
 	{
+		es.SetSelectedGameObject(Buttons[0]);
         switch (Section)
 		{
 			case MenuSetupSectionType.Handedness:
