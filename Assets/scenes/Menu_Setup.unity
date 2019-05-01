@@ -170,7 +170,7 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_HighlightedColor: {r: 0.4627451, g: 0.6901961, b: 0.85490197, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -392,6 +392,7 @@ MonoBehaviour:
       Culture=neutral, PublicKeyToken=null
   bodyAnnounced: 0
   multipleBodiesAnnounced: 0
+  es: {fileID: 1096916000}
   narrationForQuestion: {fileID: 8300000, guid: a9ed6866029094e49a3f65e18d85b72c,
     type: 3}
   extraNarrationForQuestion: []
@@ -558,6 +559,7 @@ MonoBehaviour:
       Culture=neutral, PublicKeyToken=null
   bodyAnnounced: 0
   multipleBodiesAnnounced: 0
+  es: {fileID: 1096916000}
   narrationForQuestion: {fileID: 8300000, guid: c28eabeeae3dd5347819024e2d334e22,
     type: 3}
   extraNarrationForQuestion:
@@ -680,7 +682,7 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_HighlightedColor: {r: 0.4627451, g: 0.6901961, b: 0.85490197, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -870,6 +872,7 @@ MonoBehaviour:
       Culture=neutral, PublicKeyToken=null
   bodyAnnounced: 0
   multipleBodiesAnnounced: 0
+  es: {fileID: 1096916000}
   narrationForQuestion: {fileID: 8300000, guid: 6cd381f3b3f1a9b4d9aee467b9449657,
     type: 3}
   extraNarrationForQuestion: []
@@ -933,7 +936,7 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_HighlightedColor: {r: 0.4627451, g: 0.6901961, b: 0.85490197, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -1483,6 +1486,7 @@ MonoBehaviour:
       Culture=neutral, PublicKeyToken=null
   bodyAnnounced: 0
   multipleBodiesAnnounced: 0
+  es: {fileID: 0}
   narrationForQuestion: {fileID: 0}
   extraNarrationForQuestion: []
 --- !u!1 &1008088370
@@ -1683,6 +1687,7 @@ GameObject:
   - component: {fileID: 1084049127}
   - component: {fileID: 1084049126}
   - component: {fileID: 1084049125}
+  - component: {fileID: 1084049128}
   m_Layer: 5
   m_Name: Left-Handed Btn
   m_TagString: Untagged
@@ -1729,7 +1734,7 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_HighlightedColor: {r: 0.4627451, g: 0.6901961, b: 0.85490197, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -1783,6 +1788,18 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1084049123}
+--- !u!114 &1084049128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1084049123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e439c4795c2cd4404bd21115d6d1661e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverAudioClip: {fileID: 8300000, guid: c76e49cdbf5a20446a3e6fcc2ada72d3, type: 3}
 --- !u!1 &1096915998
 GameObject:
   m_ObjectHideFlags: 0
@@ -1930,6 +1947,7 @@ GameObject:
   - component: {fileID: 1112154416}
   - component: {fileID: 1112154415}
   - component: {fileID: 1112154414}
+  - component: {fileID: 1112154417}
   m_Layer: 5
   m_Name: Right-Handed Btn
   m_TagString: Untagged
@@ -1976,7 +1994,7 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_HighlightedColor: {r: 0.46410033, g: 0.6920414, b: 0.85294116, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -2030,6 +2048,18 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1112154412}
+--- !u!114 &1112154417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1112154412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e439c4795c2cd4404bd21115d6d1661e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverAudioClip: {fileID: 8300000, guid: 37da96ac8f0f14a4193f48c19977cc81, type: 3}
 --- !u!1 &1149537694
 GameObject:
   m_ObjectHideFlags: 0
@@ -2257,7 +2287,7 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_HighlightedColor: {r: 0.4627451, g: 0.6901961, b: 0.85490197, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -2855,7 +2885,7 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_HighlightedColor: {r: 0.4627451, g: 0.6901961, b: 0.85490197, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -3013,6 +3043,41 @@ Prefab:
       propertyPath: narrationForQuestion
       value: 
       objectReference: {fileID: 8300000, guid: 6cd381f3b3f1a9b4d9aee467b9449657, type: 3}
+    - target: {fileID: 114479872739058226, guid: e3908da46f3ba2944a712ba4f9e4774e,
+        type: 2}
+      propertyPath: es
+      value: 
+      objectReference: {fileID: 1096916000}
+    - target: {fileID: 114720551074226092, guid: e3908da46f3ba2944a712ba4f9e4774e,
+        type: 2}
+      propertyPath: m_Colors.m_HighlightedColor.r
+      value: 0.4627451
+      objectReference: {fileID: 0}
+    - target: {fileID: 114720551074226092, guid: e3908da46f3ba2944a712ba4f9e4774e,
+        type: 2}
+      propertyPath: m_Colors.m_HighlightedColor.g
+      value: 0.6901961
+      objectReference: {fileID: 0}
+    - target: {fileID: 114720551074226092, guid: e3908da46f3ba2944a712ba4f9e4774e,
+        type: 2}
+      propertyPath: m_Colors.m_HighlightedColor.b
+      value: 0.85490197
+      objectReference: {fileID: 0}
+    - target: {fileID: 114920926152027748, guid: e3908da46f3ba2944a712ba4f9e4774e,
+        type: 2}
+      propertyPath: m_Colors.m_HighlightedColor.r
+      value: 0.4627451
+      objectReference: {fileID: 0}
+    - target: {fileID: 114920926152027748, guid: e3908da46f3ba2944a712ba4f9e4774e,
+        type: 2}
+      propertyPath: m_Colors.m_HighlightedColor.g
+      value: 0.6901961
+      objectReference: {fileID: 0}
+    - target: {fileID: 114920926152027748, guid: e3908da46f3ba2944a712ba4f9e4774e,
+        type: 2}
+      propertyPath: m_Colors.m_HighlightedColor.b
+      value: 0.85490197
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e3908da46f3ba2944a712ba4f9e4774e, type: 2}
   m_IsPrefabParent: 0
