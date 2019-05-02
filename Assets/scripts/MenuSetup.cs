@@ -6,6 +6,15 @@ using UnityEngine.SceneManagement;
 
 public class MenuSetup : MonoBehaviour
 {
+
+	public enum MenuType
+	{
+		Preferences,
+		PreDrillMode,
+		PreShowdownMode,
+	}
+
+	public MenuType CurrentMenuType;
     public KinectAudioParser AudioParser;
     public  List<MenuSetupSection> Sections;
 	private int _activeSection = 0;
@@ -42,6 +51,7 @@ public class MenuSetup : MonoBehaviour
         Debug.Log(_activeSection);
 		Sections[_activeSection].gameObject.SetActive(true);
 		Sections[_activeSection].OnQuestionShown();
+		Sections[_activeSection].CurrentMenuType = CurrentMenuType;
 	}
 
 	public void GoToNextSection()
@@ -49,9 +59,22 @@ public class MenuSetup : MonoBehaviour
 		_activeSection += 1;
         if (_activeSection >= Sections.Count)
         {
-            SceneManager.LoadScene("Main_Menu");
-            _activeSection = 0;
-            return;
+			Debug.Log (" final section");
+			if (MenuType.Preferences == CurrentMenuType) {
+				SceneManager.LoadScene ("Main_Menu");
+			} 
+			if (MenuType.PreDrillMode == CurrentMenuType) {
+				this.gameObject.SetActive(false);
+				ShowdownDrillManager.Instance.ConfirmOptions ();
+			} 
+			if (MenuType.PreShowdownMode == CurrentMenuType) {
+				this.gameObject.SetActive(false);
+				ShowdownManager.Instance.ConfirmOptions ();
+			} 
+
+			//_activeSection = 0;
+			return;
+			
         }
         // If the next section is for the controller rumble but we don't have a controller attatched, we can skip the rumble setting
         if ((Sections[_activeSection].Section == MenuSetupSectionType.ControllerRumble) && (!JoyconController.CheckJoyconAvail()))

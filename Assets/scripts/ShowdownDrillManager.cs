@@ -136,7 +136,7 @@ public class ShowdownDrillManager : MonoBehaviour
     public Text ballAndPosText;
     public Text clockText;
 
-    public GameState CurrentState;
+    public static GameState CurrentState;
 
     private List<BallPath> ballPositions = null;
     private GameObject ball;
@@ -177,6 +177,8 @@ public class ShowdownDrillManager : MonoBehaviour
     private int[] prevHits;
     private float maxDistance;
 
+	public static ShowdownDrillManager Instance;
+
     private Coroutine checkMissCoroutine;
 
     // CONSTS
@@ -187,6 +189,8 @@ public class ShowdownDrillManager : MonoBehaviour
 
     private void Start()
     { 
+		Instance = this;
+		
         Debug.Log("Starting game");
         hasStartedGame = false;
         CurrentState = GameState.Unstarted;
@@ -222,7 +226,6 @@ public class ShowdownDrillManager : MonoBehaviour
 
     public void handleHandednessPrompt(bool shouldKeepSame)
     {
-
         if (CurrentState != GameState.Unstarted)
         {
             return;
@@ -297,6 +300,7 @@ public class ShowdownDrillManager : MonoBehaviour
     public void ConfirmOptions()
     {
         // TODO: add the methods for changing options
+		Debug.Log(CurrentState);
         if (CurrentState == GameState.HandednessSet)
         {
             AudioManager.Instance.StopAllNarration();

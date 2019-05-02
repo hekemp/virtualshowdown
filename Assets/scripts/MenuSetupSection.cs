@@ -16,6 +16,7 @@ public enum MenuSetupSectionType
 	NarratorTalkativeness,
 	TooltipNarration,
 	KinectCalibration,
+	HandednessConfirmation,
 }
 
 public class MenuSetupSection : MonoBehaviour
@@ -29,6 +30,8 @@ public class MenuSetupSection : MonoBehaviour
 	public EventSystem es;
 
     public AudioClip narrationForQuestion;
+
+	public MenuSetup.MenuType CurrentMenuType;
 
 
     // Extra Array for Kinect Feedback Clips
@@ -50,37 +53,43 @@ public class MenuSetupSection : MonoBehaviour
 	void Start () {
 		switch (Section)
 		{
-				case MenuSetupSectionType.Handedness:
-					var lefthandBtn = Buttons[0].GetComponent<Button>();
-					lefthandBtn.onClick.AddListener(OnLeftHandSelected);
-					var righthandBtn = Buttons[1].GetComponent<Button>();
-					righthandBtn.onClick.AddListener(OnRightHandSelected);
-					
-                    break;
-				case MenuSetupSectionType.ControllerRumble:
-					var rumbleButton = Buttons[0].GetComponent<Button>();
-					rumbleButton.onClick.AddListener(OnVibrationOnSelected);
-					var noRumbleButton = Buttons[1].GetComponent<Button>();
-					noRumbleButton.onClick.AddListener(OnVibrationOffSelected);
-					break;
-				case MenuSetupSectionType.NarratorVoice:
-					var maleButton = Buttons[0].GetComponent<Button>();
-					maleButton.onClick.AddListener(OnMaleNarratorSelected);
-					var femaleButton = Buttons[1].GetComponent<Button>();
-					femaleButton.onClick.AddListener(OnFemaleNarratorSelected);
-					break;
-				case MenuSetupSectionType.KinectCalibration:
-					var confirmButton = Buttons[0].GetComponent<Button>();
-					confirmButton.onClick.AddListener(onCalibrationConfirmation);
-                    playerFoundClip = extraNarrationForQuestion[0];
-                    playerLostClip = extraNarrationForQuestion[1];
-                    multipleBodiesSeenClip = extraNarrationForQuestion[2];
-                    readySaidWhileMultipleBodiesSeen = extraNarrationForQuestion[3];
-                    readySaidWhilePlayerLost = extraNarrationForQuestion[4];
+			case MenuSetupSectionType.Handedness:
+				var lefthandBtn = Buttons[0].GetComponent<Button>();
+				lefthandBtn.onClick.AddListener(OnLeftHandSelected);
+				var righthandBtn = Buttons[1].GetComponent<Button>();
+				righthandBtn.onClick.AddListener(OnRightHandSelected);
+                break;
+			case MenuSetupSectionType.ControllerRumble:
+				var rumbleButton = Buttons[0].GetComponent<Button>();
+				rumbleButton.onClick.AddListener(OnVibrationOnSelected);
+				var noRumbleButton = Buttons[1].GetComponent<Button>();
+				noRumbleButton.onClick.AddListener(OnVibrationOffSelected);
+			    break;
+			case MenuSetupSectionType.NarratorVoice:
+				var maleButton = Buttons[0].GetComponent<Button>();
+				maleButton.onClick.AddListener(OnMaleNarratorSelected);
+				var femaleButton = Buttons[1].GetComponent<Button>();
+				femaleButton.onClick.AddListener(OnFemaleNarratorSelected);
+				break;
+			case MenuSetupSectionType.KinectCalibration:
+				var confirmButton = Buttons[0].GetComponent<Button>();
+				confirmButton.onClick.AddListener(onCalibrationConfirmation);
+                playerFoundClip = extraNarrationForQuestion[0];
+                playerLostClip = extraNarrationForQuestion[1];
+                multipleBodiesSeenClip = extraNarrationForQuestion[2];
+                readySaidWhileMultipleBodiesSeen = extraNarrationForQuestion[3];
+                readySaidWhilePlayerLost = extraNarrationForQuestion[4];
 
-                    Debug.Log("Looking for the player now...");
-					break;
+                Debug.Log("Looking for the player now...");
+				break;
+			case MenuSetupSectionType.HandednessConfirmation:
+				var confirmCorrectButton = Buttons[0].GetComponent<Button>();
+				confirmCorrectButton.onClick.AddListener(OnHandednessCorrectSelect);
+				var denyButton = Buttons[1].GetComponent<Button>();
+				denyButton.onClick.AddListener(OnHandednessIncorrectSelect);
+				break;
 		}
+		es.SetSelectedGameObject(Buttons[0]);
 
 	}
 
@@ -138,6 +147,7 @@ public class MenuSetupSection : MonoBehaviour
 		if (!gameObject.activeInHierarchy)
 			return;
 
+		// TODO: put this back, but hide it when testing menus w/o kinect plugged in
         if (!BodySourceManager.Instance.bodyFound)
 		{
             AudioManager.Instance.PlayNarrationImmediate(readySaidWhilePlayerLost, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
@@ -158,11 +168,33 @@ public class MenuSetupSection : MonoBehaviour
         Finish();
     }
 
+	public void OnHandednessCorrectSelect(){
+		if (MenuSetup.MenuType.PreDrillMode == CurrentMenuType) {
+			ShowdownDrillManager.Instance.handleHandednessPrompt (true);
+		}
+		if (MenuSetup.MenuType.PreShowdownMode == CurrentMenuType) {
+			ShowdownManager.Instance.handleHandednessPrompt (true);
+		}
+
+		Finish();
+	}
+
+	public void OnHandednessIncorrectSelect(){
+		if (MenuSetup.MenuType.PreDrillMode == CurrentMenuType) {
+			ShowdownDrillManager.Instance.handleHandednessPrompt (false);
+		}
+		if (MenuSetup.MenuType.PreShowdownMode == CurrentMenuType) {
+			ShowdownManager.Instance.handleHandednessPrompt (false);
+		}
+		Finish();
+	}
+
 
 
     public void OnQuestionShown()
 	{
-		es.SetSelectedGameObject(Buttons[0]);
+		
+
         switch (Section)
 		{
 			case MenuSetupSectionType.Handedness:
@@ -180,6 +212,7 @@ public class MenuSetupSection : MonoBehaviour
                 AudioManager.Instance.PlayNarration(narrationForQuestion, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
 				break;
 		}
+
 	}
 
 

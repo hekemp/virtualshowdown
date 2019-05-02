@@ -88,7 +88,10 @@ public class PaddleScript : MonoBehaviour {
 
         RotateBat(BodySourceManager.Instance.wristPosition, BodySourceManager.Instance.handPosition);
 
-        CheckBatInGame();
+		if ((ShowdownManager.currentGameState >= ShowdownManager.ShowdownGameState.SettingBall)|| 
+			(ShowdownDrillManager.CurrentState >= ShowdownDrillManager.GameState.BallStart)) {
+        	CheckBatInGame();
+		}
     }
 
     private float CheckCalibratedX(float xPos)

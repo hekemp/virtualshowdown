@@ -9,6 +9,8 @@ public class ShowdownManager : MonoBehaviour {
     public TextMesh opponentDifficultyText;
     public TextMesh playerHandednessText;
 
+	public static ShowdownManager Instance;
+
     private int playerScore;
     private int opponentScore;
 
@@ -82,6 +84,8 @@ public class ShowdownManager : MonoBehaviour {
     // Use this for initialization
     void Start () {
 
+		Instance = this;
+
         currentGameState = ShowdownGameState.Unstarted;
         Debug.Log("Unstarted");
 
@@ -114,6 +118,8 @@ public class ShowdownManager : MonoBehaviour {
 
     public void handleHandednessPrompt(bool shouldKeepSame)
     {
+		Debug.Log (currentGameState);
+		Debug.Log ("Here we are!");
         if (currentGameState != ShowdownGameState.Unstarted)
         {
             return;
