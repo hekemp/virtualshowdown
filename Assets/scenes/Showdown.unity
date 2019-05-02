@@ -720,98 +720,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 87163071}
---- !u!1 &137206305
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 137206307}
-  - component: {fileID: 137206306}
-  m_Layer: 0
-  m_Name: NumberSpeechManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &137206306
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 137206305}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3697ab709650014cb9c4e3e83e9358a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  numbers0Through19Clips:
-  - {fileID: 8300000, guid: 9d10f812c566051428dd08f84ac02464, type: 3}
-  - {fileID: 8300000, guid: 85f9841d3c0ff4c479536a0818d0e2bd, type: 3}
-  - {fileID: 8300000, guid: e9603f2164e284946969c5afebe344bc, type: 3}
-  - {fileID: 8300000, guid: b623b201439989c49b1ff1524560e68a, type: 3}
-  - {fileID: 8300000, guid: 727a93a654278fd41bd1c9c23a50e655, type: 3}
-  - {fileID: 8300000, guid: 0b31abcde5d8d9d44ac2ada7f12f44ca, type: 3}
-  - {fileID: 8300000, guid: e409b3f06c968524197a2e8259dcdd1b, type: 3}
-  - {fileID: 8300000, guid: a5c9101497ba2a841a09890460398be7, type: 3}
-  - {fileID: 8300000, guid: 6491cf056ae799947a1b730d5e7481f0, type: 3}
-  - {fileID: 8300000, guid: 03cc1d3b85416c74faaa0afa71c19784, type: 3}
-  - {fileID: 8300000, guid: d362321080515934d80041aefe37e476, type: 3}
-  - {fileID: 8300000, guid: 4e4c6efaaa0adef4f9f81c2e4ee02e1a, type: 3}
-  - {fileID: 8300000, guid: 1bbab1eb422f85945b36c4f1ae913710, type: 3}
-  - {fileID: 8300000, guid: 616dcaac749a45743b77149420dec5d7, type: 3}
-  - {fileID: 8300000, guid: 98b527f167af0dd44a9c982e8d3267c2, type: 3}
-  - {fileID: 8300000, guid: 8f0e60d1a47de484b985d75d79c2fd13, type: 3}
-  - {fileID: 8300000, guid: 6fa3d14f2adb4f34c85423df128c58be, type: 3}
-  - {fileID: 8300000, guid: 6b8fbb2a6e8ceff4e9cb42bf553d4a55, type: 3}
-  - {fileID: 8300000, guid: 9fdf2143456ad404c8e3ade2f9a24049, type: 3}
-  - {fileID: 8300000, guid: a809f1dc505e0764dabbf3758b64c1dd, type: 3}
-  tiedClip: {fileID: 8300000, guid: 11aeffe20e6e1fe47a24353c6998a8ba, type: 3}
-  youreUpClip: {fileID: 8300000, guid: d5e41de3ac7cd9b47bc0f334d6c896a2, type: 3}
-  opponentUpClip: {fileID: 8300000, guid: fb6c9d83055850443a1815a025476f1f, type: 3}
-  scoreIsClip: {fileID: 8300000, guid: bd6eaf63c44658048bf00561bf6bdae1, type: 3}
-  toClip: {fileID: 8300000, guid: 1bdf7267247312e4dbb517a6947e61a7, type: 3}
-  yourServeClip: {fileID: 8300000, guid: 46fce3b854ffc8e42903cef9ee9c2dd9, type: 3}
-  opponentServeClip: {fileID: 8300000, guid: 80c68fee085c93245b8ad5e390299624, type: 3}
-  readyGoClip: {fileID: 8300000, guid: 94d3800d537cb0c41b7141e3ab311c36, type: 3}
-  nextBallClip: {fileID: 8300000, guid: 7a5a1dbcb6af2bb42b99b495a5b3965d, type: 3}
-  congratsClip: {fileID: 8300000, guid: 41a02c0132d0fed4aa63c57a0bffc6e6, type: 3}
-  lostClip: {fileID: 8300000, guid: 61c2740b5e3dd0849a459acf56b54cfb, type: 3}
-  thanksClip: {fileID: 8300000, guid: b21aa6b9381137f4c8e6d7e089d78fae, type: 3}
-  welcomeClip: {fileID: 8300000, guid: 4754ad372717f58459e32be53b95b6fe, type: 3}
-  welcomeMusicClip: {fileID: 8300000, guid: f8becd8916b476e44ae1d880159757e8, type: 3}
-  multiplesOf10From20To90Clips:
-  - {fileID: 8300000, guid: 7bac3a043d0b1bd4482f650d697404f6, type: 3}
-  - {fileID: 8300000, guid: 5cdda16ff6b89f540a7d263300e1909b, type: 3}
-  - {fileID: 8300000, guid: 18665bc859e46f24ab846947dd7eb0ca, type: 3}
-  - {fileID: 8300000, guid: 517217f8993ea914b86ba032d917bc3e, type: 3}
-  - {fileID: 8300000, guid: f0a37658802a6704cb7880f8bad9a108, type: 3}
-  - {fileID: 8300000, guid: e9730e7185e7f9a48aed600e32f329ec, type: 3}
-  - {fileID: 8300000, guid: 7f6484cf4376978468843a429d4920b6, type: 3}
-  - {fileID: 8300000, guid: df9437d39a93bae43b3eb659a963e833, type: 3}
-  youHaveClip: {fileID: 8300000, guid: 5bca02831341b7f48b4b19e67d67b4b4, type: 3}
-  pointsClip: {fileID: 8300000, guid: 775a8e81ed03017478e89b16e2d03371, type: 3}
-  byClip: {fileID: 8300000, guid: 449e27c6562ae70468061bdc9d1ce3a8, type: 3}
-  footClip: {fileID: 8300000, guid: 247d5c8428ae53d4db69bdd43f1a141e, type: 3}
-  penClip: {fileID: 8300000, guid: 3f75a88dcc4ccd24e8599fb7516f0a61, type: 3}
-  inchesClip: {fileID: 8300000, guid: 565cf5d4d39e1844e8fdde18920aad83, type: 3}
-  pinchClip: {fileID: 8300000, guid: 61107ed870f88a4479176cadaea1727a, type: 3}
-  armClip: {fileID: 8300000, guid: d267abadb9f25db43ad040dc46328d87, type: 3}
---- !u!4 &137206307
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 137206305}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 10
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &140808513
 GameObject:
   m_ObjectHideFlags: 0
@@ -1517,6 +1425,86 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 494565277}
+--- !u!1 &585944600
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 585944602}
+  - component: {fileID: 585944601}
+  m_Layer: 0
+  m_Name: NumberSpeechManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &585944601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 585944600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3697ab709650014cb9c4e3e83e9358a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numbers0Through19Clips:
+  - {fileID: 8300000, guid: 26a6cdbfad6624d7ca390dd18babac29, type: 3}
+  - {fileID: 8300000, guid: 15a176b7f6bc34350b34bd5abf617f7b, type: 3}
+  - {fileID: 8300000, guid: 93564d9bd48194e0eae104f0c18ff55c, type: 3}
+  - {fileID: 8300000, guid: 8897933f7e9b041839ac2627df67bc7b, type: 3}
+  - {fileID: 8300000, guid: dd8ff0baba7e2434aa3b771ee43dd75a, type: 3}
+  - {fileID: 8300000, guid: b790dfb69eb9c4307a73f7c6b4c99a27, type: 3}
+  - {fileID: 8300000, guid: 1ddd6d58ad760428aa184a9642881b20, type: 3}
+  - {fileID: 8300000, guid: aa34c64fae978498dbd2440fcb80270e, type: 3}
+  - {fileID: 8300000, guid: b488b5d4b0d134a079bd63e7eb2eb52a, type: 3}
+  - {fileID: 8300000, guid: d929ba7451ba04ef1a8fb33fe5f306b5, type: 3}
+  - {fileID: 8300000, guid: 6663dbcea5d37405c8d42c4cd94a6647, type: 3}
+  - {fileID: 8300000, guid: 0d779af6160cf41d3a1bd66f13a888bc, type: 3}
+  - {fileID: 8300000, guid: a7944e0025f5141cba188611997a6a09, type: 3}
+  - {fileID: 8300000, guid: 0503602a185b74930aa0f72f8feb748c, type: 3}
+  - {fileID: 8300000, guid: 5fc1dad3d588040d29b45c49e55c0b16, type: 3}
+  - {fileID: 8300000, guid: 5c70fb53ed1bf4f2fa637a1735485ea2, type: 3}
+  - {fileID: 8300000, guid: d5520c5b6899a499b8dcc3dc60fc77ea, type: 3}
+  - {fileID: 8300000, guid: 519cd8bf16f664eb1b800d7d0c6af6b9, type: 3}
+  - {fileID: 8300000, guid: 8ffe4b7ff9d3c4940835b26d2313b928, type: 3}
+  - {fileID: 8300000, guid: 3abd7e344928544a4841f0d3d1dad34c, type: 3}
+  multiplesOf10From20To90Clips:
+  - {fileID: 8300000, guid: 64aed736479624c6da8540d0ae2e0ace, type: 3}
+  - {fileID: 8300000, guid: 1529c020da0da4e50b2c9f115c22573d, type: 3}
+  - {fileID: 8300000, guid: d1014d5eab0b14bcfaac45e31bdc3f23, type: 3}
+  - {fileID: 8300000, guid: d08722eb59b1947d6b2bcf6fe24f2366, type: 3}
+  - {fileID: 8300000, guid: 4c2382f21553542b8b48279d0e7045ee, type: 3}
+  - {fileID: 8300000, guid: f98ed2be32a88457580230c95a6af5bd, type: 3}
+  - {fileID: 8300000, guid: 743b6e9dafb0d4850b691593f2585d39, type: 3}
+  - {fileID: 8300000, guid: d17c98477eb7243878146ee43cfa8b73, type: 3}
+  youHaveClip: {fileID: 8300000, guid: df9cbd08d62294d809246a9eb03d5127, type: 3}
+  pointsClip: {fileID: 8300000, guid: b050d6759ceb2412dbc9453bd8974c59, type: 3}
+  byClip: {fileID: 8300000, guid: 9c7d98c29aefc4916baa750a0fd7a040, type: 3}
+  footClip: {fileID: 8300000, guid: 4cda6c869ec44419090585f419cbb13f, type: 3}
+  penClip: {fileID: 8300000, guid: 30bf43a33768c4791958028b293a3661, type: 3}
+  inchesClip: {fileID: 8300000, guid: 4a49e29b2bca043f6bff5bd1abdc53a3, type: 3}
+  pinchClip: {fileID: 8300000, guid: c7a9fc64c6ca7405689d238d5b1b592c, type: 3}
+  armClip: {fileID: 8300000, guid: a355e95e81c1149fd925328cd9bb3fd3, type: 3}
+  yourFinalScoreWasClip: {fileID: 8300000, guid: ef207b9855f9b4557b06bb49d75b9a30,
+    type: 3}
+--- !u!4 &585944602
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 585944600}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 16
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &618168918
 GameObject:
   m_ObjectHideFlags: 0
@@ -2095,7 +2083,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &713875277
 GameObject:
@@ -2211,7 +2199,7 @@ Transform:
   m_Children:
   - {fileID: 74809031}
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &780588436
 GameObject:
@@ -2370,7 +2358,7 @@ Transform:
   m_Children:
   - {fileID: 9267670}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &798967772
 GameObject:
@@ -3554,7 +3542,7 @@ RectTransform:
   m_Children:
   - {fileID: 638304101}
   m_Father: {fileID: 0}
-  m_RootOrder: 16
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -4705,7 +4693,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1727032117
 GameObject:
@@ -5477,7 +5465,7 @@ Transform:
   - {fileID: 1848021371}
   - {fileID: 1506012486}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1821032697
 GameObject:

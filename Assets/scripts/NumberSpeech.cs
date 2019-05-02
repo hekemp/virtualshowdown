@@ -5,20 +5,6 @@ using UnityEngine;
 public class NumberSpeech : MonoBehaviour {
 
     public AudioClip[] numbers0Through19Clips; // 0-19
-    public AudioClip tiedClip; // tied
-    public AudioClip youreUpClip; // youup1
-    public AudioClip opponentUpClip; // oppup1
-    public AudioClip scoreIsClip; // scoreis
-    public AudioClip toClip; // to
-    public AudioClip yourServeClip; // yourserve
-    public AudioClip opponentServeClip; // oppserve
-    public AudioClip readyGoClip; //readygo
-    public AudioClip nextBallClip; // nextball
-    public AudioClip congratsClip; // congrats
-    public AudioClip lostClip; // lost
-    public AudioClip thanksClip; // thanks
-    public AudioClip welcomeClip; // welcome
-    public AudioClip welcomeMusicClip; // welcomemus
     public AudioClip[] multiplesOf10From20To90Clips; // x0's
     public AudioClip youHaveClip; // youhave
     public AudioClip pointsClip; // points
@@ -28,6 +14,7 @@ public class NumberSpeech : MonoBehaviour {
     public AudioClip inchesClip; // inches
     public AudioClip pinchClip; // pinches
     public AudioClip armClip; // arm
+	public AudioClip yourFinalScoreWasClip;
 
     public static NumberSpeech Instance;
 
@@ -45,6 +32,7 @@ public class NumberSpeech : MonoBehaviour {
 
     public IEnumerator PlayNumbersAudio(int number)
     {
+		Debug.Log (number);
         // We have audio clips for up to 19 because these are unique numbers
         if (number <= 19)
         {
@@ -80,13 +68,24 @@ public class NumberSpeech : MonoBehaviour {
         {
             AudioManager.Instance.PlayNarration(youHaveClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
             yield return new WaitForSeconds(youHaveClip.length);
-            PlayNumbersAudio(points);
+			yield return PlayNumbersAudio(points);
             AudioManager.Instance.PlayNarration(pointsClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
             yield return new WaitForSeconds(pointsClip.length);
         }
 
         
     }
+
+	public IEnumerator PlayFinalExpPointsAudio(int points){
+		if (points < 99)
+		{
+			AudioManager.Instance.PlayNarration(yourFinalScoreWasClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+			yield return new WaitForSeconds(yourFinalScoreWasClip.length);
+			yield return PlayNumbersAudio(points);
+			AudioManager.Instance.PlayNarration(pointsClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+			yield return new WaitForSeconds(pointsClip.length);
+		}
+	}
 
     /// <summary>
     /// Reads numbers, for Exp mode correction hints in an equal distrobution between an analogy

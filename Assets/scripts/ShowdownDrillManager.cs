@@ -113,23 +113,8 @@ public class ShowdownDrillManager : MonoBehaviour
     public AudioClip moveRightClip; // .67 v
 
     public AudioClip welcomeToShowdownDrillClip;
-    public AudioClip currentlyLeftHandedClip;
-    public AudioClip currentlyRightHandedClip;
-    public AudioClip handednessOptionsForLeftyClip;
-    public AudioClip handednessOptionsForRightyClip;
-    public AudioClip nowSetToLefty;
-    public AudioClip nowSetToRightyClip;
-
-    public AudioClip quitByMainMenuOptionClip;
-    public AudioClip restartGameOptionClip;
-    public AudioClip explainDrillOptionClip;
-    public AudioClip explainDrillClip;
-    public AudioClip repeatOptionClip;
-    public AudioClip readyOptionClip;
 
     public AudioClip yourFinalScoreWas;
-    public AudioClip toPlayAgainOptionClip;
-    public AudioClip goToMainMenuOptionClip;
 
 	public AudioClip reminderOptionsClip;
     #endregion
@@ -237,55 +222,24 @@ public class ShowdownDrillManager : MonoBehaviour
 
     }
 
-    public void explainDrill()
-    {
-        if (CurrentState == GameState.HandednessSet)
-        {
-            AudioManager.Instance.PlayNarrationImmediate(explainDrillClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-
-        }
-    }
-
-    public void sayMenuOption()
-    {
-        if (CurrentState == GameState.HandednessSet)
-        {
-            AudioManager.Instance.PlayNarrationImmediate(quitByMainMenuOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-            AudioManager.Instance.PlayNarration(restartGameOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-            AudioManager.Instance.PlayNarration(explainDrillOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-            AudioManager.Instance.PlayNarration(repeatOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-            AudioManager.Instance.PlayNarration(readyOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-        }
-
-    }
-
 
     public void playGameOverNarration()
     {
         if (CurrentState == GameState.GameOver) {
-	        AudioManager.Instance.PlayNarration(toPlayAgainOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-	        AudioManager.Instance.PlayNarration(goToMainMenuOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-	        AudioManager.Instance.PlayNarration(repeatOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+			
+			AudioManager.Instance.PlayNarration(reminderOptionsClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
 	    }
     }
 
 	private IEnumerator checkTenSecondTimeLimit()
 	{
-		yield return new WaitForSeconds (toPlayAgainOptionClip.length + 10);
+		yield return new WaitForSeconds (reminderOptionsClip.length + 10);
 		playGameOverNarration();
 		// TODO: update with just the gameover audio clip since there isn't these three anymore stuff
 
 		StartCoroutine (checkTenSecondTimeLimit ());
 	}
-
-    public void repeatOptions()
-    {
-
-        if (CurrentState == GameState.GameOver)
-        {
-            playGameOverNarration();
-        }
-    }
+		
 
     public void ConfirmOptions()
     {
@@ -294,7 +248,7 @@ public class ShowdownDrillManager : MonoBehaviour
         if (CurrentState == GameState.HandednessSet)
         {
 			AudioManager.Instance.PlayNarrationImmediate(reminderOptionsClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-			StartCoroutine(setupExperimentAfterSeconds(reminderOptionsClip.length+.5));
+			StartCoroutine(setupExperimentAfterSeconds(reminderOptionsClip.length+.5f));
             
         }
     }
@@ -954,10 +908,8 @@ public class ShowdownDrillManager : MonoBehaviour
     {
         CurrentState = GameState.GameOver;
         Debug.Log("Game over!");
-        AudioManager.Instance.PlayNarration(yourFinalScoreWas, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-        yield return new WaitForSeconds(yourFinalScoreWas.length);
 
-        yield return NumberSpeech.Instance.PlayExpPointsAudio(gamePoints);
+		yield return NumberSpeech.Instance.PlayFinalExpPointsAudio (gamePoints);
 
         playGameOverNarration();
 		StartCoroutine (checkTenSecondTimeLimit ());
