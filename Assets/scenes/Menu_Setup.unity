@@ -397,6 +397,8 @@ MonoBehaviour:
     type: 3}
   repeatedNarrationForQuestionClip: {fileID: 0}
   CurrentMenuType: 0
+  firstOptionNarration: {fileID: 8300000, guid: a6323d762e55c425089e0a07f327a894,
+    type: 3}
   extraNarrationForQuestion:
   - {fileID: 8300000, guid: 03cefa23a6369483fa2014a2056f4a6b, type: 3}
   - {fileID: 8300000, guid: a3a27a183238f4448a7a774adefa7a5f, type: 3}
@@ -568,6 +570,7 @@ MonoBehaviour:
     type: 3}
   repeatedNarrationForQuestionClip: {fileID: 0}
   CurrentMenuType: 0
+  firstOptionNarration: {fileID: 0}
   extraNarrationForQuestion:
   - {fileID: 8300000, guid: 26d10cf11e0943d4f9e045a5c2e8d686, type: 3}
   - {fileID: 8300000, guid: c252a55db91ce4242a5c3b818974167c, type: 3}
@@ -883,6 +886,8 @@ MonoBehaviour:
     type: 3}
   repeatedNarrationForQuestionClip: {fileID: 0}
   CurrentMenuType: 0
+  firstOptionNarration: {fileID: 8300000, guid: 58381dc74233b45c094903a2eb98de06,
+    type: 3}
   extraNarrationForQuestion:
   - {fileID: 8300000, guid: e37e5215a65b94532a859ef097787905, type: 3}
   - {fileID: 8300000, guid: e96d209b53cdb4220a90cf96542ef84b, type: 3}
@@ -1513,6 +1518,7 @@ MonoBehaviour:
   narrationForQuestion: {fileID: 0}
   repeatedNarrationForQuestionClip: {fileID: 0}
   CurrentMenuType: 0
+  firstOptionNarration: {fileID: 0}
   extraNarrationForQuestion: []
 --- !u!1 &1008088370
 GameObject:

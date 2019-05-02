@@ -124,6 +124,7 @@ GameObject:
   - component: {fileID: 13639578}
   - component: {fileID: 13639577}
   - component: {fileID: 13639576}
+  - component: {fileID: 13639579}
   m_Layer: 5
   m_Name: Explain Showdown Btn
   m_TagString: Untagged
@@ -224,6 +225,18 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 13639574}
+--- !u!114 &13639579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 13639574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e439c4795c2cd4404bd21115d6d1661e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverAudioClip: {fileID: 8300000, guid: 439b955273b0440318754f04b2784fbb, type: 3}
 --- !u!1 &87609703
 GameObject:
   m_ObjectHideFlags: 0
@@ -1160,6 +1173,7 @@ GameObject:
   - component: {fileID: 1084049127}
   - component: {fileID: 1084049126}
   - component: {fileID: 1084049125}
+  - component: {fileID: 1084049128}
   m_Layer: 5
   m_Name: Showdown Button
   m_TagString: Untagged
@@ -1260,6 +1274,18 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1084049123}
+--- !u!114 &1084049128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1084049123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e439c4795c2cd4404bd21115d6d1661e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverAudioClip: {fileID: 8300000, guid: 4087423c9b5804c01ad4050d5d886671, type: 3}
 --- !u!1 &1088257580
 GameObject:
   m_ObjectHideFlags: 0
@@ -1271,6 +1297,7 @@ GameObject:
   - component: {fileID: 1088257584}
   - component: {fileID: 1088257583}
   - component: {fileID: 1088257582}
+  - component: {fileID: 1088257585}
   m_Layer: 5
   m_Name: Preferences Btn
   m_TagString: Untagged
@@ -1371,6 +1398,18 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1088257580}
+--- !u!114 &1088257585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1088257580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e439c4795c2cd4404bd21115d6d1661e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverAudioClip: {fileID: 8300000, guid: 70f7de338cf824129996b6415b70e779, type: 3}
 --- !u!1 &1096915998
 GameObject:
   m_ObjectHideFlags: 0
@@ -1444,6 +1483,7 @@ GameObject:
   - component: {fileID: 1112154416}
   - component: {fileID: 1112154415}
   - component: {fileID: 1112154414}
+  - component: {fileID: 1112154417}
   m_Layer: 5
   m_Name: Showdown Drill Button
   m_TagString: Untagged
@@ -1544,6 +1584,18 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1112154412}
+--- !u!114 &1112154417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1112154412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e439c4795c2cd4404bd21115d6d1661e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverAudioClip: {fileID: 8300000, guid: 26515fc35ef744c7c85b3d2de953b94b, type: 3}
 --- !u!1 &1216245224
 GameObject:
   m_ObjectHideFlags: 0
@@ -1683,6 +1735,7 @@ GameObject:
   - component: {fileID: 1356034980}
   - component: {fileID: 1356034979}
   - component: {fileID: 1356034978}
+  - component: {fileID: 1356034981}
   m_Layer: 5
   m_Name: Quit Game Btn
   m_TagString: Untagged
@@ -1783,6 +1836,18 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1356034976}
+--- !u!114 &1356034981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1356034976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e439c4795c2cd4404bd21115d6d1661e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverAudioClip: {fileID: 8300000, guid: 9f9ac2ffb67c1472689713dedbd9a69d, type: 3}
 --- !u!1 &1452375288
 GameObject:
   m_ObjectHideFlags: 0
@@ -1898,20 +1963,13 @@ MonoBehaviour:
   ExplainDrillBtn: {fileID: 1746758507}
   QuitGameBtn: {fileID: 1356034978}
   welcomeSFXClip: {fileID: 8300000, guid: 5e7e69fff93e23a4c9b283ebc87525f9, type: 3}
-  welcomeClip: {fileID: 8300000, guid: f8becd8916b476e44ae1d880159757e8, type: 3}
-  readShowdownOptionClip: {fileID: 8300000, guid: 022cca0fcbecaaa4aa7a01f4995cf605,
+  welcomeClip: {fileID: 8300000, guid: 053c247dc9d22485284e1bc607e76987, type: 3}
+  gameModeIntroductionClip: {fileID: 8300000, guid: 2947e096bbeee4efea33578a28c48b65,
     type: 3}
-  readDrillOptionClip: {fileID: 8300000, guid: c1f48918cbf28c54c99a9bd7858a753a, type: 3}
-  readPreferencesOptionClip: {fileID: 8300000, guid: e26468c784f7a524394a96f11093bf7e,
-    type: 3}
-  readExplainShowdownOptionClip: {fileID: 8300000, guid: d5b7fe59e75e43c49a7c85a708c65ba7,
-    type: 3}
-  readExplainDrillOptionClip: {fileID: 8300000, guid: b2c9e127bb1576348b42ca4d83b925ff,
-    type: 3}
-  readRepeatOptionClip: {fileID: 8300000, guid: c443e48dfe64c964cbd05d085bb9de8e,
-    type: 3}
-  explainShowdownClip: {fileID: 8300000, guid: acfd5c76075f2c542b03c7d258e716d8, type: 3}
-  explainDrillClip: {fileID: 8300000, guid: 893e20714900db543b22efdd1da197d5, type: 3}
+  firstButtonClip: {fileID: 8300000, guid: 4087423c9b5804c01ad4050d5d886671, type: 3}
+  explainShowdownClip: {fileID: 8300000, guid: de17fc372d12e4c24acc6e6360a3069e, type: 3}
+  explainDrillClip: {fileID: 8300000, guid: 31a4b41ba5dc54a4598ce76f37fb2404, type: 3}
+  es: {fileID: 1096916000}
 --- !u!1 &1708147810
 GameObject:
   m_ObjectHideFlags: 0
@@ -1968,6 +2026,7 @@ GameObject:
   - component: {fileID: 1746758509}
   - component: {fileID: 1746758508}
   - component: {fileID: 1746758507}
+  - component: {fileID: 1746758510}
   m_Layer: 5
   m_Name: Explain Drill Btn
   m_TagString: Untagged
@@ -2068,6 +2127,18 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1746758505}
+--- !u!114 &1746758510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1746758505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e439c4795c2cd4404bd21115d6d1661e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverAudioClip: {fileID: 8300000, guid: a3e6bc0820f644773b9b8bca3cf3bb23, type: 3}
 --- !u!1 &1788843447
 GameObject:
   m_ObjectHideFlags: 0
