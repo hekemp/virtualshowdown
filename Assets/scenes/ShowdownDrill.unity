@@ -2465,6 +2465,7 @@ MonoBehaviour:
   CurrentMenuType: 0
   firstOptionNarration: {fileID: 8300000, guid: ddc575b4fca554f2f9e19365422f006b,
     type: 3}
+  welcomeAudioClip: {fileID: 8300000, guid: 679801aee8b394185b642870fec7326b, type: 3}
   extraNarrationForQuestion:
   - {fileID: 8300000, guid: dff870b15c5d843c2bd6b942af104b98, type: 3}
   - {fileID: 8300000, guid: 9105b23d6a1a34dab8d20ae4ad0a86a2, type: 3}
@@ -6784,6 +6785,7 @@ MonoBehaviour:
   repeatedNarrationForQuestionClip: {fileID: 0}
   CurrentMenuType: 0
   firstOptionNarration: {fileID: 0}
+  welcomeAudioClip: {fileID: 0}
   extraNarrationForQuestion:
   - {fileID: 8300000, guid: bb880b7ad97114ccbbf1b966835f6728, type: 3}
   - {fileID: 8300000, guid: 13c0fb04dbfdb46ec89cca0d7d0c0309, type: 3}

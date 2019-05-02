@@ -41,6 +41,8 @@ public class MenuSetupSection : MonoBehaviour
 
 	public AudioClip firstOptionNarration;
 
+	public AudioClip welcomeAudioClip;
+
 
     // Extra Array for Kinect Feedback Clips
     public AudioClip[] extraNarrationForQuestion;
@@ -132,7 +134,7 @@ public class MenuSetupSection : MonoBehaviour
                 readySaidWhilePlayerLost = extraNarrationForQuestion[4];
 				troublesLocatingPlayerClip = extraNarrationForQuestion[5];
 				break;
-			case MenuSetupSectionType.HandednessConfirmation:
+		case MenuSetupSectionType.HandednessConfirmation:
 				var confirmCorrectButton = Buttons [0].GetComponent<Button> ();
 				confirmCorrectButton.onClick.AddListener (OnHandednessCorrectSelect);
 				var denyButton = Buttons [1].GetComponent<Button> ();
@@ -143,10 +145,15 @@ public class MenuSetupSection : MonoBehaviour
 				areNowLeftyClip = extraNarrationForQuestion [3];
 				areNowRightyClip = extraNarrationForQuestion [4];
 				subtitle.text = "";
+				Debug.Log (youAreCurrentlyRightyClip);
 				if (PreferenceManager.Instance.PlayerHandedness == Handedness.Left) {
 					subtitle.text = "Currently, you're set to be left-handed. Is this correct?";
+					narrationForQuestion = youAreCurrentlyLeftyClip;
+					repeatedNarrationForQuestionClip = youAreCurrentlyLeftyClip;
 				} else {
 					subtitle.text = "Currently, you're set to be right-handed. Is this correct?";
+					narrationForQuestion = youAreCurrentlyRightyClip;
+					repeatedNarrationForQuestionClip = youAreCurrentlyRightyClip;
 				}
 
 				break;
@@ -232,7 +239,7 @@ public class MenuSetupSection : MonoBehaviour
 
 
 		// TODO: put this back, but hide it when testing menus w/o kinect plugged in
-       /* if (!BodySourceManager.Instance.bodyFound)
+        /*if (!BodySourceManager.Instance.bodyFound)
 		{
             AudioManager.Instance.PlayNarrationImmediate(readySaidWhilePlayerLost, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
 			if (repeatCoroutine != null) {
@@ -249,8 +256,8 @@ public class MenuSetupSection : MonoBehaviour
 			}
 			repeatCoroutine = StartCoroutine(checkTenSecondTimeLimit());
 			return;
-        }
-*/
+        }*/
+
 		Finish ();
 	}
 
@@ -329,18 +336,39 @@ public class MenuSetupSection : MonoBehaviour
 	{
 		es.SetSelectedGameObject(Buttons[0]);
 
+		// TODO: investigate this
+		// Due to a race condition of this being activiated before start, you have to set the audio here
 		if (Section == MenuSetupSectionType.HandednessConfirmation) {
+			youAreCurrentlyLeftyClip = extraNarrationForQuestion [0];
+			youAreCurrentlyRightyClip = extraNarrationForQuestion [1];
 			if (PreferenceManager.Instance.PlayerHandedness == Handedness.Left) {
+				subtitle.text = "Currently, you're set to be left-handed. Is this correct?";
 				narrationForQuestion = youAreCurrentlyLeftyClip;
+				repeatedNarrationForQuestionClip = youAreCurrentlyLeftyClip;
 			} else {
+				subtitle.text = "Currently, you're set to be right-handed. Is this correct?";
 				narrationForQuestion = youAreCurrentlyRightyClip;
+				repeatedNarrationForQuestionClip = youAreCurrentlyRightyClip;
 			}
 		}
 
-		if (narrationForQuestion != null) {
-			AudioManager.Instance.PlayNarrationImmediate (narrationForQuestion, AudioManager.Instance.locationSettings [AudioManager.AudioLocation.Default]);
+		Debug.Log (youAreCurrentlyRightyClip);
+		Debug.Log (Section);
+		if (welcomeAudioClip != null) {
+			AudioManager.Instance.PlayNarrationImmediate (welcomeAudioClip, AudioManager.Instance.locationSettings [AudioManager.AudioLocation.Default]);
 
+			Debug.Log (narrationForQuestion);
+			if (narrationForQuestion != null) {
+				
+				AudioManager.Instance.PlayNarration (narrationForQuestion, AudioManager.Instance.locationSettings [AudioManager.AudioLocation.Default]);
+			}
+		} 
+		else {
+			if (narrationForQuestion != null) {
+				AudioManager.Instance.PlayNarrationImmediate (narrationForQuestion, AudioManager.Instance.locationSettings [AudioManager.AudioLocation.Default]);
+			}
 		}
+
 		if (firstOptionNarration != null) {
 			AudioManager.Instance.PlayNarration(firstOptionNarration, AudioManager.Instance.locationSettings [AudioManager.AudioLocation.Default]);
 		}
