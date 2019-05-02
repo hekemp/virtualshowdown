@@ -231,13 +231,21 @@ public class ShowdownManager : MonoBehaviour {
     {
         if (currentGameState == ShowdownGameState.GameOver)
         {
+			// TODO: update to use menu? mayb
             AudioManager.Instance.PlayNarration(toPlayAgainOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
             AudioManager.Instance.PlayNarration(goToMainMenuOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
             AudioManager.Instance.PlayNarration(repeatOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-        }
+			StartCoroutine (checkTenSecondTimeLimit ());
+		}
         yield return null;
     }
 
+	private IEnumerator checkTenSecondTimeLimit()
+	{
+		yield return new WaitForSeconds (10);
+		yield return StartCoroutine (sayGameOverPrompts ());
+		StartCoroutine (checkTenSecondTimeLimit ());
+	}
 
     public void restartGame()
     {

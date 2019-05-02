@@ -1894,9 +1894,9 @@ MonoBehaviour:
   ShowdownDrillBtn: {fileID: 1112154414}
   ShowdownBtn: {fileID: 1084049125}
   PreferencesBtn: {fileID: 1088257582}
-  ExplainShowdownBtn: {fileID: 0}
-  ExplainDrillBtn: {fileID: 0}
-  QuitGameBtn: {fileID: 0}
+  ExplainShowdownBtn: {fileID: 13639576}
+  ExplainDrillBtn: {fileID: 1746758507}
+  QuitGameBtn: {fileID: 1356034978}
   welcomeSFXClip: {fileID: 8300000, guid: 5e7e69fff93e23a4c9b283ebc87525f9, type: 3}
   welcomeClip: {fileID: 8300000, guid: f8becd8916b476e44ae1d880159757e8, type: 3}
   readShowdownOptionClip: {fileID: 8300000, guid: 022cca0fcbecaaa4aa7a01f4995cf605,

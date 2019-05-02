@@ -28,9 +28,13 @@ public class MenuSetupSection : MonoBehaviour
 	public bool bodyAnnounced = false;
     public bool multipleBodiesAnnounced = false;
 
+	private Coroutine repeatCoroutine;
+
 	public EventSystem es;
 
     public AudioClip narrationForQuestion;
+
+	public AudioClip repeatedNarrationForQuestionClip;
 
 	public MenuSetup.MenuType CurrentMenuType;
 
@@ -42,16 +46,20 @@ public class MenuSetupSection : MonoBehaviour
     // 2: Multiple Bodies Seen
     // 3: Ready Said while Multiple Bodies Seen
     // 4: Ready Said before Player Found
+	// 5: read the options once successful
+	// 6: troubles locating the player
 
     private AudioClip playerFoundClip;
     private AudioClip playerLostClip;
     private AudioClip multipleBodiesSeenClip;
     private AudioClip readySaidWhileMultipleBodiesSeen;
     private AudioClip readySaidWhilePlayerLost;
+	private AudioClip troublesLocatingPlayerClip;
     
 
 	// Use this for initialization
 	void Start () {
+		
 		switch (Section)
 		{
 			case MenuSetupSectionType.Handedness:
@@ -80,8 +88,7 @@ public class MenuSetupSection : MonoBehaviour
                 multipleBodiesSeenClip = extraNarrationForQuestion[2];
                 readySaidWhileMultipleBodiesSeen = extraNarrationForQuestion[3];
                 readySaidWhilePlayerLost = extraNarrationForQuestion[4];
-
-                Debug.Log("Looking for the player now...");
+				troublesLocatingPlayerClip = extraNarrationForQuestion[5];
 				break;
 			case MenuSetupSectionType.HandednessConfirmation:
 				var confirmCorrectButton = Buttons[0].GetComponent<Button>();
@@ -227,35 +234,40 @@ public class MenuSetupSection : MonoBehaviour
 	{
 		es.SetSelectedGameObject(Buttons[0]);
 
-        switch (Section)
-		{
-			case MenuSetupSectionType.Handedness:
-                AudioManager.Instance.PlayNarrationImmediate(narrationForQuestion, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-				break;
-			case MenuSetupSectionType.ControllerRumble:
-                AudioManager.Instance.PlayNarrationImmediate(narrationForQuestion, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-				break;
-			case MenuSetupSectionType.NarratorVoice:
-                // Queue it up in this case so the missing joycon for controller rumble can play
-                AudioManager.Instance.PlayNarrationImmediate(narrationForQuestion, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-				break;
-			case MenuSetupSectionType.KinectCalibration:
-                // Queue it up in this case so the missing joycon for controller rumble can play
-                AudioManager.Instance.PlayNarrationImmediate(narrationForQuestion, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-				break;
-			// TODO: add audio for new sections
+		if (narrationForQuestion != null) {
+			AudioManager.Instance.PlayNarrationImmediate (narrationForQuestion, AudioManager.Instance.locationSettings [AudioManager.AudioLocation.Default]);
 		}
+		if (repeatedNarrationForQuestionClip == null) {
+			repeatedNarrationForQuestionClip = narrationForQuestion;
+		}
+		repeatCoroutine = StartCoroutine(checkTenSecondTimeLimit());
+	}
 
+	private IEnumerator checkTenSecondTimeLimit()
+	{
+		if (repeatedNarrationForQuestionClip != null) {
+			yield return new WaitForSeconds (repeatedNarrationForQuestionClip.length + 10);
+			AudioManager.Instance.PlayNarration (repeatedNarrationForQuestionClip, AudioManager.Instance.locationSettings [AudioManager.AudioLocation.Default]);
+
+			repeatCoroutine = StartCoroutine (checkTenSecondTimeLimit ());
+		}
+		yield return null;
 	}
 
 
 	void Finish()
 	{
+		if (repeatCoroutine != null) {
+			StopCoroutine(repeatCoroutine);
+			repeatCoroutine = null;
+		}
 		foreach (var btn in Buttons)
 		{
 			var button = btn.GetComponent<Button>();
 			button.onClick.RemoveAllListeners();
 		}
+
+		// stop the repeat coroutine
 
 		OnSelectionMade.Invoke();
 	}
@@ -275,6 +287,7 @@ public class MenuSetupSection : MonoBehaviour
 				if (bodyAnnounced && BodySourceManager.Instance.bodyFound)
 				{
 					// Nothing yet?
+					repeatedNarrationForQuestionClip = playerFoundClip;
 				}
 				// Body was not announced but we now see the body. AKA need to announce we found them.
 				else if (!bodyAnnounced && BodySourceManager.Instance.bodyFound)
@@ -282,6 +295,7 @@ public class MenuSetupSection : MonoBehaviour
                     AudioManager.Instance.PlayNarrationImmediate(playerFoundClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
 
 					bodyAnnounced = true;
+					repeatedNarrationForQuestionClip = playerFoundClip;
 				}
 				// Body was announced but now we don't see the body. AKA we need to announce that we lost sight of them
 				else if (bodyAnnounced && !BodySourceManager.Instance.bodyFound)
@@ -290,17 +304,20 @@ public class MenuSetupSection : MonoBehaviour
                     AudioManager.Instance.PlayNarrationImmediate(playerLostClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
 
                     bodyAnnounced = false;
+					repeatedNarrationForQuestionClip = troublesLocatingPlayerClip;
 				}
 				// Body was not announced but we don't see them yet. AKA we're waiting for them to get into position.
 				else
 				{
 					// Nothing yet? 
+					repeatedNarrationForQuestionClip = troublesLocatingPlayerClip;
 				}
 
                 // Multiple bodies was already announced and we still multiple bodies. AKA waiting for them to move.
                 if (multipleBodiesAnnounced && BodySourceManager.Instance.MultipleBodiesDetected)
                 {
                     // Nothing yet?
+					repeatedNarrationForQuestionClip = multipleBodiesSeenClip;
                 }
                 // Multiple bodies was not announced and we see multiple bodies. Aka announce that there's an error here.
                 else if (!multipleBodiesAnnounced && BodySourceManager.Instance.MultipleBodiesDetected)
@@ -308,6 +325,7 @@ public class MenuSetupSection : MonoBehaviour
                     AudioManager.Instance.PlayNarrationImmediate(multipleBodiesSeenClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
 
                     multipleBodiesAnnounced = true;
+					repeatedNarrationForQuestionClip = multipleBodiesSeenClip;
                 }
                 // Multiple bodies were seen but now we only see one. AKA we need to announce that we're good to go
                 else if (multipleBodiesAnnounced && !BodySourceManager.Instance.MultipleBodiesDetected)
@@ -315,6 +333,7 @@ public class MenuSetupSection : MonoBehaviour
                     AudioManager.Instance.PlayNarrationImmediate(playerFoundClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
 
                     multipleBodiesAnnounced = false;
+					repeatedNarrationForQuestionClip = playerFoundClip;
                 }
                 // Multiple bodies weren't seen and we don't see multiple bodies. Aka there's nothing for us to do here
                 else

@@ -279,11 +279,20 @@ public class ShowdownDrillManager : MonoBehaviour
     public void playGameOverNarration()
     {
         if (CurrentState == GameState.GameOver) {
-        AudioManager.Instance.PlayNarration(toPlayAgainOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-        AudioManager.Instance.PlayNarration(goToMainMenuOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-        AudioManager.Instance.PlayNarration(repeatOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-        }
+	        AudioManager.Instance.PlayNarration(toPlayAgainOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+	        AudioManager.Instance.PlayNarration(goToMainMenuOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+	        AudioManager.Instance.PlayNarration(repeatOptionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+	    }
     }
+
+	private IEnumerator checkTenSecondTimeLimit()
+	{
+		yield return new WaitForSeconds (toPlayAgainOptionClip.length + 10);
+		playGameOverNarration();
+		// TODO: update with just the gameover audio clip since there isn't these three anymore stuff
+
+		StartCoroutine (checkTenSecondTimeLimit ());
+	}
 
     public void repeatOptions()
     {
@@ -962,6 +971,7 @@ public class ShowdownDrillManager : MonoBehaviour
         yield return NumberSpeech.Instance.PlayExpPointsAudio(gamePoints);
 
         playGameOverNarration();
+		StartCoroutine (checkTenSecondTimeLimit ());
         yield return null;
     }
 

@@ -2461,6 +2461,7 @@ MonoBehaviour:
   es: {fileID: 622284295}
   narrationForQuestion: {fileID: 8300000, guid: a9ed6866029094e49a3f65e18d85b72c,
     type: 3}
+  CurrentMenuType: 0
   extraNarrationForQuestion: []
 --- !u!1 &572556928
 GameObject:
@@ -6805,12 +6806,15 @@ MonoBehaviour:
   es: {fileID: 622284295}
   narrationForQuestion: {fileID: 8300000, guid: c28eabeeae3dd5347819024e2d334e22,
     type: 3}
+  CurrentMenuType: 0
   extraNarrationForQuestion:
   - {fileID: 8300000, guid: 26d10cf11e0943d4f9e045a5c2e8d686, type: 3}
   - {fileID: 8300000, guid: c252a55db91ce4242a5c3b818974167c, type: 3}
   - {fileID: 8300000, guid: cab07018b6d00904b8e3ed2dfccaaea2, type: 3}
   - {fileID: 8300000, guid: 1acf4dea672e005488ee9c7341e7f2bf, type: 3}
   - {fileID: 8300000, guid: 26b6bfd625f404044bef2fbf12e9f70a, type: 3}
+  - {fileID: 8300000, guid: ff8650d3b383a084ab2c69dbf6f5169b, type: 3}
+  - {fileID: 8300000, guid: 2f40b2815dfe82b4bbf2ca32edf5ee85, type: 3}
 --- !u!224 &1637008580
 RectTransform:
   m_ObjectHideFlags: 0
