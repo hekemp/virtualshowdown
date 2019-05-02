@@ -239,7 +239,7 @@ public class MenuSetupSection : MonoBehaviour
 
 
 		// TODO: put this back, but hide it when testing menus w/o kinect plugged in
-        /*if (!BodySourceManager.Instance.bodyFound)
+        if (!BodySourceManager.Instance.bodyFound)
 		{
             AudioManager.Instance.PlayNarrationImmediate(readySaidWhilePlayerLost, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
 			if (repeatCoroutine != null) {
@@ -256,7 +256,7 @@ public class MenuSetupSection : MonoBehaviour
 			}
 			repeatCoroutine = StartCoroutine(checkTenSecondTimeLimit());
 			return;
-        }*/
+        }
 
 		Finish ();
 	}
