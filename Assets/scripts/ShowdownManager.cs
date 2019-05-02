@@ -97,23 +97,6 @@ public class ShowdownManager : MonoBehaviour {
         AudioManager.Instance.PlayNarrationImmediate(welcomeToShowdownClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
         yield return new WaitForSeconds(welcomeToShowdownClip.length);
 
-        AudioClip narrationToRead;
-        AudioClip optionsToRead;
-        if (PreferenceManager.Instance.PlayerHandedness == Handedness.Left)
-        {
-            narrationToRead = currentlyLeftHandedClip;
-            optionsToRead = handednessOptionsForLeftyClip;
-        } else
-        {
-            narrationToRead = currentlyRightHandedClip;
-            optionsToRead = handednessOptionsForRightyClip;
-        }
-
-        AudioManager.Instance.PlayNarrationImmediate(narrationToRead, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-        yield return new WaitForSeconds(narrationToRead.length);
-
-        AudioManager.Instance.PlayNarrationImmediate(optionsToRead, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-
     }
 
     public void handleHandednessPrompt(bool shouldKeepSame)
@@ -147,7 +130,7 @@ public class ShowdownManager : MonoBehaviour {
 
         currentGameState = ShowdownGameState.HandednessSet;
 
-        AudioManager.Instance.PlayNarration(opponentDifficultyPromptClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+        //AudioManager.Instance.PlayNarration(opponentDifficultyPromptClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
 
     }
 
@@ -180,7 +163,7 @@ public class ShowdownManager : MonoBehaviour {
 
         currentGameState = ShowdownGameState.DifficultySet;
 
-        StartCoroutine(sayMenuOption());
+        //StartCoroutine(sayMenuOption());
 
     }
 

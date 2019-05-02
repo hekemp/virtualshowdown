@@ -2461,8 +2461,14 @@ MonoBehaviour:
   es: {fileID: 622284295}
   narrationForQuestion: {fileID: 8300000, guid: a9ed6866029094e49a3f65e18d85b72c,
     type: 3}
+  repeatedNarrationForQuestionClip: {fileID: 0}
   CurrentMenuType: 0
-  extraNarrationForQuestion: []
+  extraNarrationForQuestion:
+  - {fileID: 8300000, guid: 9d10f812c566051428dd08f84ac02464, type: 3}
+  - {fileID: 8300000, guid: 85f9841d3c0ff4c479536a0818d0e2bd, type: 3}
+  - {fileID: 8300000, guid: e9603f2164e284946969c5afebe344bc, type: 3}
+  - {fileID: 8300000, guid: b623b201439989c49b1ff1524560e68a, type: 3}
+  - {fileID: 8300000, guid: 727a93a654278fd41bd1c9c23a50e655, type: 3}
 --- !u!1 &572556928
 GameObject:
   m_ObjectHideFlags: 0
@@ -6806,6 +6812,7 @@ MonoBehaviour:
   es: {fileID: 622284295}
   narrationForQuestion: {fileID: 8300000, guid: c28eabeeae3dd5347819024e2d334e22,
     type: 3}
+  repeatedNarrationForQuestionClip: {fileID: 0}
   CurrentMenuType: 0
   extraNarrationForQuestion:
   - {fileID: 8300000, guid: 26d10cf11e0943d4f9e045a5c2e8d686, type: 3}
@@ -8189,7 +8196,7 @@ MonoBehaviour:
           m_CallState: 2
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-  - keyword: Main Menu
+  - keyword: Quit Game
     action:
       m_PersistentCalls:
         m_Calls:
@@ -8206,7 +8213,7 @@ MonoBehaviour:
           m_CallState: 2
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-  - keyword: Go to menu
+  - keyword: Quit
     action:
       m_PersistentCalls:
         m_Calls:

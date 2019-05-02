@@ -29,6 +29,7 @@ public class MenuSetupSection : MonoBehaviour
     public bool multipleBodiesAnnounced = false;
 
 	private Coroutine repeatCoroutine;
+	private Coroutine reselectCorutine;
 
 	public EventSystem es;
 
@@ -38,9 +39,12 @@ public class MenuSetupSection : MonoBehaviour
 
 	public MenuSetup.MenuType CurrentMenuType;
 
+	public AudioClip firstOptionNarration;
+
 
     // Extra Array for Kinect Feedback Clips
     public AudioClip[] extraNarrationForQuestion;
+	// For Kinect: 
     // 0: Player Found
     // 1: Player Lost
     // 2: Multiple Bodies Seen
@@ -49,12 +53,45 @@ public class MenuSetupSection : MonoBehaviour
 	// 5: read the options once successful
 	// 6: troubles locating the player
 
+	// For handedness confirmation
+	// 0: currently left
+	// 1: currently right
+	// 2: keep the same
+	// 3: are now left
+	// 4: are now right
+
+	// For opponent difficulty: 
+	// 0: now easy
+	// 1: now medium
+	// 2: now hard
+
+	// For Handedness:
+	// 0: left
+	// 1: right
+
+	// For Vibration
+	// 0: on
+	// 1: off
+
     private AudioClip playerFoundClip;
     private AudioClip playerLostClip;
     private AudioClip multipleBodiesSeenClip;
     private AudioClip readySaidWhileMultipleBodiesSeen;
     private AudioClip readySaidWhilePlayerLost;
 	private AudioClip troublesLocatingPlayerClip;
+
+	private AudioClip youAreCurrentlyLeftyClip;
+	private AudioClip youAreCurrentlyRightyClip;
+	private AudioClip keepSettingsTheSameClip;
+	private AudioClip areNowLeftyClip;
+	private AudioClip areNowRightyClip;
+
+	private AudioClip nowEasyClip;
+	private AudioClip nowMediumClip;
+	private AudioClip nowHardClip;
+
+	private AudioClip vibrationsEnabledClip;
+	private AudioClip vibrationsDisabledClip;
     
 
 	// Use this for initialization
@@ -67,12 +104,16 @@ public class MenuSetupSection : MonoBehaviour
 				lefthandBtn.onClick.AddListener(OnLeftHandSelected);
 				var righthandBtn = Buttons[1].GetComponent<Button>();
 				righthandBtn.onClick.AddListener(OnRightHandSelected);
+				areNowLeftyClip = extraNarrationForQuestion[0];
+				areNowRightyClip = extraNarrationForQuestion[1];
                 break;
 			case MenuSetupSectionType.ControllerRumble:
 				var rumbleButton = Buttons[0].GetComponent<Button>();
 				rumbleButton.onClick.AddListener(OnVibrationOnSelected);
 				var noRumbleButton = Buttons[1].GetComponent<Button>();
 				noRumbleButton.onClick.AddListener(OnVibrationOffSelected);
+				vibrationsEnabledClip = extraNarrationForQuestion[0];
+				vibrationsDisabledClip = extraNarrationForQuestion[1];
 			    break;
 			case MenuSetupSectionType.NarratorVoice:
 				var maleButton = Buttons[0].GetComponent<Button>();
@@ -95,14 +136,24 @@ public class MenuSetupSection : MonoBehaviour
 				confirmCorrectButton.onClick.AddListener(OnHandednessCorrectSelect);
 				var denyButton = Buttons[1].GetComponent<Button>();
 				denyButton.onClick.AddListener(OnHandednessIncorrectSelect);
+				youAreCurrentlyLeftyClip = extraNarrationForQuestion[0];
+				youAreCurrentlyRightyClip = extraNarrationForQuestion[1];
+				keepSettingsTheSameClip = extraNarrationForQuestion[2];
+				areNowLeftyClip = extraNarrationForQuestion[3];
+				areNowRightyClip = extraNarrationForQuestion[4];
+
 				break;
 			case MenuSetupSectionType.OpponentDifficulty:
 				var easyButton = Buttons[0].GetComponent<Button>();
 				easyButton.onClick.AddListener(OnEasyDifficultySelect);
 				var mediumButton = Buttons[1].GetComponent<Button>();
 				mediumButton.onClick.AddListener(OnMediumDifficultySelect);
-				var hardButton = Buttons[0].GetComponent<Button>();
+				var hardButton = Buttons[2].GetComponent<Button>();
 				hardButton.onClick.AddListener(OnHardDifficultySelect);
+
+				nowEasyClip = extraNarrationForQuestion[0];
+				nowMediumClip = extraNarrationForQuestion[1];
+				nowHardClip = extraNarrationForQuestion[2];
 				break;
 		}
 
@@ -113,7 +164,10 @@ public class MenuSetupSection : MonoBehaviour
         if (!gameObject.activeInHierarchy)
             return;
         PreferenceManager.Instance.PlayerHandedness = Handedness.Left;
-        Finish();
+
+		AudioManager.Instance.PlayNarrationImmediate(areNowLeftyClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+
+		StartCoroutine (FinishAfterSeconds (areNowLeftyClip.length));
     }
 
     public void OnRightHandSelected()
@@ -121,7 +175,9 @@ public class MenuSetupSection : MonoBehaviour
         if (!gameObject.activeInHierarchy)
             return;
         PreferenceManager.Instance.PlayerHandedness = Handedness.Right;
-        Finish();
+		AudioManager.Instance.PlayNarrationImmediate(areNowRightyClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+
+		StartCoroutine (FinishAfterSeconds (areNowRightyClip.length));
     }
 
     public void OnVibrationOnSelected()
@@ -129,7 +185,9 @@ public class MenuSetupSection : MonoBehaviour
         if (!gameObject.activeInHierarchy)
             return;
         PreferenceManager.Instance.ControllerRumble = true;
-        Finish();
+		AudioManager.Instance.PlayNarrationImmediate(vibrationsEnabledClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+
+		StartCoroutine (FinishAfterSeconds (vibrationsEnabledClip.length));
     }
 
     public void OnVibrationOffSelected()
@@ -137,7 +195,9 @@ public class MenuSetupSection : MonoBehaviour
         if (!gameObject.activeInHierarchy)
             return;
         PreferenceManager.Instance.ControllerRumble = false;
-        Finish();
+		AudioManager.Instance.PlayNarrationImmediate(vibrationsDisabledClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+
+		StartCoroutine (FinishAfterSeconds (vibrationsDisabledClip.length));
     }
 
     public void OnMaleNarratorSelected()
@@ -215,7 +275,9 @@ public class MenuSetupSection : MonoBehaviour
 			ShowdownManager.Instance.handleHandednessPrompt (true);
 		}
 
-		Finish();
+		AudioManager.Instance.PlayNarrationImmediate(keepSettingsTheSameClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+
+		StartCoroutine (FinishAfterSeconds (keepSettingsTheSameClip.length));
 	}
 
 	public void OnHandednessIncorrectSelect(){
@@ -225,7 +287,24 @@ public class MenuSetupSection : MonoBehaviour
 		if (MenuSetup.MenuType.PreShowdownMode == CurrentMenuType) {
 			ShowdownManager.Instance.handleHandednessPrompt (false);
 		}
-		Finish();
+
+		AudioClip clipToPlay;
+
+		if (PreferenceManager.Instance.PlayerHandedness == Handedness.Left) {
+			clipToPlay = areNowLeftyClip;
+		} else {
+			clipToPlay = areNowRightyClip;
+		}
+
+		AudioManager.Instance.PlayNarrationImmediate(clipToPlay, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+
+		StartCoroutine (FinishAfterSeconds (clipToPlay.length));
+
+	}
+
+	IEnumerator FinishAfterSeconds(float s) {
+		yield return new WaitForSeconds (s);
+		Finish ();
 	}
 
 
@@ -234,13 +313,27 @@ public class MenuSetupSection : MonoBehaviour
 	{
 		es.SetSelectedGameObject(Buttons[0]);
 
+		if (Section == MenuSetupSectionType.HandednessConfirmation) {
+			if (PreferenceManager.Instance.PlayerHandedness == Handedness.Left) {
+				narrationForQuestion = youAreCurrentlyLeftyClip;
+			} else {
+				narrationForQuestion = youAreCurrentlyRightyClip;
+			}
+		}
+
 		if (narrationForQuestion != null) {
 			AudioManager.Instance.PlayNarrationImmediate (narrationForQuestion, AudioManager.Instance.locationSettings [AudioManager.AudioLocation.Default]);
+
+		}
+		if (firstOptionNarration != null) {
+			AudioManager.Instance.PlayNarration(firstOptionNarration, AudioManager.Instance.locationSettings [AudioManager.AudioLocation.Default]);
 		}
 		if (repeatedNarrationForQuestionClip == null) {
 			repeatedNarrationForQuestionClip = narrationForQuestion;
 		}
 		repeatCoroutine = StartCoroutine(checkTenSecondTimeLimit());
+
+		//StartCoroutine(SelectAfterSeconds(narrationForQuestion.length));
 	}
 
 	private IEnumerator checkTenSecondTimeLimit()
@@ -253,6 +346,14 @@ public class MenuSetupSection : MonoBehaviour
 		}
 		yield return null;
 	}
+
+	/*private IEnumerator SelectAfterSeconds(float s){
+		yield return new WaitForSeconds (s);
+		if (Buttons [1] != null) {
+			es.SetSelectedGameObject (Buttons [1]);
+		}
+		es.SetSelectedGameObject(Buttons[0]);
+	}*/
 
 
 	void Finish()

@@ -204,23 +204,6 @@ public class ShowdownDrillManager : MonoBehaviour
         AudioManager.Instance.PlayNarrationImmediate(welcomeToShowdownDrillClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
         yield return new WaitForSeconds(welcomeToShowdownDrillClip.length);
 
-        AudioClip narrationToRead;
-        AudioClip optionsToRead;
-        if (PreferenceManager.Instance.PlayerHandedness == Handedness.Left)
-        {
-            narrationToRead = currentlyLeftHandedClip;
-            optionsToRead = handednessOptionsForLeftyClip;
-        }
-        else
-        {
-            narrationToRead = currentlyRightHandedClip;
-            optionsToRead = handednessOptionsForRightyClip;
-        }
-
-        AudioManager.Instance.PlayNarrationImmediate(narrationToRead, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-        yield return new WaitForSeconds(narrationToRead.length);
-
-        AudioManager.Instance.PlayNarrationImmediate(optionsToRead, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
 
     }
 
@@ -236,20 +219,19 @@ public class ShowdownDrillManager : MonoBehaviour
             // they were right handed, so we should set them to be left handed
             if (PreferenceManager.Instance.PlayerHandedness == Handedness.Right)
             {
-                AudioManager.Instance.PlayNarrationImmediate(nowSetToLefty, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+                //AudioManager.Instance.PlayNarrationImmediate(nowSetToLefty, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
 
                 PreferenceManager.Instance.PlayerHandedness = Handedness.Left;
             }
             else // they were left handed, so we should set them to be right handed
             {
-                AudioManager.Instance.PlayNarrationImmediate(nowSetToRightyClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+                //AudioManager.Instance.PlayNarrationImmediate(nowSetToRightyClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
 
                 PreferenceManager.Instance.PlayerHandedness = Handedness.Right;
             }
         }
 
         CurrentState = GameState.HandednessSet;
-        sayMenuOption();
 
     }
 
@@ -297,9 +279,6 @@ public class ShowdownDrillManager : MonoBehaviour
     public void repeatOptions()
     {
 
-        if (CurrentState == GameState.HandednessSet) {
-            sayMenuOption();
-        }
         if (CurrentState == GameState.GameOver)
         {
             playGameOverNarration();
@@ -312,6 +291,7 @@ public class ShowdownDrillManager : MonoBehaviour
 		Debug.Log(CurrentState);
         if (CurrentState == GameState.HandednessSet)
         {
+			// TODO: say the reminder prompt
             AudioManager.Instance.StopAllNarration();
             Debug.Log("Setting up experiment");
             hasStartedGame = true;
@@ -772,6 +752,7 @@ public class ShowdownDrillManager : MonoBehaviour
 
             SetGameHints();
         }
+			
     }
 
     private void CheckBallPosition()
