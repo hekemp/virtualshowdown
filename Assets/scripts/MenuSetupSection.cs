@@ -98,7 +98,6 @@ public class MenuSetupSection : MonoBehaviour
 				hardButton.onClick.AddListener(OnHardDifficultySelect);
 				break;
 		}
-		es.SetSelectedGameObject(Buttons[0]);
 
 	}
 
@@ -226,7 +225,7 @@ public class MenuSetupSection : MonoBehaviour
 
     public void OnQuestionShown()
 	{
-		
+		es.SetSelectedGameObject(Buttons[0]);
 
         switch (Section)
 		{
@@ -238,11 +237,11 @@ public class MenuSetupSection : MonoBehaviour
 				break;
 			case MenuSetupSectionType.NarratorVoice:
                 // Queue it up in this case so the missing joycon for controller rumble can play
-                AudioManager.Instance.PlayNarration(narrationForQuestion, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+                AudioManager.Instance.PlayNarrationImmediate(narrationForQuestion, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
 				break;
 			case MenuSetupSectionType.KinectCalibration:
                 // Queue it up in this case so the missing joycon for controller rumble can play
-                AudioManager.Instance.PlayNarration(narrationForQuestion, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+                AudioManager.Instance.PlayNarrationImmediate(narrationForQuestion, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
 				break;
 			// TODO: add audio for new sections
 		}
@@ -252,11 +251,12 @@ public class MenuSetupSection : MonoBehaviour
 
 	void Finish()
 	{
-//		foreach (var btn in Buttons)
-//		{
-//			var button = btn.GetComponent<Button>();
-//			button.onClick.RemoveAllListeners();
-//		}
+		foreach (var btn in Buttons)
+		{
+			var button = btn.GetComponent<Button>();
+			button.onClick.RemoveAllListeners();
+		}
+
 		OnSelectionMade.Invoke();
 	}
 	

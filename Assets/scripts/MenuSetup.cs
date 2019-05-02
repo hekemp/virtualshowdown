@@ -79,12 +79,25 @@ public class MenuSetup : MonoBehaviour
         // If the next section is for the controller rumble but we don't have a controller attatched, we can skip the rumble setting
         if ((Sections[_activeSection].Section == MenuSetupSectionType.ControllerRumble) && (!JoyconController.CheckJoyconAvail()))
 		{
-            AudioManager.Instance.PlayNarrationImmediate(joyconSkipAudioClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-
-            _activeSection += 1;
-			PreferenceManager.Instance.ControllerRumble = false;
+			StartCoroutine (handleNoController());
+			return;
 		}
 		SetSections();
+	}
+
+	public IEnumerator handleNoController(){
+		
+		AudioManager.Instance.PlayNarrationImmediate(joyconSkipAudioClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+
+		_activeSection += 1;
+		PreferenceManager.Instance.ControllerRumble = false;
+		//this.gameObject.SetActive (false);
+		//yield return new WaitForSeconds (joyconSkipAudioClip.length);
+		if (MenuType.Preferences == CurrentMenuType) {
+			//this.gameObject.SetActive(false);
+			yield return new WaitForSeconds (joyconSkipAudioClip.length);
+			SceneManager.LoadScene ("Main_Menu");
+		} 
 	}
 
     public void OnRepeatSelected()

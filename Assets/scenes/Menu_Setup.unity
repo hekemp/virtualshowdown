@@ -395,6 +395,7 @@ MonoBehaviour:
   es: {fileID: 1096916000}
   narrationForQuestion: {fileID: 8300000, guid: a9ed6866029094e49a3f65e18d85b72c,
     type: 3}
+  CurrentMenuType: 0
   extraNarrationForQuestion: []
 --- !u!1 &260496814
 GameObject:
@@ -562,6 +563,7 @@ MonoBehaviour:
   es: {fileID: 1096916000}
   narrationForQuestion: {fileID: 8300000, guid: c28eabeeae3dd5347819024e2d334e22,
     type: 3}
+  CurrentMenuType: 0
   extraNarrationForQuestion:
   - {fileID: 8300000, guid: 26d10cf11e0943d4f9e045a5c2e8d686, type: 3}
   - {fileID: 8300000, guid: c252a55db91ce4242a5c3b818974167c, type: 3}
@@ -875,6 +877,7 @@ MonoBehaviour:
   es: {fileID: 1096916000}
   narrationForQuestion: {fileID: 8300000, guid: 6cd381f3b3f1a9b4d9aee467b9449657,
     type: 3}
+  CurrentMenuType: 0
   extraNarrationForQuestion: []
 --- !u!1 &651950235
 GameObject:
@@ -1488,6 +1491,7 @@ MonoBehaviour:
   multipleBodiesAnnounced: 0
   es: {fileID: 0}
   narrationForQuestion: {fileID: 0}
+  CurrentMenuType: 0
   extraNarrationForQuestion: []
 --- !u!1 &1008088370
 GameObject:
@@ -1711,7 +1715,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -200, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 160, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1084049125
@@ -1971,7 +1975,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 200, y: 0}
+  m_AnchoredPosition: {x: 0, y: -100}
   m_SizeDelta: {x: 160, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1112154414
@@ -2505,6 +2509,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b1b501bd08ed1c45829fa72abd46f7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CurrentMenuType: 0
   AudioParser: {fileID: 1986608257}
   Sections:
   - {fileID: 222977325}
