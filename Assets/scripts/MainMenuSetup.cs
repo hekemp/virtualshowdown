@@ -93,19 +93,19 @@ public class MainMenuSetup : MonoBehaviour
 	public void StartDrillMode()
 	{
 		Debug.Log("Going to drill mode");
-		SceneManager.LoadScene("ShowdownDrill");
+		SceneManager.LoadSceneAsync("ShowdownDrill");
 	}
 
 	public void StartShowdown()
 	{
 		Debug.Log("Going to showdown mode");
-		SceneManager.LoadScene("Showdown");
+		SceneManager.LoadSceneAsync("Showdown");
 	}
 
 	public void StartPreferencesMenu()
 	{
 		Debug.Log("Going to preference mode");
-		SceneManager.LoadScene("Menu_Setup");
+		SceneManager.LoadSceneAsync("Menu_Setup");
 	}
 
     public void ExplainShowdown()
@@ -122,7 +122,8 @@ public class MainMenuSetup : MonoBehaviour
     }
 
 	public void QuitGame(){
-		// TODO: quit game here
-	}
+        // TODO: quit game here
+        Application.Quit();
+    }
 
 }

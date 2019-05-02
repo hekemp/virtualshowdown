@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657958, g: 0.49641377, b: 0.57481766, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657934, g: 0.4964134, b: 0.5748173, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -3546,7 +3546,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Calibrating the Kinect now...
+  m_Text: Locating your Body Now... Please move into position 6 feet back from your
+    Kinect.
 --- !u!222 &856395001
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8206,8 +8207,8 @@ MonoBehaviour:
     action:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1082073988}
-          m_MethodName: ConfirmOptions
+        - m_Target: {fileID: 1637008579}
+          m_MethodName: onCalibrationConfirmation
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}

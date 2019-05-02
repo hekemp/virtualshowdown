@@ -57,6 +57,8 @@ public class MenuSetup : MonoBehaviour
 	public void GoToNextSection()
 	{
 		_activeSection += 1;
+
+        Debug.Log(_activeSection);
         if (_activeSection >= Sections.Count)
         {
 			Debug.Log (" final section");
@@ -71,6 +73,7 @@ public class MenuSetup : MonoBehaviour
 				this.gameObject.SetActive(false);
 				ShowdownManager.Instance.ConfirmOptions ();
 			} 
+            
 
 			//_activeSection = 0;
 			return;

@@ -85,6 +85,7 @@ public class BodySourceManager : MonoBehaviour
         if (Instance != null)
         {
             Destroy(this);
+            return;
         }
 
         Instance = this;

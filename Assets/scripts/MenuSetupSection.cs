@@ -236,10 +236,8 @@ public class MenuSetupSection : MonoBehaviour
 		if (!gameObject.activeInHierarchy)
 			return;
 
-
-
 		// TODO: put this back, but hide it when testing menus w/o kinect plugged in
-        if (!BodySourceManager.Instance.bodyFound)
+        if (!BodySourceManager.Instance.bodyFound || BodySourceManager.Instance.BodyCount < 1)
 		{
             AudioManager.Instance.PlayNarrationImmediate(readySaidWhilePlayerLost, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
 			if (repeatCoroutine != null) {
@@ -271,23 +269,30 @@ public class MenuSetupSection : MonoBehaviour
 			ShowdownManager.Instance.handleDifficultyPrompt (0);
 		}
 
-		Finish();	
-	}
+        AudioManager.Instance.PlayNarrationImmediate(nowEasyClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+
+        StartCoroutine(FinishAfterSeconds(nowEasyClip.length));
+    }
 
 	public void OnMediumDifficultySelect(){
 		if (MenuSetup.MenuType.PreShowdownMode == CurrentMenuType) {
 			ShowdownManager.Instance.handleDifficultyPrompt (1);
 		}
 
-		Finish();	
-	}
+        AudioManager.Instance.PlayNarrationImmediate(nowMediumClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+
+        StartCoroutine(FinishAfterSeconds(nowMediumClip.length));
+    }
 
 	public void OnHardDifficultySelect(){
 		if (MenuSetup.MenuType.PreShowdownMode == CurrentMenuType) {
 			ShowdownManager.Instance.handleDifficultyPrompt (2);
 		}
 
-		Finish();	
+        AudioManager.Instance.PlayNarrationImmediate(nowHardClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+
+        StartCoroutine(FinishAfterSeconds(nowHardClip.length));
+
 	}
 
 	public void OnHandednessCorrectSelect(){
@@ -428,6 +433,8 @@ public class MenuSetupSection : MonoBehaviour
 			case MenuSetupSectionType.NarratorVoice:
 				break;
 			case MenuSetupSectionType.KinectCalibration:
+                //Debug.Log(BodySourceManager.Instance.BodyCount);
+                //Debug.Log(BodySourceManager.Instance.bodyFound);
 				// Body was already announced and we still see the body. AKA waiting their OK.
 				if (bodyAnnounced && BodySourceManager.Instance.bodyFound)
 				{
