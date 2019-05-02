@@ -11,6 +11,9 @@ public class MainMenuSetup : MonoBehaviour
 	public Button ShowdownDrillBtn;
 	public Button ShowdownBtn;
 	public Button PreferencesBtn;
+	public Button ExplainShowdownBtn;
+	public Button ExplainDrillBtn;
+	public Button QuitGameBtn;
 
     public AudioClip welcomeSFXClip;
     public AudioClip welcomeClip;
@@ -31,6 +34,9 @@ public class MainMenuSetup : MonoBehaviour
 		ShowdownDrillBtn.onClick.AddListener(StartDrillMode);
 		ShowdownBtn.onClick.AddListener(StartShowdown);
 		PreferencesBtn.onClick.AddListener(StartPreferencesMenu);
+		ExplainShowdownBtn.onClick.AddListener (ExplainShowdown);
+		ExplainDrillBtn.onClick.AddListener (ExplainDrill);
+		QuitGameBtn.onClick.AddListener (QuitGame);
 
         StartCoroutine(playIntroductionNarration());
 	}
@@ -90,17 +96,21 @@ public class MainMenuSetup : MonoBehaviour
 		SceneManager.LoadScene("Menu_Setup");
 	}
 
-    public void explainShowdown()
+    public void ExplainShowdown()
     {
 
         AudioManager.Instance.PlayNarrationImmediate(explainShowdownClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
 
     }
 
-    public void explainDrill()
+    public void ExplainDrill()
     {
         AudioManager.Instance.PlayNarrationImmediate(explainDrillClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
 
     }
+
+	public void QuitGame(){
+		// TODO: quit game here
+	}
 
 }
