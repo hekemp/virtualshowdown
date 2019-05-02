@@ -5,7 +5,6 @@ using System;
 using System.IO;
 using System.Text;
 using System.Timers;
-using UnityEditor;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
