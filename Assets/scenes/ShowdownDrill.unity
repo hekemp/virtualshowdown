@@ -1730,7 +1730,7 @@ GameObject:
   - component: {fileID: 142115459}
   - component: {fileID: 142115458}
   m_Layer: 5
-  m_Name: Left-Handed Btn
+  m_Name: YesBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1766,7 +1766,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e439c4795c2cd4404bd21115d6d1661e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverAudioClip: {fileID: 8300000, guid: c76e49cdbf5a20446a3e6fcc2ada72d3, type: 3}
+  hoverAudioClip: {fileID: 8300000, guid: ddc575b4fca554f2f9e19365422f006b, type: 3}
 --- !u!114 &142115459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2409,7 +2409,7 @@ GameObject:
   - component: {fileID: 409652987}
   - component: {fileID: 409652988}
   m_Layer: 5
-  m_Name: Handedness
+  m_Name: HandednessConfirmation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2463,12 +2463,15 @@ MonoBehaviour:
     type: 3}
   repeatedNarrationForQuestionClip: {fileID: 0}
   CurrentMenuType: 0
+  firstOptionNarration: {fileID: 8300000, guid: ddc575b4fca554f2f9e19365422f006b,
+    type: 3}
   extraNarrationForQuestion:
-  - {fileID: 8300000, guid: 9d10f812c566051428dd08f84ac02464, type: 3}
-  - {fileID: 8300000, guid: 85f9841d3c0ff4c479536a0818d0e2bd, type: 3}
-  - {fileID: 8300000, guid: e9603f2164e284946969c5afebe344bc, type: 3}
-  - {fileID: 8300000, guid: b623b201439989c49b1ff1524560e68a, type: 3}
-  - {fileID: 8300000, guid: 727a93a654278fd41bd1c9c23a50e655, type: 3}
+  - {fileID: 8300000, guid: dff870b15c5d843c2bd6b942af104b98, type: 3}
+  - {fileID: 8300000, guid: 9105b23d6a1a34dab8d20ae4ad0a86a2, type: 3}
+  - {fileID: 8300000, guid: 47bf66748e839409aa3cc39ee60c2e23, type: 3}
+  - {fileID: 8300000, guid: 03cefa23a6369483fa2014a2056f4a6b, type: 3}
+  - {fileID: 8300000, guid: a3a27a183238f4448a7a774adefa7a5f, type: 3}
+  subtitle: {fileID: 1038366281}
 --- !u!1 &572556928
 GameObject:
   m_ObjectHideFlags: 0
@@ -4035,6 +4038,7 @@ MonoBehaviour:
     type: 3}
   goToMainMenuOptionClip: {fileID: 8300000, guid: a7fa05065a93ecc4f810e4bc9e889283,
     type: 3}
+  reminderOptionsClip: {fileID: 8300000, guid: e8d37e72376d64aa69702b01c0b87bd7, type: 3}
   ballAndPosText: {fileID: 572556930}
   clockText: {fileID: 1322502142}
   playerLevel: 0
@@ -5816,7 +5820,7 @@ GameObject:
   - component: {fileID: 1246620872}
   - component: {fileID: 1246620871}
   m_Layer: 5
-  m_Name: Right-Handed Btn
+  m_Name: NoBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5852,7 +5856,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e439c4795c2cd4404bd21115d6d1661e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverAudioClip: {fileID: 8300000, guid: 37da96ac8f0f14a4193f48c19977cc81, type: 3}
+  hoverAudioClip: {fileID: 8300000, guid: d98c9d38489314e1db3622a0a13e74c2, type: 3}
 --- !u!114 &1246620872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6810,18 +6814,19 @@ MonoBehaviour:
   bodyAnnounced: 0
   multipleBodiesAnnounced: 0
   es: {fileID: 622284295}
-  narrationForQuestion: {fileID: 8300000, guid: c28eabeeae3dd5347819024e2d334e22,
+  narrationForQuestion: {fileID: 8300000, guid: 1840d48c5924944ddb513ccb0d54d8e3,
     type: 3}
   repeatedNarrationForQuestionClip: {fileID: 0}
   CurrentMenuType: 0
+  firstOptionNarration: {fileID: 0}
   extraNarrationForQuestion:
-  - {fileID: 8300000, guid: 26d10cf11e0943d4f9e045a5c2e8d686, type: 3}
-  - {fileID: 8300000, guid: c252a55db91ce4242a5c3b818974167c, type: 3}
-  - {fileID: 8300000, guid: cab07018b6d00904b8e3ed2dfccaaea2, type: 3}
-  - {fileID: 8300000, guid: 1acf4dea672e005488ee9c7341e7f2bf, type: 3}
-  - {fileID: 8300000, guid: 26b6bfd625f404044bef2fbf12e9f70a, type: 3}
-  - {fileID: 8300000, guid: ff8650d3b383a084ab2c69dbf6f5169b, type: 3}
-  - {fileID: 8300000, guid: 2f40b2815dfe82b4bbf2ca32edf5ee85, type: 3}
+  - {fileID: 8300000, guid: bb880b7ad97114ccbbf1b966835f6728, type: 3}
+  - {fileID: 8300000, guid: 13c0fb04dbfdb46ec89cca0d7d0c0309, type: 3}
+  - {fileID: 8300000, guid: 107dbe067fa09417ba43fcf7448710be, type: 3}
+  - {fileID: 8300000, guid: 19f0cf9d7ba0640299045b904fb7a1bf, type: 3}
+  - {fileID: 8300000, guid: a558169f1a12c4734837518b62526755, type: 3}
+  - {fileID: 8300000, guid: bc3e0b31b279348be8ad43cf5d8cfe94, type: 3}
+  subtitle: {fileID: 0}
 --- !u!224 &1637008580
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7547,7 +7552,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Correct
+  m_Text: Yes
 --- !u!222 &1804699379
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7621,7 +7626,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Incorrect
+  m_Text: No
 --- !u!222 &1825258583
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7914,7 +7919,7 @@ MonoBehaviour:
   Sections:
   - {fileID: 409652988}
   - {fileID: 1637008579}
-  joyconSkipAudioClip: {fileID: 8300000, guid: 31f2c5299d108144ebfe09930d9cbf8e, type: 3}
+  joyconSkipAudioClip: {fileID: 8300000, guid: ab72d7d14d8c648c1af368147b385dad, type: 3}
 --- !u!114 &1896488692
 MonoBehaviour:
   m_ObjectHideFlags: 0

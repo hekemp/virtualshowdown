@@ -130,6 +130,8 @@ public class ShowdownDrillManager : MonoBehaviour
     public AudioClip yourFinalScoreWas;
     public AudioClip toPlayAgainOptionClip;
     public AudioClip goToMainMenuOptionClip;
+
+	public AudioClip reminderOptionsClip;
     #endregion
 
     // UI
@@ -291,16 +293,22 @@ public class ShowdownDrillManager : MonoBehaviour
 		Debug.Log(CurrentState);
         if (CurrentState == GameState.HandednessSet)
         {
-			// TODO: say the reminder prompt
-            AudioManager.Instance.StopAllNarration();
-            Debug.Log("Setting up experiment");
-            hasStartedGame = true;
-            CurrentState = GameState.BallStart;
-            SetupExperiment();
-            StartCoroutine(CheckSixMinuteTimeLimit());
-            StartCoroutine(KickBall());
+			AudioManager.Instance.PlayNarrationImmediate(reminderOptionsClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+			StartCoroutine(setupExperimentAfterSeconds(reminderOptionsClip.length+.5));
+            
         }
     }
+
+	public IEnumerator setupExperimentAfterSeconds(float s) {
+		yield return new WaitForSeconds (s);
+		AudioManager.Instance.StopAllNarration();
+		Debug.Log("Setting up experiment");
+		hasStartedGame = true;
+		CurrentState = GameState.BallStart;
+		SetupExperiment();
+		StartCoroutine(CheckSixMinuteTimeLimit());
+		StartCoroutine(KickBall());
+	}
 
     public void restartGame()
     {

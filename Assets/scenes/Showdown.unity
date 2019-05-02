@@ -1435,12 +1435,14 @@ MonoBehaviour:
     type: 3}
   repeatedNarrationForQuestionClip: {fileID: 0}
   CurrentMenuType: 0
+  firstOptionNarration: {fileID: 0}
   extraNarrationForQuestion:
   - {fileID: 8300000, guid: 9d10f812c566051428dd08f84ac02464, type: 3}
   - {fileID: 8300000, guid: 85f9841d3c0ff4c479536a0818d0e2bd, type: 3}
   - {fileID: 8300000, guid: e9603f2164e284946969c5afebe344bc, type: 3}
   - {fileID: 8300000, guid: b623b201439989c49b1ff1524560e68a, type: 3}
   - {fileID: 8300000, guid: 727a93a654278fd41bd1c9c23a50e655, type: 3}
+  subtitle: {fileID: 1821032699}
 --- !u!1 &494565277
 GameObject:
   m_ObjectHideFlags: 0
@@ -2916,12 +2918,14 @@ MonoBehaviour:
     type: 3}
   repeatedNarrationForQuestionClip: {fileID: 0}
   CurrentMenuType: 0
+  firstOptionNarration: {fileID: 0}
   extraNarrationForQuestion:
   - {fileID: 8300000, guid: 26d10cf11e0943d4f9e045a5c2e8d686, type: 3}
   - {fileID: 8300000, guid: c252a55db91ce4242a5c3b818974167c, type: 3}
   - {fileID: 8300000, guid: cab07018b6d00904b8e3ed2dfccaaea2, type: 3}
   - {fileID: 8300000, guid: 1acf4dea672e005488ee9c7341e7f2bf, type: 3}
   - {fileID: 8300000, guid: 26b6bfd625f404044bef2fbf12e9f70a, type: 3}
+  subtitle: {fileID: 0}
 --- !u!224 &935401763
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4051,10 +4055,12 @@ MonoBehaviour:
     type: 3}
   repeatedNarrationForQuestionClip: {fileID: 0}
   CurrentMenuType: 2
+  firstOptionNarration: {fileID: 0}
   extraNarrationForQuestion:
   - {fileID: 8300000, guid: 9d10f812c566051428dd08f84ac02464, type: 3}
   - {fileID: 8300000, guid: 85f9841d3c0ff4c479536a0818d0e2bd, type: 3}
   - {fileID: 8300000, guid: e9603f2164e284946969c5afebe344bc, type: 3}
+  subtitle: {fileID: 0}
 --- !u!1 &1490277652
 GameObject:
   m_ObjectHideFlags: 0

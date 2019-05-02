@@ -50,8 +50,7 @@ public class MenuSetupSection : MonoBehaviour
     // 2: Multiple Bodies Seen
     // 3: Ready Said while Multiple Bodies Seen
     // 4: Ready Said before Player Found
-	// 5: read the options once successful
-	// 6: troubles locating the player
+	// 5: troubles locating the player
 
 	// For handedness confirmation
 	// 0: currently left
@@ -92,6 +91,8 @@ public class MenuSetupSection : MonoBehaviour
 
 	private AudioClip vibrationsEnabledClip;
 	private AudioClip vibrationsDisabledClip;
+
+	public Text subtitle;
     
 
 	// Use this for initialization
@@ -132,15 +133,21 @@ public class MenuSetupSection : MonoBehaviour
 				troublesLocatingPlayerClip = extraNarrationForQuestion[5];
 				break;
 			case MenuSetupSectionType.HandednessConfirmation:
-				var confirmCorrectButton = Buttons[0].GetComponent<Button>();
-				confirmCorrectButton.onClick.AddListener(OnHandednessCorrectSelect);
-				var denyButton = Buttons[1].GetComponent<Button>();
-				denyButton.onClick.AddListener(OnHandednessIncorrectSelect);
-				youAreCurrentlyLeftyClip = extraNarrationForQuestion[0];
-				youAreCurrentlyRightyClip = extraNarrationForQuestion[1];
-				keepSettingsTheSameClip = extraNarrationForQuestion[2];
-				areNowLeftyClip = extraNarrationForQuestion[3];
-				areNowRightyClip = extraNarrationForQuestion[4];
+				var confirmCorrectButton = Buttons [0].GetComponent<Button> ();
+				confirmCorrectButton.onClick.AddListener (OnHandednessCorrectSelect);
+				var denyButton = Buttons [1].GetComponent<Button> ();
+				denyButton.onClick.AddListener (OnHandednessIncorrectSelect);
+				youAreCurrentlyLeftyClip = extraNarrationForQuestion [0];
+				youAreCurrentlyRightyClip = extraNarrationForQuestion [1];
+				keepSettingsTheSameClip = extraNarrationForQuestion [2];
+				areNowLeftyClip = extraNarrationForQuestion [3];
+				areNowRightyClip = extraNarrationForQuestion [4];
+				subtitle.text = "";
+				if (PreferenceManager.Instance.PlayerHandedness == Handedness.Left) {
+					subtitle.text = "Currently, you're set to be left-handed. Is this correct?";
+				} else {
+					subtitle.text = "Currently, you're set to be right-handed. Is this correct?";
+				}
 
 				break;
 			case MenuSetupSectionType.OpponentDifficulty:
@@ -222,20 +229,29 @@ public class MenuSetupSection : MonoBehaviour
 		if (!gameObject.activeInHierarchy)
 			return;
 
+
+
 		// TODO: put this back, but hide it when testing menus w/o kinect plugged in
         if (!BodySourceManager.Instance.bodyFound)
 		{
             AudioManager.Instance.PlayNarrationImmediate(readySaidWhilePlayerLost, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-
+			if (repeatCoroutine != null) {
+				StopCoroutine (repeatCoroutine);
+			}
+			repeatCoroutine = StartCoroutine(checkTenSecondTimeLimit());
             return;
 		}
         if(BodySourceManager.Instance.MultipleBodiesDetected)
         {
             AudioManager.Instance.PlayNarrationImmediate(readySaidWhileMultipleBodiesSeen, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
-            return;
+			if (repeatCoroutine != null) {
+				StopCoroutine (repeatCoroutine);
+			}
+			repeatCoroutine = StartCoroutine(checkTenSecondTimeLimit());
+			return;
         }
 
-		Finish();
+		Finish ();
 	}
 
     public void OnDefaultSelected()
@@ -395,6 +411,10 @@ public class MenuSetupSection : MonoBehaviour
 				{
                     AudioManager.Instance.PlayNarrationImmediate(playerFoundClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
 
+					if (repeatCoroutine != null) {
+						StopCoroutine (repeatCoroutine);
+					}
+					repeatCoroutine = StartCoroutine(checkTenSecondTimeLimit());
 					bodyAnnounced = true;
 					repeatedNarrationForQuestionClip = playerFoundClip;
 				}
@@ -404,6 +424,10 @@ public class MenuSetupSection : MonoBehaviour
 
                     AudioManager.Instance.PlayNarrationImmediate(playerLostClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
 
+					if (repeatCoroutine != null) {
+						StopCoroutine (repeatCoroutine);
+					}
+					repeatCoroutine = StartCoroutine(checkTenSecondTimeLimit());
                     bodyAnnounced = false;
 					repeatedNarrationForQuestionClip = troublesLocatingPlayerClip;
 				}
@@ -425,6 +449,10 @@ public class MenuSetupSection : MonoBehaviour
                 {
                     AudioManager.Instance.PlayNarrationImmediate(multipleBodiesSeenClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
 
+					if (repeatCoroutine != null) {
+						StopCoroutine (repeatCoroutine);
+					}
+					repeatCoroutine = StartCoroutine(checkTenSecondTimeLimit());
                     multipleBodiesAnnounced = true;
 					repeatedNarrationForQuestionClip = multipleBodiesSeenClip;
                 }
@@ -433,6 +461,10 @@ public class MenuSetupSection : MonoBehaviour
                 {
                     AudioManager.Instance.PlayNarrationImmediate(playerFoundClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
 
+					if (repeatCoroutine != null) {
+						StopCoroutine (repeatCoroutine);
+					}
+					repeatCoroutine = StartCoroutine(checkTenSecondTimeLimit());
                     multipleBodiesAnnounced = false;
 					repeatedNarrationForQuestionClip = playerFoundClip;
                 }
