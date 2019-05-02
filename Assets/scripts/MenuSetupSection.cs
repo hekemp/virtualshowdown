@@ -17,6 +17,7 @@ public enum MenuSetupSectionType
 	TooltipNarration,
 	KinectCalibration,
 	HandednessConfirmation,
+	OpponentDifficulty,
 }
 
 public class MenuSetupSection : MonoBehaviour
@@ -87,6 +88,14 @@ public class MenuSetupSection : MonoBehaviour
 				confirmCorrectButton.onClick.AddListener(OnHandednessCorrectSelect);
 				var denyButton = Buttons[1].GetComponent<Button>();
 				denyButton.onClick.AddListener(OnHandednessIncorrectSelect);
+				break;
+			case MenuSetupSectionType.OpponentDifficulty:
+				var easyButton = Buttons[0].GetComponent<Button>();
+				easyButton.onClick.AddListener(OnEasyDifficultySelect);
+				var mediumButton = Buttons[1].GetComponent<Button>();
+				mediumButton.onClick.AddListener(OnMediumDifficultySelect);
+				var hardButton = Buttons[0].GetComponent<Button>();
+				hardButton.onClick.AddListener(OnHardDifficultySelect);
 				break;
 		}
 		es.SetSelectedGameObject(Buttons[0]);
@@ -168,6 +177,30 @@ public class MenuSetupSection : MonoBehaviour
         Finish();
     }
 
+	public void OnEasyDifficultySelect(){
+		if (MenuSetup.MenuType.PreShowdownMode == CurrentMenuType) {
+			ShowdownManager.Instance.handleDifficultyPrompt (0);
+		}
+
+		Finish();	
+	}
+
+	public void OnMediumDifficultySelect(){
+		if (MenuSetup.MenuType.PreShowdownMode == CurrentMenuType) {
+			ShowdownManager.Instance.handleDifficultyPrompt (1);
+		}
+
+		Finish();	
+	}
+
+	public void OnHardDifficultySelect(){
+		if (MenuSetup.MenuType.PreShowdownMode == CurrentMenuType) {
+			ShowdownManager.Instance.handleDifficultyPrompt (2);
+		}
+
+		Finish();	
+	}
+
 	public void OnHandednessCorrectSelect(){
 		if (MenuSetup.MenuType.PreDrillMode == CurrentMenuType) {
 			ShowdownDrillManager.Instance.handleHandednessPrompt (true);
@@ -211,6 +244,7 @@ public class MenuSetupSection : MonoBehaviour
                 // Queue it up in this case so the missing joycon for controller rumble can play
                 AudioManager.Instance.PlayNarration(narrationForQuestion, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
 				break;
+			// TODO: add audio for new sections
 		}
 
 	}
