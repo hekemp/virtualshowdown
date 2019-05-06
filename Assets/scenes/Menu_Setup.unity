@@ -348,7 +348,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &222977324
 RectTransform:
   m_ObjectHideFlags: 0
@@ -399,9 +399,11 @@ MonoBehaviour:
   CurrentMenuType: 0
   firstOptionNarration: {fileID: 8300000, guid: a6323d762e55c425089e0a07f327a894,
     type: 3}
+  welcomeAudioClip: {fileID: 0}
   extraNarrationForQuestion:
   - {fileID: 8300000, guid: 03cefa23a6369483fa2014a2056f4a6b, type: 3}
   - {fileID: 8300000, guid: a3a27a183238f4448a7a774adefa7a5f, type: 3}
+  subtitle: {fileID: 0}
 --- !u!1 &260496814
 GameObject:
   m_ObjectHideFlags: 0
@@ -571,12 +573,14 @@ MonoBehaviour:
   repeatedNarrationForQuestionClip: {fileID: 0}
   CurrentMenuType: 0
   firstOptionNarration: {fileID: 0}
+  welcomeAudioClip: {fileID: 0}
   extraNarrationForQuestion:
   - {fileID: 8300000, guid: 26d10cf11e0943d4f9e045a5c2e8d686, type: 3}
   - {fileID: 8300000, guid: c252a55db91ce4242a5c3b818974167c, type: 3}
   - {fileID: 8300000, guid: cab07018b6d00904b8e3ed2dfccaaea2, type: 3}
   - {fileID: 8300000, guid: 1acf4dea672e005488ee9c7341e7f2bf, type: 3}
   - {fileID: 8300000, guid: 26b6bfd625f404044bef2fbf12e9f70a, type: 3}
+  subtitle: {fileID: 0}
 --- !u!1 &382932741
 GameObject:
   m_ObjectHideFlags: 0
@@ -835,7 +839,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &529672407
 RectTransform:
   m_ObjectHideFlags: 0
@@ -888,9 +892,11 @@ MonoBehaviour:
   CurrentMenuType: 0
   firstOptionNarration: {fileID: 8300000, guid: 58381dc74233b45c094903a2eb98de06,
     type: 3}
+  welcomeAudioClip: {fileID: 0}
   extraNarrationForQuestion:
   - {fileID: 8300000, guid: e37e5215a65b94532a859ef097787905, type: 3}
   - {fileID: 8300000, guid: e96d209b53cdb4220a90cf96542ef84b, type: 3}
+  subtitle: {fileID: 0}
 --- !u!1 &651950235
 GameObject:
   m_ObjectHideFlags: 0
@@ -1519,7 +1525,9 @@ MonoBehaviour:
   repeatedNarrationForQuestionClip: {fileID: 0}
   CurrentMenuType: 0
   firstOptionNarration: {fileID: 0}
+  welcomeAudioClip: {fileID: 0}
   extraNarrationForQuestion: []
+  subtitle: {fileID: 0}
 --- !u!1 &1008088370
 GameObject:
   m_ObjectHideFlags: 0

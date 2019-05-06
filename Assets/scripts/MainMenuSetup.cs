@@ -14,10 +14,12 @@ public class MainMenuSetup : MonoBehaviour
 	public Button PreferencesBtn;
 	public Button ExplainShowdownBtn;
 	public Button ExplainDrillBtn;
+	public Button ReviewAudioBtn;
 	public Button QuitGameBtn;
 
     public AudioClip welcomeSFXClip;
     public AudioClip welcomeClip;
+	public AudioClip AudioReviewClip;
 	public AudioClip gameModeIntroductionClip;
 	public AudioClip firstButtonClip;
 
@@ -41,6 +43,7 @@ public class MainMenuSetup : MonoBehaviour
 		PreferencesBtn.onClick.AddListener(StartPreferencesMenu);
 		ExplainShowdownBtn.onClick.AddListener (ExplainShowdown);
 		ExplainDrillBtn.onClick.AddListener (ExplainDrill);
+		ReviewAudioBtn.onClick.AddListener (ExplainAudio);
 		QuitGameBtn.onClick.AddListener (QuitGame);
 
         StartCoroutine(playIntroductionNarration());
@@ -112,18 +115,32 @@ public class MainMenuSetup : MonoBehaviour
     {
 
         AudioManager.Instance.PlayNarrationImmediate(explainShowdownClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+		AudioManager.Instance.PlayNarration(gameModeIntroductionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
 
     }
 
     public void ExplainDrill()
     {
         AudioManager.Instance.PlayNarrationImmediate(explainDrillClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+		AudioManager.Instance.PlayNarration(gameModeIntroductionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
 
     }
 
+	public void ExplainAudio(){
+		AudioManager.Instance.PlayNarrationImmediate(AudioReviewClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+		AudioManager.Instance.PlayNarration(gameModeIntroductionClip, AudioManager.Instance.locationSettings[AudioManager.AudioLocation.Default]);
+
+	}
+
 	public void QuitGame(){
-        // TODO: quit game here
-        Application.Quit();
+		// save any game data here
+		#if UNITY_EDITOR
+		// Application.Quit() does not work in the editor so
+		// UnityEditor.EditorApplication.isPlaying need to be set to false to end the game
+		UnityEditor.EditorApplication.isPlaying = false;
+		#else
+		Application.Quit();
+		#endif
     }
 
 }
