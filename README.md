@@ -35,7 +35,7 @@ files. This may take several minutes.
 5. (Optional/Troubleshooting) If your drivers aren\'t downloaded
 automatically (usually due to security settings), please download the
 drivers and runtime dependencies
-[[here]{.underline}](https://www.microsoft.com/en-us/download/details.aspx?id=44559).
+[here](https://www.microsoft.com/en-us/download/details.aspx?id=44559).
 
 ### Pairing the Nintendo Switch Joy-Con to Your Computer
 
@@ -59,7 +59,7 @@ drivers and runtime dependencies
 
 ### Game Instructions (to Play)
 
-Download VirtualShowdown.zip from either [[GitHub]{.underline}](https://github.com/hekemp/virtualshowdown/releases) or [[itch.io]{.underline}](https://hekemp.itch.io/virtual-showdown).
+Download VirtualShowdown.zip from either [GitHub](https://github.com/hekemp/virtualshowdown/releases) or [itch.io](https://hekemp.itch.io/virtual-showdown).
 Click on the zip and extract all of the contents. Depending on which
 unzipping software you use, you may be able to double click the zip to
 unzip the contents to a new folder. Otherwise, extract all files from
@@ -169,10 +169,10 @@ main menu, and "Restart" to restart that game mode.
 
 ### Troubleshooting \"Pairing the Nintendo Switch Joy-Con to Your Computer\":
 
-[Question:]{.underline} What should I do if my Joy-Con's syncing lights
+__Question__: What should I do if my Joy-Con's syncing lights
 continue to flash even after following these steps?
 
-[Answer:]{.underline} This is, unfortunately, just how the Joy-Con is
+__Answer__: This is, unfortunately, just how the Joy-Con is
 programmed to work when synced with a computer. Provided that you ran
 into no errors during these steps, your device will be paired and
 connected correctly, though. If the game still can't detect your
@@ -181,9 +181,9 @@ the Nintendo Switch Joy-Con to Your Computer" section) and click on the
 Joy-Con under Paired Devices. You should then be able to click to forget
 the Joy-Con device. Then, repeat these steps to sync the device.
 
-[Question:]{.underline} What should I do if the device asks for a pin?
+__Question:__ What should I do if the device asks for a pin?
 
-[Answer:]{.underline} Thankfully, the Switch uses the default pins for
+__Answer:__ Thankfully, the Switch uses the default pins for
 Bluetooth devices. Try \"0000\", and if this doesn\'t work, try
 \"1234\". If neither of these work, please consult your Joy-Con manual
 or provider, as they may have changed the pin for the device.
